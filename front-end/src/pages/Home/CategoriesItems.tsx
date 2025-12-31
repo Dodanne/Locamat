@@ -1,0 +1,24 @@
+import type { Category } from "../../types/category";
+
+type HomeProps = {
+  categories: Category[];
+};
+
+export default function CategoriesItems({categories}: HomeProps) {
+     
+    return (
+        <div className="section-white">
+            <div className="container-max">
+                 <h2 className="section-title">Parcourir par catégorie</h2>
+                     <div className="mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-6 justify-items-center max-w-full">
+                {categories.map((category) => (
+                            <div key={category.name} className="flex flex-col items-center gap-3 p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors w-full cursor-pointer">
+                                <span className="text-3xl">{category.icon}</span>
+                                <span className="text-sm text-gray-700 text-center">{category.name}</span>
+                             </div>
+                          ))}
+                </div>  
+            </div>
+        </div>
+    )   
+}

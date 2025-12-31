@@ -1,0 +1,91 @@
+import Header from "./components/Header";
+import Home from "./pages/Home/Home";
+import EquipmentSearch from "./pages/EquipmentSearch/EquipmentSearch";
+import { BrowserRouter,Route,Routes, useParams} from "react-router-dom";
+import Footer from "./components/Footer";
+import type { Item } from "./types/item";
+import type { User } from "./types/users";
+import type { Category } from "./types/category";
+import AddEquipment from "./pages/AddEquipment/AddEquipment";
+import ChatPage from "./pages/Chat/ChatPage";
+import UserProfile from "./pages/User/UserProfile";
+import Connexion from "./pages/User/Connexion";
+import { useEffect, useState } from "react";
+import EquipmentItem from "./pages/EquipmentItem/EquipmentItem";
+
+
+function App(){
+ const [itemsList,setItemsList]=useState<Item[]>([]);
+ const [usersList,setUsersList]=useState<User[]>([]);
+ const [categoriesList,setCategoriesList]=useState<Category[]>([]);
+ 
+ useEffect(() => {
+  async function fetchItems() {
+  try { {
+    const response = await fetch("http://localhost:3000/equipment");
+    const data: Item[] = await response.json();
+    setItemsList(data);
+  }
+}
+catch (err) {
+  console.error(err);
+}
+} 
+  fetchItems();
+}, []);
+
+ useEffect(() => {
+  async function fetchUsers() {
+  try { {
+    const response = await fetch("http://localhost:3000/users");
+    const data= await response.json();
+    setUsersList(data);
+  }
+}
+catch (err) {
+  console.error(err);
+}
+} 
+  fetchUsers();
+}, []);
+
+ useEffect(() => {
+  async function fetchCategories() {
+  try { {
+    const response = await fetch("http://localhost:3000/category");
+    const data= await response.json();
+    setCategoriesList(data);
+  }
+}
+catch (err) {
+  console.error(err);
+}
+} 
+  fetchCategories();
+}, []);
+
+
+  return (
+    <>
+    <BrowserRouter>
+    <Header />
+    <div className="min-h-screen bg-gray-50">
+    <Routes>
+      <Route path="/" element={<Home items={itemsList} user={usersList} category={categoriesList}/>}/>
+      <Route path="/rechercher" element={<EquipmentSearch item={itemsList} users={usersList} categories={categoriesList}/>}/>
+      <Route path="/new-equipment" element={<AddEquipment categories={categoriesList}/>}/>
+      <Route path="/chat" element={<ChatPage/>}/>
+      <Route path="/connexion" element={<Connexion categories={categoriesList}/>}/>
+      <Route path="/user-profile" element={<UserProfile items={itemsList} users={usersList} />}/>
+      <Route path="/equipment/:id" element={<EquipmentItem />}/>
+    </Routes>
+    </div>
+     <Footer/>
+    </BrowserRouter>
+    
+    
+    </>
+  )
+}
+
+export default App;
