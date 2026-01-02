@@ -81,14 +81,15 @@ export default function EquipmentItem() {
                  </div>
             </div>
             <div className="lg:col-span-1">
-                <div  className="bg-white flex flex-col gap-6 rounded-xl border sticky top-24">
-            
-                <div className="text-3xl text-primary font-medium">{item.price}€ <span className="text-sm text-gray-500 font-normal">par jour</span></div>
-                <button className="btn btn-primary w-full py-3">Réserver</button>
-                <div className="text-gray-700">
-                    <h3 className="text-lg text-gray-900 mb-2">Caution</h3>
-                    <p>{item.caution}€</p>
+                <div  className="bg-white flex flex-col gap-6 rounded-xl border sticky top-24 p-8">
+                <div>
+                    <div className="text-3xl text-primary ">{item.price} € 
+                    </div>
+                <span className=" text-gray-500 pl-3 "> par jour</span>
                 </div>
+                <hr />
+
+                <button className="btn flex-1 items-center rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Réserver</button> 
             </div>
             </div>
         </div>
