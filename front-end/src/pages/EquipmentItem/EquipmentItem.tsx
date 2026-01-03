@@ -1,7 +1,7 @@
 import type { Item } from "../../types/item.js";
 import { IoLocationSharp, IoArrowBack } from "react-icons/io5";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { CiChat1 } from "react-icons/ci";
 
@@ -12,8 +12,8 @@ export default function EquipmentItem() {
     useEffect(() => {
         async function fetchEquipmentItem() {
             try {
-                const response = await fetch(`http://localhost:3000/equipment/${id}`);
-                const data = await response.json();
+                const res = await fetch(`http://localhost:3000/equipment/${id}`);
+                const data = await res.json();
                 setItem(data);
                 console.log(data)
             } catch (err) {
@@ -24,7 +24,9 @@ export default function EquipmentItem() {
     }, [id]);
     return (
         <div className="container py-8">
+            <Link to="/rechercher" >
            <button className="btn p-3 bg-white hover:bg-gray-200"> <IoArrowBack /> Retour aux résultats</button>
+           </Link>
            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
                 <div className="relative overflow-hidden py-4">

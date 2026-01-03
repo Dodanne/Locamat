@@ -39,20 +39,6 @@ export default {
           "monospace",
         ],
       },
-      keyframes: {
-        scrollUp: {
-          "0%": { transform: "translate(-50%, 0)" },
-          "100%": { transform: "translate(-50%, -50%)" },
-        },
-        scrollDown: {
-          "0%": { transform: "translate(-50%, -50%)" },
-          "100%": { transform: "translate(-50%, 0)" },
-        },
-      },
-      animation: {
-        "scroll-up": "scrollUp 18s linear infinite",
-        "scroll-down": "scrollDown 18s linear infinite",
-      },
     },
     plugins: [],
   },

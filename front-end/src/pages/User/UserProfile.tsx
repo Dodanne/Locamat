@@ -18,7 +18,7 @@ type ItemCardProps = {
 }
 
 export default function UserProfile ({items, users}:ItemCardProps){
-const [activeDiv,setActiveDiv]=useState("")
+const [activeDiv,setActiveDiv]=useState("equipment")
 
 
     return(
@@ -56,14 +56,14 @@ const [activeDiv,setActiveDiv]=useState("")
         </div>
         <div className="flex flex-col gap-2 my-6">
             <div className="bg-gray-200 h-9 items-center justify-center rounded-xl p-[3px] grid w-full grid-cols-3">
-                <button onClick={()=>setActiveDiv("equipment")} className="btn bg-white py-1 px-2 rounded-xl h-7">
+                <button onClick={()=>setActiveDiv("equipment")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="equipment" ? 'bg-white' : ''} `}>
                     <BsBoxSeam /> Mon matériel () 
                 </button>
                 
-                <button onClick={()=>setActiveDiv("locations")} className="btn bg-white py-1 px-2 rounded-xl h-7">
+                <button onClick={()=>setActiveDiv("locations")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="locations" ? 'bg-white' : ''} `}>
                     <PiClockCounterClockwise /> Mes locations () 
                 </button>
-                 <button onClick={()=>setActiveDiv("reviews")} className="btn bg-white py-1 px-2 rounded-xl h-7">
+                 <button onClick={()=>setActiveDiv("reviews")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="reviews" ? 'bg-white' : ''} `}>
                     <FaRegStar /> Avis reçus() 
                 </button>
             </div> 

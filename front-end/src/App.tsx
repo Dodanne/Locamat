@@ -22,8 +22,8 @@ function App(){
  useEffect(() => {
   async function fetchItems() {
   try { {
-    const response = await fetch("http://localhost:3000/equipment");
-    const data: Item[] = await response.json();
+    const res = await fetch("http://localhost:3000/equipment");
+    const data: Item[] = await res.json();
     setItemsList(data);
   }
 }
@@ -37,8 +37,8 @@ catch (err) {
  useEffect(() => {
   async function fetchUsers() {
   try { {
-    const response = await fetch("http://localhost:3000/users");
-    const data= await response.json();
+    const res = await fetch("http://localhost:3000/users");
+    const data= await res.json();
     setUsersList(data);
   }
 }
@@ -52,8 +52,8 @@ catch (err) {
  useEffect(() => {
   async function fetchCategories() {
   try { {
-    const response = await fetch("http://localhost:3000/category");
-    const data= await response.json();
+    const res = await fetch("http://localhost:3000/category");
+    const data= await res.json();
     setCategoriesList(data);
   }
 }

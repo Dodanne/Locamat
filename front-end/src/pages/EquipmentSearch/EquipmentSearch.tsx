@@ -5,14 +5,31 @@ import { IoFilterSharp } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import Slider from "../../components/Slider"
 import { Category } from "../../types/category";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 type ItemCardProps = {
     item:Item []
     users:User[]
     categories:Category []
 }
-
 export default function equipmentSearch ({item,categories, users }:ItemCardProps){
+    
+    const [selectedCategories, setSelectedCategories] =  useState<number[]>([]);
+    
+    const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+        const categoryId = Number(e.target.value);
+        setSelectedCategories((prev) => 
+            prev.includes(categoryId) ? prev.filter((id) => id !== categoryId): [...prev, categoryId]); 
+    }
+    const filteredItems = item.filter((item) => {
+        if (selectedCategories.length === 0) {
+            return true; 
+        }
+        
+        return selectedCategories.includes(item.category_id);
+});
+
 
     return(
         // recherche + filtre
@@ -40,9 +57,9 @@ export default function equipmentSearch ({item,categories, users }:ItemCardProps
                              {/* categories */}
                             <h3 className="text-lg mb-4 text-gray-900">Catégories</h3>
                              <div className="space-y-3">
-                                {categories.map((cat,i)=>(
-                                     <label htmlFor={`${i}`} key={cat.name} className="flex items-center gap-1 text-sm font-semibold select-none cursor-pointer">
-                                      <input type="checkbox"/>
+                                {categories.map((cat)=>(
+                                     <label  key={cat.name} className="flex items-center gap-1 text-sm font-semibold select-none cursor-pointer">
+                                      <input type="checkbox"  value={cat.id} onChange={handleChange} />
                                         <span>{cat.icon}</span>
                                         <span>{cat.name}</span> 
                                    </label>
@@ -71,10 +88,10 @@ export default function equipmentSearch ({item,categories, users }:ItemCardProps
             {/* résultats */}
             <div className="flex-1">
                 <div className="loop-div">
-                    {item.map ((i)=>  {
+                    {filteredItems.map ((i)=>  {
                         const user = users.find((u) => u.id === i.owner_id);
-            if (!user) return null; 
-            return <ItemCard key={i.id} item={i} user={user}/>
+                        if (!user) return null; 
+                        return <Link to={`/equipment/${i.id}`}><ItemCard key={i.id} item={i} user={user}/></Link>
                     })
                     }
                 </div>

@@ -44,6 +44,18 @@ app.get("/category", async (req, res) => {
   }
 });
 
+app.post("/new-equipment", async (req, res) => {
+  try {
+    const { title, description, category_id, photo, price, caution } = req.body;
+    const [data] = await db.query(
+      `INSERT INTO equipment (title, description, category_id, photo, price, caution, owner_id) VALUES ('${title}', '${description}', ${category_id}, '${photo}', ${price}, ${caution}, 2)`
+    );
+    res.json(data[0]);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 app.listen(3000, () => {
   console.log("Back-end lancé");
 });
