@@ -43,6 +43,15 @@ app.get("/category", async (req, res) => {
     console.error(err);
   }
 });
+app.get("/category/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const [data] = await db.query(`SELECT * FROM category WHERE id=${id}`);
+    res.json(data[0]);
+  } catch (err) {
+    console.error(err);
+  }
+});
 
 app.post("/new-equipment", async (req, res) => {
   try {

@@ -6,7 +6,8 @@ import { FaSearch } from "react-icons/fa";
 import Slider from "../../components/Slider"
 import { Category } from "../../types/category";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 type ItemCardProps = {
     item:Item []
@@ -26,10 +27,18 @@ export default function equipmentSearch ({item,categories, users }:ItemCardProps
         if (selectedCategories.length === 0) {
             return true; 
         }
-        
         return selectedCategories.includes(item.category_id);
 });
+const [searchParams] = useSearchParams();
+  const categorieId = searchParams.get("categorie");
 
+
+  useEffect(() => {
+    if (categorieId) {
+       setSelectedCategories([Number(categorieId)]);
+      
+    }
+  }, [categorieId]);
 
     return(
         // recherche + filtre
@@ -59,7 +68,7 @@ export default function equipmentSearch ({item,categories, users }:ItemCardProps
                              <div className="space-y-3">
                                 {categories.map((cat)=>(
                                      <label  key={cat.name} className="flex items-center gap-1 text-sm font-semibold select-none cursor-pointer">
-                                      <input type="checkbox"  value={cat.id} onChange={handleChange} />
+                                      <input type="checkbox"  value={cat.id}  checked={selectedCategories.includes(cat.id)} onChange={handleChange} />
                                         <span>{cat.icon}</span>
                                         <span>{cat.name}</span> 
                                    </label>
