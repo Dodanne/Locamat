@@ -1,6 +1,13 @@
 import { FaSearch } from "react-icons/fa";
+import {useState} from "react"
 
 export default function Banner(){
+const [search, setSearch]=useState("")
+function handleChange (e:React.ChangeEvent<HTMLInputElement>){
+    setSearch(e.target.value)
+}
+
+
     return (
         <div className="relative py-20 overflow-hidden">
             {/* Background */}
@@ -17,7 +24,7 @@ export default function Banner(){
                 <div className="flex-1 flex items-center gap-2 px-3">
                     <FaSearch className=" left-3  text-gray-400" />
                     <label htmlFor="search"></label>
-                    <input type="text" placeholder="Que recherchez-vous ? (ex: perceuse, tente, vélo...)" className="flex-1 h-9 w-full min-w-0 rounded-md px-3 py-1 text-base md:text-sm bg-gray-100 placeholder:text-gray-500  focus:outline-none "/>
+                    <input type="text" value={search} onChange={handleChange} placeholder="Que recherchez-vous ? (ex: perceuse, tente, vélo...)" className="flex-1 h-9 w-full min-w-0 rounded-md px-3 py-1 text-base md:text-sm bg-gray-100 placeholder:text-gray-500  focus:outline-none "/>
                 </div>
                 <button className="btn-primary">Rechercher</button>
             </div>

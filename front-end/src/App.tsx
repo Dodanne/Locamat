@@ -8,10 +8,11 @@ import type { User } from "./types/users";
 import type { Category } from "./types/category";
 import AddEquipment from "./pages/AddEquipment/AddEquipment";
 import ChatPage from "./pages/Chat/ChatPage";
-import UserProfile from "./pages/User/UserProfile";
 import Connexion from "./pages/User/Connexion";
 import { useEffect, useState } from "react";
 import EquipmentItem from "./pages/EquipmentItem/EquipmentItem";
+import ChooseProfile from "./pages/User/ChooseProfile"
+import UserProfile from "./pages/User/UserProfile";
 
 
 function App(){
@@ -76,8 +77,10 @@ catch (err) {
       <Route path="/new-equipment" element={<AddEquipment categories={categoriesList}/>}/>
       <Route path="/chat" element={<ChatPage/>}/>
       <Route path="/connexion" element={<Connexion categories={categoriesList}/>}/>
-      <Route path="/user-profile" element={<UserProfile items={itemsList} users={usersList} />}/>
+      <Route path="/user-profile" element={<ChooseProfile users={usersList} />}/>
       <Route path="/equipment/:id" element={<EquipmentItem />}/>
+      <Route path="/user-profile/:id" element={<UserProfile /> }/>
+      
     </Routes>
     </div>
      <Footer/>

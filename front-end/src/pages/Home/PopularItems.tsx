@@ -11,7 +11,7 @@ type PopularItemsProps={
 
 
 export default function PopularItems({items,users}:PopularItemsProps) {
-  console.log("items in PopularItems:", items);
+  
   return (
     <div className="py-16 bg-gray-50">
       <div className="container">

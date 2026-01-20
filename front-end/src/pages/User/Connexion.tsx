@@ -4,7 +4,7 @@ type ConnexionProps = {
       categories: Category[];
     };
 export default function Connexion({categories}: ConnexionProps) {
-    const [direction,setDirection] = useState<"up" | "down">("down");
+  
 
     return (
         <div className="container py-8">

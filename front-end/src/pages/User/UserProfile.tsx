@@ -5,42 +5,68 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { BsBoxSeam } from "react-icons/bs";
 import { PiClockCounterClockwise } from "react-icons/pi";
 import { FaRegStar } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import ItemCard from "../Home/ItemCard";
-import type {Item} from "../../types/item"
-import { User } from "../../types/users";
 import AddEquipmentBtn from "../../components/AddEquipmentBtn";
 import StarRating from "../../components/StarRating";
+import { User } from "../../types/users";
+import { Item } from "../../types/item";
 
-type ItemCardProps = {
-    items:Item []
-    users:User[]
-}
 
-export default function UserProfile ({items, users}:ItemCardProps){
+
+export default function UserProfile (){
 const [activeDiv,setActiveDiv]=useState("equipment")
-
+const [user,setUser]=useState<User>({}as User)
+const [userEquipments,setUserEquipments]=useState<Item[]>([])
+ const {id}=useParams();
+    useEffect(() => {
+        async function fetchUsers() {
+            try {
+                const res = await fetch(`http://localhost:3000/user/${id}`);
+                const data = await res.json();
+                setUser(data);
+                console.log(data)
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchUsers();
+    }, [id]);
+    useEffect(() => {
+        async function fetchUserEquipments() {
+            try {
+                const res = await fetch(`http://localhost:3000/user/${id}/equipment`);
+                const data = await res.json();
+                setUserEquipments((data));
+                console.log(data)
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchUserEquipments();
+    }, [id]);
 
     return(
     <div className="container py-8">
         <div className=" flex flex-col gap-6 rounded-xl border bg-white">
             <div className="flex items-start gap-6 p-4">
                 <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-24 w-24">
-                <img src={users[0]?.photo} alt={users[0]?.first_name} className="img-cover"/></span>
+                <img src={user.photo} alt={user.first_name} className="img-cover"/></span>
                 <div className="flex-1">
                     <div className="flex items-center gap-3 my-2">
-                        <h1 className="text-3xl text-gray-900">{users[0]?.first_name} {users[0]?.last_name}</h1>
+                        <h1 className="text-3xl text-gray-900">{user.first_name} {user.last_name}</h1>
                         <span className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit gap-1 overflow-hidden border-transparent bg-gray-300">Particulier</span>
                     </div>
                     <div className="flex items-center gap-6 text-gray-600 mb-4">
                         <div className="flex items-center gap-1">
                             <FaStar  className="text-yellow-400"/>
-                            <span className="text-gray-900">{users[0]?.rating_avg}</span>
-                            <span className="text-gray-500">{users[0]?.rating_count}</span>
+                            <span className="text-gray-900">{user.rating_avg}</span>
+                            <span className="text-gray-500">{user.rating_count}</span>
                         </div>  
                         <div className="flex items-center gap-1">
                             <IoLocationOutline />
-                            <span>{users[0]?.city} </span>  
+                            <span>{user.city} </span>  
                         </div>            
                     </div>
                     <div className="flex gap-3">
@@ -75,11 +101,9 @@ const [activeDiv,setActiveDiv]=useState("equipment")
                        <AddEquipmentBtn/>
                      </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                       {items&& items.map ((i)=>{
-                          const user = users.find((u) => u.id === i.owner_id);
-                                     if (!user) return null; 
-                                     return <ItemCard key={i.id} item={i} user={user} />;
-                                   })}
+                       {userEquipments.map ((i)=> (
+                                     <ItemCard key={i.id} item={i} user={user} />
+                       ))}
                         
                     </div>
                 </>   
@@ -137,21 +161,21 @@ const [activeDiv,setActiveDiv]=useState("equipment")
                         <div className="px-6">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div className="text-center">
-                                    <div className="text-4xl text-primary mb-2">{users[0]?.rating_avg}</div>
+                                    <div className="text-4xl text-primary mb-2">{user?.rating_avg}</div>
                                     <div className="flex items-center justify-center gap-1 mb-1">
-                                        <StarRating rating={users[0]?.rating_avg??0} />
+                                        <StarRating rating={user.rating_avg??0} />
                                     </div>
                                         <p className="text-gray-600">Note moyenne</p>
                                 </div>
                                 <div className="text-center">
                                     <div className="text-4xl text-primary mb-2">
-                                        {users[0]?.rating_count}
+                                        {user.rating_count}
                                     </div>
                                 <p className="text-gray-600">Avis reçus</p>
                                 </div>
                                 <div className="text-center">
                                     <div className="text-4xl text-primary mb-2">
-                                        {Math.round((users[0]?.rating_avg || 0) * 20)}%
+                                        {Math.round((user.rating_avg || 0) * 20)}%
                                     </div>
                                 <p className="text-gray-600">Taux de satisfaction</p>
                                 </div>

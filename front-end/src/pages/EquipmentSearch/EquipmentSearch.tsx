@@ -1,7 +1,6 @@
 import {Item} from "../../types/item"
 import { User } from "../../types/users"
 import ItemCard from "../Home/ItemCard"
-import { IoFilterSharp } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import Slider from "../../components/Slider"
 import { Category } from "../../types/category";
@@ -15,20 +14,27 @@ type ItemCardProps = {
     categories:Category []
 }
 export default function equipmentSearch ({item,categories, users }:ItemCardProps){
-    
+    //useStates
     const [selectedCategories, setSelectedCategories] =  useState<number[]>([]);
-    
-    const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const [search,setSearch]=useState("")
+
+    //handleChanges
+    function handleChangeSearchBar(e:React.ChangeEvent<HTMLInputElement>){
+        setSearch(e.target.value)
+    }
+        const handleChangeCategory = (e:React.ChangeEvent<HTMLInputElement>) => {
         const categoryId = Number(e.target.value);
         setSelectedCategories((prev) => 
             prev.includes(categoryId) ? prev.filter((id) => id !== categoryId): [...prev, categoryId]); 
     }
-    const filteredItems = item.filter((item) => {
-        if (selectedCategories.length === 0) {
-            return true; 
-        }
-        return selectedCategories.includes(item.category_id);
-});
+        //filter => A FAIRE DANS LE BACK
+    const filteredItems=item.filter((i)=>{
+       const filterSearch= i.title.toLowerCase().includes(search.toLowerCase())
+       const filterCategory= selectedCategories.length === 0 ||selectedCategories.includes(i.category_id);    
+    return filterSearch&& filterCategory 
+    })
+    
+
 const [searchParams] = useSearchParams();
   const categorieId = searchParams.get("categorie");
 
@@ -47,16 +53,14 @@ const [searchParams] = useSearchParams();
             <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1 relative">
                     <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input type="text" className=" w-full h-10 pr-4 pl-10 text-blackText bg-gray-100 rounded-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-secondary placeholder:text-gray-600" placeholder="Rechercher du matériel..."/>
+                    <input type="text" value={search} onChange={handleChangeSearchBar} className=" w-full h-10 pr-4 pl-10 text-blackText bg-gray-100 rounded-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-secondary placeholder:text-gray-600" placeholder="Rechercher du matériel..."/>
                 </div>
-                <button className="flex items-center justify-center gap-2 h-10 px-4 font-semibold rounded-md border border-gray-300 text-sm hover:bg                -gray-100">
-                <IoFilterSharp />
-                Filtres
-                </button>  
+               
             </div>
-            <div className="text-gray-600 text-sm">
-                "" resultats trouvés
-            </div>
+           {search.trim() !== ""&&(
+             <div className="text-gray-600 text-sm">
+            {filteredItems.length} resultats trouvés
+            </div>)}
         </div>
         {/* Aside Bar */}
         <div className="flex gap-8">
@@ -68,7 +72,7 @@ const [searchParams] = useSearchParams();
                              <div className="space-y-3">
                                 {categories.map((cat)=>(
                                      <label  key={cat.name} className="flex items-center gap-1 text-sm font-semibold select-none cursor-pointer">
-                                      <input type="checkbox"  value={cat.id}  checked={selectedCategories.includes(cat.id)} onChange={handleChange} />
+                                      <input type="checkbox"  value={cat.id}  checked={selectedCategories.includes(cat.id)} onChange={handleChangeCategory} />
                                         <span>{cat.icon}</span>
                                         <span>{cat.name}</span> 
                                    </label>
