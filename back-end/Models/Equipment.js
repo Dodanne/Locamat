@@ -51,6 +51,7 @@ const Equipment = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   },
 );
 export default Equipment;

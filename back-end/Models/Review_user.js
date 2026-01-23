@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../db/sequelize.js";
 
 const Review_user = sequelize.define(
-  "review_users",
+  "review_user",
   {
     reviews_user_id: {
       type: DataTypes.INTEGER,
@@ -29,6 +29,7 @@ const Review_user = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   },
 );
 export default Review_user;

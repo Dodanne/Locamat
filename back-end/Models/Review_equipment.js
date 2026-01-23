@@ -29,6 +29,7 @@ const Review_equipment = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   },
 );
 export default Review_equipment;
