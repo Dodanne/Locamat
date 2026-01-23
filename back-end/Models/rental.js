@@ -1,8 +1,9 @@
 import { DataTypes } from "sequelize";
-import Sequelize from "../db/sequelize";
+import sequelize from "../db/sequelize.js";
 
-export default function Rental() {
-  return Sequelize.define("rental", {
+const Rental = sequelize.define(
+  "rental",
+  {
     rental_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -17,5 +18,10 @@ export default function Rental() {
       onUpdate: "CASCADE",
       onDelete: "RESTRICT",
     },
-  });
-}
+  },
+  {
+    timestamps: true,
+    freezeTableName: true,
+  },
+);
+export default Rental;

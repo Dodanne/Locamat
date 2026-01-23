@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../db/sequelize";
+import sequelize from "../db/sequelize.js";
 
 const User = sequelize.define(
   "user",
@@ -81,6 +81,7 @@ const User = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   },
 );
 export default User;

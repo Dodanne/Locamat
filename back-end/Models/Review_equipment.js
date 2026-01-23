@@ -1,10 +1,10 @@
 import { DataTypes } from "sequelize";
-import sequelize from "../db/sequelize";
+import sequelize from "../db/sequelize.js";
 
-const Reviews_user = sequelize.define(
-  "reviews_users",
+const Review_equipment = sequelize.define(
+  "review_equipment",
   {
-    reviews_user_id: {
+    reviews_equipment_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -31,4 +31,4 @@ const Reviews_user = sequelize.define(
     timestamps: true,
   },
 );
-export default Reviews_user;
+export default Review_equipment;
