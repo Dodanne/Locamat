@@ -1,4 +1,4 @@
-import type {User} from "../../types/users"
+import type {User} from "../../types/User"
 import {Link} from "react-router-dom"
 
 type ChooseProfileProps= {

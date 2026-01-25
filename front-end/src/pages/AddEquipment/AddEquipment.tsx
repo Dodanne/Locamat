@@ -1,7 +1,7 @@
 import { FaEuroSign } from "react-icons/fa";
-import { Category } from "../../types/category";
+import { Category } from "../../types/Category";
 import { useEffect, useState } from "react";
-import type { Item } from "../../types/item";
+import type { Equipment } from "../../types/Equipment";
 
 type AddEquipmentProps = {
     categories:Category []
@@ -16,7 +16,7 @@ export default function AddEquipment ({categories}: AddEquipmentProps) {
     caution: "",
     photo: ""
   });
-  const [equipments, setEquipments] = useState<Item[]>([]);
+  const [equipments, setEquipments] = useState<Equipment[]>([]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

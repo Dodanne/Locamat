@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Category } from "../../types/category";
+import { Category } from "../../types/Category";
 type ConnexionProps = {
       categories: Category[];
     };

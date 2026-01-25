@@ -2,7 +2,7 @@ import { User } from "./../Models/index.js";
 
 export const getAllUsers = async (req, res) => {
   try {
-    const [data] = await User.findAll();
+    const data = await User.findAll();
     res.json(data);
     // console.log(data);
   } catch (err) {
@@ -13,8 +13,8 @@ export const getAllUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
   try {
     const id = req.params.id;
-    const [data] = await User.findByPk(id);
-    res.json(data[0]);
+    const data = await User.findByPk(id);
+    res.json(data);
   } catch (err) {
     console.error(err);
   }

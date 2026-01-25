@@ -2,7 +2,7 @@ import { Rental, User, Equipment } from "../Models/index.js";
 
 export const getAllRentals = async (req, res) => {
   try {
-    const [data] = await Rental.findAll({
+    const data = await Rental.findAll({
       include: [
         {
           model: User,
@@ -26,21 +26,21 @@ export const getAllRentals = async (req, res) => {
 export const getRentalById = async (req, res) => {
   try {
     const id = req.params.id;
-    const [data] = await Rental.findByPk(id, {
+    const data = await Rental.findByPk(id, {
       include: [
         {
           model: Equipment,
           as: "equipment",
-          attributes: ["id", "name", "type", "status"],
+          //attribute
         },
         {
           model: User,
           as: "renter",
-          attributes: ["id", "first_name", "last_name", "email", "photo"],
+          //attribute
         },
       ],
     });
-    res.json(data[0]);
+    res.json(data);
   } catch (err) {
     console.error(err);
   }

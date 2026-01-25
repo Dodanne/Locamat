@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { Category } from "../../types/category";
+import type { Category } from "../../types/Category";
 
 type HomeProps = {
   categories: Category[];

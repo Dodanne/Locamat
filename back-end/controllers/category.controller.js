@@ -12,7 +12,7 @@ export const getAllCategories = async (req, res) => {
 export const getCategoryById = async (req, res) => {
   try {
     const id = req.params.id;
-    const [data] = await Category.findByPk(id);
+    const data = await Category.findByPk(id);
     res.json(data[0]);
   } catch (err) {
     console.error(err);

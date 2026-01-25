@@ -10,15 +10,16 @@ import { useParams } from "react-router-dom";
 import ItemCard from "../Home/ItemCard";
 import AddEquipmentBtn from "../../components/AddEquipmentBtn";
 import StarRating from "../../components/StarRating";
-import { User } from "../../types/users";
-import { Item } from "../../types/item";
+import { User } from "../../types/User";
+import { Equipment } from "../../types/Equipment";
 
 
 
 export default function UserProfile (){
 const [activeDiv,setActiveDiv]=useState("equipment")
 const [user,setUser]=useState<User>({}as User)
-const [userEquipments,setUserEquipments]=useState<Item[]>([])
+const [userEquipments,setUserEquipments]=useState<Equipment[]>([])
+const [userRentals,setUserRentals]=useState<Equipment[]>([])
  const {id}=useParams();
     useEffect(() => {
         async function fetchUsers() {
@@ -38,7 +39,7 @@ const [userEquipments,setUserEquipments]=useState<Item[]>([])
             try {
                 const res = await fetch(`http://localhost:3000/user/${id}/equipment`);
                 const data = await res.json();
-                setUserEquipments((data));
+                setUserEquipments(data);
                 console.log(data)
             } catch (err) {
                 console.error(err);
@@ -46,6 +47,21 @@ const [userEquipments,setUserEquipments]=useState<Item[]>([])
         }
         fetchUserEquipments();
     }, [id]);
+
+    useEffect(() => {
+        async function fetchUserRentals() {
+            try {
+                const res = await fetch(`http://localhost:3000/rental/${id}`);
+                const data = await res.json();
+                setUserRentals(data);
+                console.log(data)
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchUserRentals();
+    }, [id]);
+
 
     return(
     <div className="container py-8">
@@ -102,7 +118,7 @@ const [userEquipments,setUserEquipments]=useState<Item[]>([])
                      </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                        {userEquipments.map ((i)=> (
-                                     <ItemCard key={i.id} item={i} user={user} />
+                                     <ItemCard key={i.equipment_id} equipment={i} user={user} />
                        ))}
                         
                     </div>
@@ -110,19 +126,19 @@ const [userEquipments,setUserEquipments]=useState<Item[]>([])
                 )}
             {activeDiv==="locations"&&(
                 <>
-                <div className="flex items-center justify-between"> 
+                <div className="flex equipments-center justify-between"> 
                        <h2 className="text-2xl text-gray-900 my-4">Historique des locations</h2>
                  </div>
                 <div className="space-y-4">
-                    {items&& items.map ((i)=>(
+                    {userRentals && userRentals.map ((e)=>(
 
                     <div className="bg-white flex flex-col gap-6 rounded-xl border p-4">
                         <div className="flex gap-6">
-                            <img src={i.photo} alt={i.title} className="w-32 h-32 object-cover rounded-lg"></img>
+                            <img src={e.photo} alt={e.title} className="w-32 h-32 object-cover rounded-lg"></img>
                             <div className="flex-1">
                                 <div className="flex items-start justify-between mb-2">
                                     <div>
-                                     <h3 className="text-xl text-gray-900 mb-1">{i.title}</h3>
+                                     <h3 className="text-xl text-gray-900 mb-1">{e.title}</h3>
                                      <p className="text-gray-600"> Propriétaire : user.name</p>
                                     </div>
                                     <span className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit">passée</span>
@@ -134,7 +150,7 @@ const [userEquipments,setUserEquipments]=useState<Item[]>([])
                                         <p>Du : useritem.enddate</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-2xl text-primary">{i.price} €</p>
+                                        <p className="text-2xl text-primary">{e.price} €</p>
                                         <p className="text-sm text-gray-500">Total</p>
                                     </div>
                                 </div>

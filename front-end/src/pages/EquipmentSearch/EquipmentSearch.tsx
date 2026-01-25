@@ -1,19 +1,19 @@
-import {Item} from "../../types/item"
-import { User } from "../../types/users"
+import {Equipment} from "../../types/Equipment"
+import { User } from "../../types/User"
 import ItemCard from "../Home/ItemCard"
 import { FaSearch } from "react-icons/fa";
 import Slider from "../../components/Slider"
-import { Category } from "../../types/category";
+import { Category } from "../../types/Category";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 type ItemCardProps = {
-    item:Item []
+    equipment:Equipment []
     users:User[]
     categories:Category []
 }
-export default function equipmentSearch ({item,categories, users }:ItemCardProps){
+export default function equipmentSearch ({equipment,categories, users }:ItemCardProps){
     //useStates
     const [selectedCategories, setSelectedCategories] =  useState<number[]>([]);
     const [search,setSearch]=useState("")
@@ -28,7 +28,7 @@ export default function equipmentSearch ({item,categories, users }:ItemCardProps
             prev.includes(categoryId) ? prev.filter((id) => id !== categoryId): [...prev, categoryId]); 
     }
         //filter => A FAIRE DANS LE BACK
-    const filteredItems=item.filter((i)=>{
+    const filteredItems=equipment.filter((i)=>{
        const filterSearch= i.title.toLowerCase().includes(search.toLowerCase())
        const filterCategory= selectedCategories.length === 0 ||selectedCategories.includes(i.category_id);    
     return filterSearch&& filterCategory 
@@ -72,7 +72,7 @@ const [searchParams] = useSearchParams();
                              <div className="space-y-3">
                                 {categories.map((cat)=>(
                                      <label  key={cat.name} className="flex items-center gap-1 text-sm font-semibold select-none cursor-pointer">
-                                      <input type="checkbox"  value={cat.id}  checked={selectedCategories.includes(cat.id)} onChange={handleChangeCategory} />
+                                      <input type="checkbox"  value={cat.category_id}  checked={selectedCategories.includes(cat.category_id)} onChange={handleChangeCategory} />
                                         <span>{cat.icon}</span>
                                         <span>{cat.name}</span> 
                                    </label>
@@ -102,9 +102,9 @@ const [searchParams] = useSearchParams();
             <div className="flex-1">
                 <div className="loop-div">
                     {filteredItems.map ((i)=>  {
-                        const user = users.find((u) => u.id === i.owner_id);
+                        const user = users.find((u) => u.user_id === i.owner_id);
                         if (!user) return null; 
-                        return <Link to={`/equipment/${i.id}`}><ItemCard key={i.id} item={i} user={user}/></Link>
+                        return <Link to={`/equipment/${i.equipment_id}`}><ItemCard key={i.equipment_id} equipment={i} user={user}/></Link>
                     })
                     }
                 </div>

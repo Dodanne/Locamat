@@ -12,8 +12,8 @@ const Rental = sequelize.define(
     equipment_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: "user",
-        key: "user_id",
+        model: "equipment",
+        key: "equipment_id",
       },
       onUpdate: "CASCADE",
       onDelete: "RESTRICT",

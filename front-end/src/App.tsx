@@ -3,9 +3,9 @@ import Home from "./pages/Home/Home";
 import EquipmentSearch from "./pages/EquipmentSearch/EquipmentSearch";
 import { BrowserRouter,Route,Routes, useParams} from "react-router-dom";
 import Footer from "./components/Footer";
-import type { Item } from "./types/item";
-import type { User } from "./types/users";
-import type { Category } from "./types/category";
+import type { Equipment } from "./types/Equipment";
+import type { User } from "./types/User";
+import type { Category } from "./types/Category";
 import AddEquipment from "./pages/AddEquipment/AddEquipment";
 import ChatPage from "./pages/Chat/ChatPage";
 import Connexion from "./pages/User/Connexion";
@@ -16,23 +16,23 @@ import UserProfile from "./pages/User/UserProfile";
 
 
 function App(){
- const [itemsList,setItemsList]=useState<Item[]>([]);
+ const [equipmentList,setEquipmentList]=useState<Equipment[]>([]);
  const [usersList,setUsersList]=useState<User[]>([]);
  const [categoriesList,setCategoriesList]=useState<Category[]>([]);
  
  useEffect(() => {
-  async function fetchItems() {
+  async function fetchEquipments() {
   try { {
     const res = await fetch("http://localhost:3000/equipment");
-    const data: Item[] = await res.json();
-    setItemsList(data);
+    const data: Equipment[] = await res.json();
+    setEquipmentList(data);
   }
 }
 catch (err) {
   console.error(err);
 }
 } 
-  fetchItems();
+  fetchEquipments();
 }, []);
 
  useEffect(() => {
@@ -72,8 +72,8 @@ catch (err) {
     <Header />
     <div className="min-h-screen bg-gray-50">
     <Routes>
-      <Route path="/" element={<Home items={itemsList} user={usersList} category={categoriesList}/>}/>
-      <Route path="/rechercher" element={<EquipmentSearch item={itemsList} users={usersList} categories={categoriesList}/>}/>
+      <Route path="/" element={<Home equipments={equipmentList} user={usersList} category={categoriesList}/>}/>
+      <Route path="/rechercher" element={<EquipmentSearch equipment={equipmentList} users={usersList} categories={categoriesList}/>}/>
       <Route path="/new-equipment" element={<AddEquipment categories={categoriesList}/>}/>
       <Route path="/chat" element={<ChatPage/>}/>
       <Route path="/connexion" element={<Connexion categories={categoriesList}/>}/>
