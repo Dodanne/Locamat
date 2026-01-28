@@ -49,7 +49,7 @@ export const createEquipment = async (req, res) => {
       caution,
       owner_id: owner_id,
     });
-    res.json(data[0]);
+    res.json(data);
   } catch (err) {
     console.error(err);
   }

@@ -14,15 +14,14 @@ const Category = sequelize.define(
       allowNull: false,
       validate: {
         notNull: {
-          message: "Le nom de la catégorie est obligatoire",
+          msg: "Le nom de la catégorie est obligatoire",
         },
         notEmpty: {
-          message: "Le nom de la catégorie ne peut pas être vide",
+          msg: "Le nom de la catégorie ne peut pas être vide",
         },
         len: {
           args: [2, 50],
-          message:
-            "Le nom de la catégorie doit contenir entre 2 et 50 caractères",
+          msg: "Le nom de la catégorie doit contenir entre 2 et 50 caractères",
         },
       },
     },
@@ -31,10 +30,10 @@ const Category = sequelize.define(
       allowNull: false,
       validate: {
         notNull: {
-          message: "L'icone de la catégorie est obligatoire",
+          msg: "L'icone de la catégorie est obligatoire",
         },
         notEmpty: {
-          message: "L'icone de la catégorie ne peut pas être vide",
+          msg: "L'icone de la catégorie ne peut pas être vide",
         },
       },
     },

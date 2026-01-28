@@ -13,6 +13,9 @@ import { useEffect, useState } from "react";
 import EquipmentItem from "./pages/EquipmentItem/EquipmentItem";
 import ChooseProfile from "./pages/User/ChooseProfile"
 import UserProfile from "./pages/User/UserProfile";
+import AddUser from "./pages/User/AddUser";
+import Dashboard from "./pages/Admin/Dashboard"
+import ScrollToTop from "./components/ScrollToTop";
 
 
 function App(){
@@ -70,16 +73,19 @@ catch (err) {
     <>
     <BrowserRouter>
     <Header />
+    <ScrollToTop/>
     <div className="min-h-screen bg-gray-50">
     <Routes>
       <Route path="/" element={<Home equipments={equipmentList} user={usersList} category={categoriesList}/>}/>
       <Route path="/rechercher" element={<EquipmentSearch equipment={equipmentList} users={usersList} categories={categoriesList}/>}/>
       <Route path="/new-equipment" element={<AddEquipment categories={categoriesList}/>}/>
       <Route path="/chat" element={<ChatPage/>}/>
-      <Route path="/connexion" element={<Connexion categories={categoriesList}/>}/>
+      <Route path="/connexion" element={<Connexion />}/>
       <Route path="/user-profile" element={<ChooseProfile users={usersList} />}/>
       <Route path="/equipment/:id" element={<EquipmentItem />}/>
       <Route path="/user-profile/:id" element={<UserProfile /> }/>
+      <Route path="/new-user" element={<AddUser /> }/>
+      <Route path="/admin-dashboard" element={< Dashboard/> }/>
       
     </Routes>
     </div>

@@ -12,10 +12,30 @@ const Equipment = sequelize.define(
     title: {
       type: DataTypes.STRING,
       allowNull: false,
+      notNull: {
+        msg: "Le titre est obligatoire",
+      },
+      notEmpty: {
+        msg: "Le titre ne peut pas être vide",
+      },
+      len: {
+        args: [3, 60],
+        msg: "Le titre doit contenir entre 3 et 60 caractères",
+      },
     },
     description: {
       type: DataTypes.TEXT,
       allowNull: false,
+      notNull: {
+        msg: "La description est obligatoire",
+      },
+      notEmpty: {
+        msg: "La description ne peut pas être vide",
+      },
+      len: {
+        args: [3],
+        msg: "Le description doit contenir au moins 3 caractères",
+      },
     },
     category_id: {
       type: DataTypes.INTEGER,
@@ -28,16 +48,31 @@ const Equipment = sequelize.define(
     },
     photo: {
       type: DataTypes.STRING,
-      defaultValue:
-        "https://us.123rf.com/450wm/dustin999/dustin9992302/dustin999230203648/199476687-ic%C3%B4ne-d-image-dans-un-style-plat-tendance-isol%C3%A9-sur-fond-gris-symbole-d-image-pour-la-conception-de.jpg?ver=6",
+      defaultValue: "images/default.png",
     },
     price: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      validate: {
+        notNull: { msg: "Le prix est obligatoire" },
+        isDecimal: { msg: "Le prix doit être un nombre décimal" },
+        min: {
+          args: [0],
+          msg: "Le prix ne peut pas être négatif",
+        },
+      },
     },
     caution: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      validate: {
+        notNull: { msg: "La caution est obligatoire" },
+        isDecimal: { msg: "La caution doit être un nombre décimal" },
+        min: {
+          args: [0],
+          msg: "La caution ne peut pas être négative",
+        },
+      },
     },
     owner_id: {
       type: DataTypes.INTEGER,
@@ -46,7 +81,7 @@ const Equipment = sequelize.define(
         key: "user_id",
       },
       onUpdate: "CASCADE",
-      onDelete: "RESTRICT",
+      onDelete: "CASCADE",
     },
   },
   {

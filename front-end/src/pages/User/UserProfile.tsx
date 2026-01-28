@@ -12,6 +12,7 @@ import AddEquipmentBtn from "../../components/AddEquipmentBtn";
 import StarRating from "../../components/StarRating";
 import { User } from "../../types/User";
 import { Equipment } from "../../types/Equipment";
+import { DiVim } from "react-icons/di";
 
 
 
@@ -62,13 +63,23 @@ const [userRentals,setUserRentals]=useState<Equipment[]>([])
         fetchUserRentals();
     }, [id]);
 
+function getInitials(user: User) {
+     if (!user?.first_name || !user?.last_name) return "";
+    return `${user.first_name.charAt(0).toUpperCase()}${user.last_name.charAt(0).toUpperCase()}`;
+  };
 
     return(
     <div className="container py-8">
         <div className=" flex flex-col gap-6 rounded-xl border bg-white">
             <div className="flex items-start gap-6 p-4">
                 <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-24 w-24">
-                <img src={user.photo} alt={user.first_name} className="img-cover"/></span>
+                    {user.photo && user.photo !=="NULL" ? (  
+                        <img src={user.photo} alt={user.first_name} className="w-full h-full object-cover"/>
+                 ):(
+                    <span className="flex items-center justify-center w-full h-full text-2xl font-bold text-white bg-accent rounded-full">{getInitials(user)}</span>
+                 )
+                    } 
+                </span>
                 <div className="flex-1">
                     <div className="flex items-center gap-3 my-2">
                         <h1 className="text-3xl text-gray-900">{user.first_name} {user.last_name}</h1>

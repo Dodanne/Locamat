@@ -11,7 +11,7 @@ console.log (users)
     <h2>Voir le profil de : </h2>
    { users.map((u)=> (
     <div>
- <Link to={`/user-profile/${u.id}`}> <h3 key={u.id}> {u.last_name} {u.first_name}</h3> </Link>
+ <Link to={`/user-profile/${u.user_id}`}> <h3 key={u.user_id}> {u.last_name} {u.first_name}</h3> </Link>
  </div>
    ))}
 

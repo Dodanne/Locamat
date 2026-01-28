@@ -16,7 +16,33 @@ const Rental = sequelize.define(
         key: "equipment_id",
       },
       onUpdate: "CASCADE",
-      onDelete: "RESTRICT",
+      onDelete: "SET NULL",
+    },
+    start_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        notNull: { msg: "La date de début est obligatoire" },
+        isDate: { msg: "La date de début doit être une date valide" },
+      },
+    },
+    end_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        notNull: { msg: "La date de fin est obligatoire" },
+        isDate: { msg: "La date de fin doit être une date valide" },
+        isAfterStart(value) {
+          if (this.start_date && value < this.start_date) {
+            throw new Error("La date de fin doit être après la date de début");
+          }
+        },
+      },
+    },
+    status: {
+      type: DataTypes.ENUM("pending", "accepted", "refused"),
+      allowNull: false,
+      defaultValue: "pending",
     },
   },
   {

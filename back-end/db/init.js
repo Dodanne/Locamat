@@ -6,7 +6,7 @@ export default async function initDb() {
     await sequelize.authenticate();
     console.log("succès de la connexion avec la db");
 
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log("Tables et Models synchronisés");
   } catch (err) {
     console.log(err);

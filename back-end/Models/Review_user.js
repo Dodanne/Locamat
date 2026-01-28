@@ -16,7 +16,7 @@ const Review_user = sequelize.define(
         key: "rental_id",
       },
       onUpdate: "CASCADE",
-      onDelete: "RESTRICT",
+      onDelete: "SET NULL",
     },
     rating: {
       type: DataTypes.DECIMAL(2, 1),

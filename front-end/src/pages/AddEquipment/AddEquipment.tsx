@@ -31,6 +31,7 @@ export default function AddEquipment ({categories}: AddEquipmentProps) {
         });
         const data = await res.json();
         console.log(data);
+        
         setEquipments(prev => [...prev, data]);
     }
     catch (err) {
@@ -64,7 +65,7 @@ export default function AddEquipment ({categories}: AddEquipmentProps) {
                 <select name="category_id" value={formData.category_id} onChange={handleChange} id="form-category" className="form-input" required>
                     <option value="" className="hidden">Selectionnez une catégorie</option>
                     {categories.map((cat)=>(
-                            <option value={cat.id} className="bg-white text-black ">{cat.name}</option>
+                            <option value={cat.category_id} className="bg-white text-black ">{cat.name}</option>
                     ))}
                 </select>
                 </div>

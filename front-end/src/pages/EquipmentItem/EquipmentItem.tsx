@@ -31,7 +31,7 @@ export default function EquipmentItem() {
            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
                 <div className="relative overflow-hidden py-4">
-                   <img src={equipment.photo} alt={equipment.title} className="img-cover w-full rounded-xl h-96"/>
+                   <img src={`http://localhost:3000/${equipment.photo}`} alt={equipment.title} className="img-cover w-full rounded-xl h-96"/>
                    <span className="inline-flex items-center justify-center rounded-md border px-2 py-1 m-2 text-xs font-medium w-fit bg-white text-primary absolute top-4 right-1"> 
                 {equipment.owner?.user_type}</span>
                 </div>
