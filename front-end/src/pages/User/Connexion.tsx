@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { User } from "../../types/User";
-
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../components/AuthContext";
 
 export default function Connexion() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const {login}=useAuth()
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -21,9 +22,9 @@ export default function Connexion() {
         throw new Error("Identifiants incorrects");
       }
       const data = await res.json();
-      console.log("connecte :", data.token);
-      localStorage.setItem("token", data.token)
-      console.log( localStorage.getItem("token"));
+       login(data.token, data.user.id);
+      navigate(`/user-profile/${data.user.id}`)
+      
       
     } catch (err) {
       console.error(err);
@@ -46,7 +47,7 @@ export default function Connexion() {
         </div>
         <div className="flex flex-col justify-center items-center p-4 my-10">
             <div className="p-8 bg-white/70 rounded-2xl shadow-xl">
-                <h1 className="text-2xl font-semibold text-gray-900 text-center">Connectez-vous ou créez votre compte <br />LocaMat</h1>
+                <h1 className="text-2xl font-semibold text-gray-900 text-center">Connectez-vous avec votre compte LocaMat</h1>
             <div className="py-16">
                 <form className="space-y-6  " onSubmit={handleSubmit}>
                     <div className="form-div">
@@ -62,6 +63,7 @@ export default function Connexion() {
                         onChange={(e) => setPassword(e.target.value)}/>
                     </div>
                     <button type="submit" className="w-full items-center h-10 rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Continuer</button>
+                    <div className="text-center italic underline text-sm"> <Link to="/new-user"> Pas encore de compte LocaMat ? Inscrivez-vous ici </Link></div>
                 </form>
             </div>
             </div>

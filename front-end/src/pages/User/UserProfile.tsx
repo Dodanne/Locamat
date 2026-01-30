@@ -6,13 +6,14 @@ import { BsBoxSeam } from "react-icons/bs";
 import { PiClockCounterClockwise } from "react-icons/pi";
 import { FaRegStar } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ItemCard from "../Home/ItemCard";
 import AddEquipmentBtn from "../../components/AddEquipmentBtn";
 import StarRating from "../../components/StarRating";
 import { User } from "../../types/User";
 import { Equipment } from "../../types/Equipment";
-import { DiVim } from "react-icons/di";
+import { FaHandHolding } from "react-icons/fa";
+import { Rental } from "../../types/Rental";
 
 
 
@@ -20,12 +21,16 @@ export default function UserProfile (){
 const [activeDiv,setActiveDiv]=useState("equipment")
 const [user,setUser]=useState<User>({}as User)
 const [userEquipments,setUserEquipments]=useState<Equipment[]>([])
-const [userRentals,setUserRentals]=useState<Equipment[]>([])
+const [userRentals,setUserRentals]=useState<Rental[]>([])
  const {id}=useParams();
     useEffect(() => {
         async function fetchUsers() {
             try {
-                const res = await fetch(`http://localhost:3000/user/${id}`);
+                const res = await fetch(`http://localhost:3000/user/${id}`,{
+                    headers:{
+                        Authorization:`Bearer ${localStorage.getItem("token")}`
+                    }
+                });
                 const data = await res.json();
                 setUser(data);
                 console.log(data)
@@ -40,7 +45,7 @@ const [userRentals,setUserRentals]=useState<Equipment[]>([])
             try {
                 const res = await fetch(`http://localhost:3000/user/${id}/equipment`);
                 const data = await res.json();
-                setUserEquipments(data);
+                setUserEquipments(Array.isArray(data) ? data : []);
                 console.log(data)
             } catch (err) {
                 console.error(err);
@@ -54,7 +59,8 @@ const [userRentals,setUserRentals]=useState<Equipment[]>([])
             try {
                 const res = await fetch(`http://localhost:3000/rental/${id}`);
                 const data = await res.json();
-                setUserRentals(data);
+                console.log(data)
+                setUserRentals(Array.isArray(data) ? data : []); // pour ne pas avoir null=>tableau vide
                 console.log(data)
             } catch (err) {
                 console.error(err);
@@ -74,7 +80,7 @@ function getInitials(user: User) {
             <div className="flex items-start gap-6 p-4">
                 <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-24 w-24">
                     {user.photo && user.photo !=="NULL" ? (  
-                        <img src={user.photo} alt={user.first_name} className="w-full h-full object-cover"/>
+                        <img src={`http://localhost:3000/images/users/${user.photo}`} alt={user.first_name} className="w-full h-full object-cover"/>
                  ):(
                     <span className="flex items-center justify-center w-full h-full text-2xl font-bold text-white bg-accent rounded-full">{getInitials(user)}</span>
                  )
@@ -83,7 +89,7 @@ function getInitials(user: User) {
                 <div className="flex-1">
                     <div className="flex items-center gap-3 my-2">
                         <h1 className="text-3xl text-gray-900">{user.first_name} {user.last_name}</h1>
-                        <span className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit gap-1 overflow-hidden border-transparent bg-gray-300">Particulier</span>
+                        <span className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit gap-1 overflow-hidden border-transparent bg-gray-300">{user.user_type}</span>
                     </div>
                     <div className="flex items-center gap-6 text-gray-600 mb-4">
                         <div className="flex items-center gap-1">
@@ -98,7 +104,7 @@ function getInitials(user: User) {
                     </div>
                     <div className="flex gap-3">
                         <button className="btn border-gray-200 bg-background hover:bg-gray-200 h-9 px-4 py-2">
-                        <FaRegEdit /> Modifier le profil
+                        <FaRegEdit /> Modifier les informations du profil
                         </button>
                         <button className="btn border-gray-200 bg-background hover:bg-gray-200 h-9 px-4 py-2">
                         <IoSettingsOutline /> Paramètres
@@ -108,13 +114,15 @@ function getInitials(user: User) {
             </div>
         </div>
         <div className="flex flex-col gap-2 my-6">
-            <div className="bg-gray-200 h-9 items-center justify-center rounded-xl p-[3px] grid w-full grid-cols-3">
+            <div className="bg-gray-200 h-9 items-center justify-center rounded-xl p-[3px] grid w-full grid-cols-4">
                 <button onClick={()=>setActiveDiv("equipment")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="equipment" ? 'bg-white' : ''} `}>
-                    <BsBoxSeam /> Mon matériel () 
-                </button>
+                    <BsBoxSeam /> Mon matériel () </button>
                 
                 <button onClick={()=>setActiveDiv("locations")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="locations" ? 'bg-white' : ''} `}>
                     <PiClockCounterClockwise /> Mes locations () 
+                </button>
+                <button onClick={()=>setActiveDiv("prêts")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="prêts" ? 'bg-white' : ''} `}>
+                    <FaHandHolding className="flex items-center gap-2 relative -top-0.5"/> Mes prêts () 
                 </button>
                  <button onClick={()=>setActiveDiv("reviews")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="reviews" ? 'bg-white' : ''} `}>
                     <FaRegStar /> Avis reçus() 
@@ -123,6 +131,14 @@ function getInitials(user: User) {
        
         {activeDiv==="equipment"&&(
                 <>
+                {userEquipments.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-12 text-center text-gray-500">
+                        <p className="text-lg mb-4">  Vous n’avez pas encore commencé à louer. </p>
+                        <p className="mb-6"> Commencez dès à présent en ajoutant votre premier matériel </p>
+                    <AddEquipmentBtn />
+                    </div>
+                     ) :(
+                        <> 
                      <div className="flex items-center justify-between"> 
                        <h2 className="text-2xl text-gray-900 my-4">Mon matériel</h2>
                        <AddEquipmentBtn/>
@@ -130,38 +146,46 @@ function getInitials(user: User) {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                        {userEquipments.map ((i)=> (
                                      <ItemCard key={i.equipment_id} equipment={i} user={user} />
-                       ))}
-                        
+                       ))}      
                     </div>
+                    </>
+                     )}
                 </>   
                 )}
             {activeDiv==="locations"&&(
                 <>
-                <div className="flex equipments-center justify-between"> 
-                       <h2 className="text-2xl text-gray-900 my-4">Historique des locations</h2>
-                 </div>
-                <div className="space-y-4">
+                {userRentals.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-12 text-center text-gray-500">
+                        <p className="text-lg mb-4">  Vous n’avez pas encore commencé à louer. </p>
+                        <p className="mb-6"> Commencez dès à présent à louer du materiel près de chez vous. </p>
+                            <Link to="/rechercher"> <div className="btn p-3 bg-accent text-white"> Trouver du materiel à emprunter </div> </Link>
+                    </div>
+                     ) :(
+                        <>
+                    <div className="flex equipments-center justify-between"> 
+                       <h2 className="text-2xl text-gray-900 my-4"> Matériel que j’ai loué</h2>
+                    </div>
+                    <div className="space-y-4">
                     {userRentals && userRentals.map ((e)=>(
-
-                    <div className="bg-white flex flex-col gap-6 rounded-xl border p-4">
+                        <div className="bg-white flex flex-col gap-6 rounded-xl border p-4">
                         <div className="flex gap-6">
-                            <img src={e.photo} alt={e.title} className="w-32 h-32 object-cover rounded-lg"></img>
+                            <img src={e.equipment?.photo} alt={e.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
                             <div className="flex-1">
                                 <div className="flex items-start justify-between mb-2">
                                     <div>
-                                     <h3 className="text-xl text-gray-900 mb-1">{e.title}</h3>
-                                     <p className="text-gray-600"> Propriétaire : user.name</p>
+                                     <h3 className="text-xl text-gray-900 mb-1">{e.equipment?.title}</h3>
+                                     <p className="text-gray-600"> {e.renter?.first_name} {e.renter?.last_name}</p>
                                     </div>
                                     <span className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit">passée</span>
                                 </div>
                                 <hr className="my-4"/>
                                 <div className="flex items-center justify-between">
                                     <div className="text-gray-600">
-                                        <p>Du : useritem.startdate</p>
-                                        <p>Du : useritem.enddate</p>
+                                        <p>Du {e.start_date}</p>
+                                        <p>Du {e.end_date}</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-2xl text-primary">{e.price} €</p>
+                                        <p className="text-2xl text-primary">{e.equipment?.price} €</p>
                                         <p className="text-sm text-gray-500">Total</p>
                                     </div>
                                 </div>
@@ -172,10 +196,65 @@ function getInitials(user: User) {
                             </div>
                         </div>
                     </div>
+                    
                     ))}
                 </div>
                 </>
-
+                )}
+            </>
+            )}
+             {activeDiv==="prêts"&&(
+                <>
+                 {userRentals.length === 0 ? (
+                    <>
+                    <div className="flex flex-col items-center justify-center py-12 text-center text-gray-500">
+                        <p className="text-lg mb-4">  Vous n’avez pas encore commencé à louer. </p>
+                        <p className="mb-6"> Commencez dès à présent en ajoutant votre premier matériel </p>
+                    <AddEquipmentBtn />
+                    </div>
+                    </>
+                     ) : (
+                        <>
+                <div className="flex equipments-center justify-between"> 
+                       <h2 className="text-2xl text-gray-900 my-4"> Matériel que j’ai prêté</h2>
+                 </div>
+                <div className="space-y-4">
+                    {userRentals && userRentals.map ((e)=>(
+                    <div className="bg-white flex flex-col gap-6 rounded-xl border p-4">
+                        <div className="flex gap-6">
+                            <img src={e.equipment?.photo} alt={e.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
+                            <div className="flex-1">
+                                <div className="flex items-start justify-between mb-2">
+                                    <div>
+                                     <h3 className="text-xl text-gray-900 mb-1">{e.equipment?.title}</h3>
+                                     <p className="text-gray-600"> {e.equipment?.owner?.first_name} {e.equipment?.owner?.last_name}</p>
+                                    </div>
+                                    <span className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit">passe/encours/bientot</span>
+                                </div>
+                                <hr className="my-4"/>
+                                <div className="flex items-center justify-between">
+                                    <div className="text-gray-600">
+                                        <p>Du {e.start_date}</p>
+                                        <p>Du {e.end_date}</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-2xl text-primary">{e.equipment?.price} €</p>
+                                        <p className="text-sm text-gray-500">Total</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2 mt-4">
+                                    <button className="btn hover:bg-gray-300">Laisser un avis </button>
+                                    <button className="btn hover:bg-gray-300">Voir les détails </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ))}
+                </div>
+                </>
+                )}
+            </>
             )}
             {activeDiv==="reviews"&&(
                 <>

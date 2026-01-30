@@ -14,7 +14,7 @@ return (
     <div className="flex flex-col border rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition">
          {/* Image */}
         <div className="relative h-48">
-            <img src={`http://localhost:3000/${equipment.photo}`} alt={equipment.title} className="img-cover"/>
+            <img src={`http://localhost:3000/images/equipments/${equipment.photo}`} alt={equipment.title} className="img-cover"/>
              <span className="absolute top-3 right-3 bg-white text-primary text-xs font-medium px-2 py-0.5 rounded-md border">
                 {user.user_type}</span>
         </div>

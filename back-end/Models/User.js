@@ -149,6 +149,7 @@ const User = sequelize.define(
     phone: {
       type: DataTypes.STRING,
       allowNull: false,
+      unqiue: true,
       validate: {
         notNull: { msg: "Le téléphone est obligatoire" },
         notEmpty: { msg: "Le téléphone ne peut pas être vide" },

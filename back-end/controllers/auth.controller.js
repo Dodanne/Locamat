@@ -21,7 +21,7 @@ export const postLogin = async (req, res) => {
     }
     const token = jwt.sign(
       {
-        id: user._id,
+        id: user.user_id,
         first_name: user.first_name,
         // rajouter le role
       },
@@ -29,10 +29,11 @@ export const postLogin = async (req, res) => {
       { expiresIn: JWT_EXPIRES_IN },
     );
     console.log("Login OK," + token);
+    console.log(user.user_id);
     res.status(200).json({
       token,
       user: {
-        id: user._id,
+        id: user.user_id,
         first_name: user.first_name,
       },
     });

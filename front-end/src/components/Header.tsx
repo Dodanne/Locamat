@@ -3,17 +3,25 @@ import { FaMessage } from "react-icons/fa6";
 import { FaBell, FaUser  } from "react-icons/fa";
 import { NavLink, Link } from "react-router-dom";
 import AddEquipmentBtn from "./AddEquipmentBtn";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import { IoMdMenu, IoMdClose } from "react-icons/io";
+import { useAuth } from "../components/AuthContext";
+import { IoLogOutSharp } from "react-icons/io5";
+
 
 
 export default function Header() {
-  const navLinkClass = ({ isActive }: { isActive: boolean }) =>`text-[15px] transition-colors ${isActive ? "text-primary" : "text-secondary"}`;
+  const { isLogged, userId, user } = useAuth();
+  const navLinkClass = ({ isActive }: { isActive: boolean }) =>` transition-colors ${isActive ? "text-primary" : "text-secondary"}`;
   const [isMenuOpen, setIsMenuOpen] =  useState(false);
+
+
+
+  
 
   return (
     <header className="bg-white text-primary border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div className="container">
+        <div className="container pr-0">
             <div className="flex items-center justify-between h-20">
     <div className="flex items-center gap-3 cursor-pointer group">
         <div className="relative flex-shrink-0">
@@ -32,13 +40,27 @@ export default function Header() {
             <AddEquipmentBtn/>
       </nav>
            
-            <div className="hidden md:flex items-center gap-3">
-            <NavLink to="/chat"> <button className="icon-btn">
-            <FaMessage className="icon-primary"/></button></NavLink>
-            <button className="icon-btn">
-            <FaBell className="icon-primary"/></button>
-            <NavLink to="/user-profile"> <button className="flex items-center gap-2 icon-btn">
-            <FaUser className="icon-primary"/></button></NavLink>
+            <div className="hidden md:flex items-end gap-3">
+          {isLogged ? (
+      <>
+            <NavLink to="/chat"> <button className="flex flex-col items-center text-sm icon-btn">
+            <FaMessage className="icon-primary m-2"/><span>Messagerie</span></button></NavLink>
+
+            <button className="flex flex-col items-center text-sm  icon-btn">
+            <FaBell className="icon-primary m-2"/><span>Notifications</span></button>
+           
+           {user&& (
+            <NavLink to={`/user-profile/${userId}`}> <button className="flex flex-col items-center text-sm icon-btn">
+            <img src={`http://localhost:3000/images/users/${user.photo}`} alt={user.first_name} className="w-10 h-10 rounded-full object-cover border border-gray-300"/> <span>Mon compte</span></button></NavLink>
+            )}
+            <NavLink to={`/logout`}> <button className="flex flex-col items-center text-sm icon-btn">
+            <IoLogOutSharp className="icon-primary m-1 text-4xl"/> <span>Deconnexion</span></button></NavLink>
+            
+      </> 
+       ):(
+            <NavLink to="/connexion"><button className="flex flex-col items-center text-sm icon-btn"><FaUser className="icon-primary" />
+            <span>Me connecter</span></button> </NavLink>
+            )}
             </div>
               {/*  Mobile menu button */}
              <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -49,7 +71,7 @@ export default function Header() {
                  <NavLink to="/" end onClick={() => setIsMenuOpen(false)} className={navLinkClass}> Accueil </NavLink>
                  <NavLink to="/rechercher" onClick={() => setIsMenuOpen(false)} className={navLinkClass}> Rechercher </NavLink>
                  <NavLink to="/chat" onClick={() => setIsMenuOpen(false)} className={navLinkClass}>  Messagerie </NavLink>
-                 <NavLink to="/user-profile" onClick={() => setIsMenuOpen(false)} className={navLinkClass}>  Se connecter/S'enregistrer </NavLink>
+                 <NavLink to="/connexion" onClick={() => setIsMenuOpen(false)} className={navLinkClass}>  Se connecter/S'enregistrer </NavLink>
         </div>
       )}
             </div>

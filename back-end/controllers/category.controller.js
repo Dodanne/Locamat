@@ -13,7 +13,7 @@ export const getCategoryById = async (req, res) => {
   try {
     const id = req.params.id;
     const data = await Category.findByPk(id);
-    res.json(data[0]);
+    res.json(data);
   } catch (err) {
     console.error(err);
   }

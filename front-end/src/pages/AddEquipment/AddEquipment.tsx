@@ -2,19 +2,22 @@ import { FaEuroSign } from "react-icons/fa";
 import { Category } from "../../types/Category";
 import { useEffect, useState } from "react";
 import type { Equipment } from "../../types/Equipment";
+import { useNavigate } from "react-router-dom";
 
 type AddEquipmentProps = {
     categories:Category []
 }
 
 export default function AddEquipment ({categories}: AddEquipmentProps) {
+
+    const token = localStorage.getItem("token");
     const [formData, setFormData] = useState({
     title: "",
     description: "",
     category_id: "",
     price: "",
     caution: "",
-    photo: ""
+    photo: null as File | null,
   });
   const [equipments, setEquipments] = useState<Equipment[]>([]);
 
@@ -22,12 +25,25 @@ export default function AddEquipment ({categories}: AddEquipmentProps) {
     e.preventDefault();
      console.log(formData);
     try {
+        const form= new FormData()
+        form.append("title", formData.title)
+        form.append("description", formData.description)
+        form.append("category_id",formData.category_id)
+        form.append("price",formData.price)
+        form.append("caution", formData.caution)
+        if (formData.photo) {
+             console.log(formData.photo)
+            form.append("photo", formData.photo);
+         }
+
+        // form.append("photo", formData.photo)
+
        const res= await  fetch("http://localhost:3000/new-equipment", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
+             headers: {
+            Authorization: `Bearer ${token}`, 
+  },            
+            body: form
         });
         const data = await res.json();
         console.log(data);
@@ -40,12 +56,20 @@ export default function AddEquipment ({categories}: AddEquipmentProps) {
     }
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value
+        const { name } = e.target;
+         if (e.target instanceof HTMLInputElement && e.target.type === "file") {
+           const file = e.target.files?.[0] ?? null; 
+        setFormData((prev) => ({
+            ...prev,
+            [name]: file
         }));
+        return
     }
+     setFormData((prevData) => ({
+            ...prevData,
+            [name]: e.target.value
+        }));
+}
 
     return(
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -76,7 +100,7 @@ export default function AddEquipment ({categories}: AddEquipmentProps) {
                 </div>
                 <div className='form-div'>
                     <label className="form-label" htmlFor="photo">Photo </label>
-                    <input className="form-input"  name="photo" value={formData.photo} onChange={handleChange} />
+                    <input className="form-input"  name="photo" type="file" accept="image/*" onChange={handleChange} />
                 </div>
                 <div className="form-div relative">
                     <label className="form-label" htmlFor="price">Prix de la location (par jour)</label>

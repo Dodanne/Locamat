@@ -1,12 +1,12 @@
 import express from "express";
 import {
   getAllRentals,
-  getRentalById,
+  getRentalsByRenter,
 } from "../controllers/rental.controller.js";
 
 const router = express.Router();
 
 router.get("/rent", getAllRentals);
-router.get("/rental/:id", getRentalById);
+router.get("/rental/:id", getRentalsByRenter);
 
 export default router;

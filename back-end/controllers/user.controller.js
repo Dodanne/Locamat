@@ -1,5 +1,4 @@
 import { User } from "./../Models/index.js";
-import bcrypt from "bcryptjs";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -26,7 +25,6 @@ export const createUser = async (req, res) => {
       first_name,
       last_name,
       birthday,
-      photo,
       email,
       password,
       number,
@@ -38,12 +36,13 @@ export const createUser = async (req, res) => {
       compagny_name,
       siret,
     } = req.body;
-
+    const photo = req.file ? req.file.filename : null;
+    console.log(req.file);
     const data = await User.create({
       first_name,
       last_name,
       birthday,
-      photo,
+      photo: photo,
       email,
       password,
       number,
@@ -57,7 +56,7 @@ export const createUser = async (req, res) => {
     });
     res.status(201).json(data);
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 };

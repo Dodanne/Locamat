@@ -11,11 +11,13 @@ import ChatPage from "./pages/Chat/ChatPage";
 import Connexion from "./pages/User/Connexion";
 import { useEffect, useState } from "react";
 import EquipmentItem from "./pages/EquipmentItem/EquipmentItem";
-import ChooseProfile from "./pages/User/ChooseProfile"
 import UserProfile from "./pages/User/UserProfile";
 import AddUser from "./pages/User/AddUser";
 import Dashboard from "./pages/Admin/Dashboard"
 import ScrollToTop from "./components/ScrollToTop";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./components/AuthContext";
+import Deconnexion from "./pages/User/Deconnexion";
 
 
 function App(){
@@ -71,6 +73,7 @@ catch (err) {
 
   return (
     <>
+    <AuthProvider>
     <BrowserRouter>
     <Header />
     <ScrollToTop/>
@@ -78,19 +81,22 @@ catch (err) {
     <Routes>
       <Route path="/" element={<Home equipments={equipmentList} user={usersList} category={categoriesList}/>}/>
       <Route path="/rechercher" element={<EquipmentSearch equipment={equipmentList} users={usersList} categories={categoriesList}/>}/>
+      {/* <Route path="/new-equipment" element={<ProtectedRoute><AddEquipment categories={categoriesList}/></ProtectedRoute>}/> */}
       <Route path="/new-equipment" element={<AddEquipment categories={categoriesList}/>}/>
-      <Route path="/chat" element={<ChatPage/>}/>
+      <Route path="/chat" element={<ProtectedRoute><ChatPage/></ProtectedRoute>}/>
       <Route path="/connexion" element={<Connexion />}/>
-      <Route path="/user-profile" element={<ChooseProfile users={usersList} />}/>
       <Route path="/equipment/:id" element={<EquipmentItem />}/>
-      <Route path="/user-profile/:id" element={<UserProfile /> }/>
+      <Route path="/user-profile/:id" element={<ProtectedRoute> <UserProfile /> </ProtectedRoute> }/>
       <Route path="/new-user" element={<AddUser /> }/>
-      <Route path="/admin-dashboard" element={< Dashboard/> }/>
+      <Route path="/admin-dashboard" element={<ProtectedRoute> < Dashboard/> </ProtectedRoute> }/>
+     
+      <Route path="/logout" element={<Deconnexion/> }/>
       
     </Routes>
     </div>
      <Footer/>
     </BrowserRouter>
+    </AuthProvider>
     
     
     </>

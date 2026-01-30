@@ -9,7 +9,7 @@ export default function AddUser () {
                 first_name: "",
                 last_name: "",
                 birthday:"",
-                photo: "",
+                photo: null as File | null,
                 email: "",
                 password: "",
                 confirm_password:"",
@@ -27,36 +27,58 @@ export default function AddUser () {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-     console.log(formData);
-     console.log(formData.password, formData.confirm_password)
      if (formData.password !== formData.confirm_password) {
      setNoMatchPassword("Les mots de passe ne correspondent pas !");
     return;
   }
     try {
-       const { confirm_password, ...dataToSend } = formData;
+        const form= new FormData(); // pas de JSON.stringiy car photo est un fichier
+         form.append("first_name", formData.first_name);
+         form.append("last_name", formData.last_name);
+         form.append("birthday", formData.birthday);
+         form.append("email", formData.email);
+         form.append("password", formData.password);
+         form.append("number", formData.number);
+         form.append("street", formData.street);
+         form.append("postal_code", formData.postal_code);
+         form.append("city", formData.city);
+         form.append("phone", formData.phone);
+         form.append("user_type", formData.user_type);
+         if (formData.user_type === "professionnel") {
+                form.append("compagny_name", formData.compagny_name ?? "");
+                form.append("siret", formData.siret ?? "");
+                }
+        
+            if (formData.photo) {
+            form.append("photo", formData.photo);
+        }
+
        const res= await  fetch("http://localhost:3000/new-user", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataToSend)
+            body: form 
         });
         const data = await res.json();
-       
-        console.log(res.status, data);
+        console.log(data)
         setUsers(prev => [...prev, data]);
-    }
-    catch (err) {
-        console.error(err);
-    }
-    }
+             }
+                catch (err) {
+                 console.log(err);
+                }
+         }
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
-        const { name, value } = e.target;
+        const { name } = e.target;
+         if (e.target instanceof HTMLInputElement && e.target.type === "file") {
+           const file = e.target.files?.[0] ?? null; 
+    setFormData((prev) => ({
+      ...prev,
+      [name]: file,
+    }));
+    return;
+  }
         setFormData((prevData) => ({
             ...prevData,
-            [name]: value
+            [name]: e.target.value
         }));
         if (name === "password" || name === "confirm_password") {
         setNoMatchPassword("");
@@ -69,7 +91,7 @@ export default function AddUser () {
             <h1 className="text-3xl text-gray-900 mb-2">Inscrivez-vous</h1>
             <p className="text-gray-600">Mettez en location votre matériel ou louez du matériel</p>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
             <div className="flex flex-col gap-6 rounded-xl border bg-white p-6"> 
             <div className="form-div">
                 <label className="form-label" htmlFor="name">Nom </label>
@@ -98,7 +120,7 @@ export default function AddUser () {
             </div>
             <div className='form-div'>
                     <label className="form-label" htmlFor="photo">Photo </label>
-                    <input className="form-input"  name="photo" value={formData.photo} onChange={handleChange} />
+                    <input className="form-input"  name="photo" type="file" accept="image/*" onChange={handleChange} />
             </div>
              <div className="form-div">
                      <label className="form-label">Numéro de rue</label>

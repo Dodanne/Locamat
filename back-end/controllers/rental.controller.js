@@ -7,12 +7,12 @@ export const getAllRentals = async (req, res) => {
         {
           model: User,
           as: "renter",
-          attributes: ["id", "first_name", "last_name", "email", "photo"],
+          attributes: ["user_id", "first_name", "last_name", "email", "photo"],
         },
         {
           model: Equipment,
           as: "equipment",
-          attributes: ["id", "name", "type", "status"],
+          attributes: ["equipment_id", "title", "price", "photo"],
         },
       ],
     });
@@ -23,25 +23,34 @@ export const getAllRentals = async (req, res) => {
   }
 };
 
-export const getRentalById = async (req, res) => {
+export const getRentalsByRenter = async (req, res) => {
   try {
-    const id = req.params.id;
-    const data = await Rental.findByPk(id, {
+    const renterId = req.params.id;
+    const data = await Rental.findAll({
+      where: { renter_id: renterId },
       include: [
         {
           model: Equipment,
           as: "equipment",
-          //attribute
+          attributes: ["equipment_id", "title", "price", "photo", "owner_id"],
+          include: [
+            {
+              model: User,
+              as: "owner",
+              attributes: ["user_id", "first_name", "last_name", "photo"],
+            },
+          ],
         },
         {
           model: User,
           as: "renter",
-          //attribute
+          attributes: ["user_id", "first_name", "last_name", "photo", "email"],
         },
       ],
     });
     res.json(data);
   } catch (err) {
     console.error(err);
+    res.json({ error: "Erreur serveur" });
   }
 };

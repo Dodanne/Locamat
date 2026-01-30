@@ -39,18 +39,24 @@ export const getEquipmentByUser = async (req, res) => {
 
 export const createEquipment = async (req, res) => {
   try {
-    const { title, description, category_id, photo, price, caution } = req.body;
+    console.log("req.body", req.body);
+    console.log("req.file", req.file);
+    const { title, description, category_id, price, caution } = req.body;
+    const photo = req.file ? req.file.filename : "default.png";
+    const owner_id = req.user.id;
     const data = await Equipment.create({
       title,
       description,
       category_id,
-      photo,
+      photo: photo,
       price,
       caution,
       owner_id: owner_id,
     });
     res.json(data);
+    console.log(data);
   } catch (err) {
-    console.error(err);
+    console.log(err);
+    res.status(500).json({ error: err.message });
   }
 };
