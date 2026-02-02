@@ -68,7 +68,7 @@ const [userRentals,setUserRentals]=useState<Rental[]>([])
         }
         fetchUserRentals();
     }, [id]);
-
+ console.log(user)
 function getInitials(user: User) {
      if (!user?.first_name || !user?.last_name) return "";
     return `${user.first_name.charAt(0).toUpperCase()}${user.last_name.charAt(0).toUpperCase()}`;
@@ -76,7 +76,7 @@ function getInitials(user: User) {
 
     return(
     <div className="container py-8">
-        <div className=" flex flex-col gap-6 rounded-xl border bg-white">
+        <div className=" grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 rounded-xl border bg-white">
             <div className="flex items-start gap-6 p-4">
                 <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-24 w-24">
                     {user.photo && user.photo !=="NULL" ? (  
@@ -112,6 +112,20 @@ function getInitials(user: User) {
                     </div>
                 </div>   
             </div>
+            {user.role === "super-admin" && (
+                <div className="fixed bottom-4 left-4 right-4 z-50 lg:static lg:z-auto lg:flex lg:flex-col lg:rounded-xl lg:border lg:bg-white lg:p-4 m-4">
+                   {/* mobile */}
+                   <button className="btn bg-accent text-white w-full shadow-lg lg:hidden"> Accès admin </button>
+                  {/* ordi */}
+                  <div className="hidden lg:flex flex-col gap-4"> 
+                    <h2 className="text-lg font-semibold text-gray-900 text-center"> Administration </h2>
+                    <Link to="/dashboard"><button className="btn bg-accent text-white w-full">Accès admin</button></Link>
+                    <button className="btn  gap-2 bg-background hover:bg-gray-100">
+                      <IoSettingsOutline /> Paramètres admin </button>
+                     </div>
+                  </div>
+                )}
+
         </div>
         <div className="flex flex-col gap-2 my-6">
             <div className="bg-gray-200 h-9 items-center justify-center rounded-xl p-[3px] grid w-full grid-cols-4">

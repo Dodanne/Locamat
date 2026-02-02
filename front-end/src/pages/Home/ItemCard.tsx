@@ -10,6 +10,7 @@ type ItemCardProps = {
 
 
 export default function ItemCard({equipment, user}:ItemCardProps) {
+   
 return (
     <div className="flex flex-col border rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition">
          {/* Image */}
@@ -21,7 +22,10 @@ return (
     {/* Contenu */}
         <div className="p-4 flex flex-col gap-4 bg-white">
             {/* Titre + Localisation */}
-            <h3 className="text-lg text-gray-900 mb-1">{equipment.title}</h3>
+            <div className="flex items-center justify-between gap-2 mb-2">
+                <h3 className="text-lg text-gray-900 mb-1">{equipment.title}</h3>
+                <span className="text-sm text-black bg-primary/10 px-2 py-1 rounded-full">{equipment.category?.name}</span>
+            </div>
             <div className="flex items-center gap-2 text-sm text-gray-600">
                 <IoLocationSharp />
       <span>{user.city}</span>  

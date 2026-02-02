@@ -18,4 +18,5 @@ export type User = {
   rating_avg: number;
   rating_count: number;
   status: string;
+  role: string;
 }

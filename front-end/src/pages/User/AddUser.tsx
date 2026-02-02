@@ -1,10 +1,13 @@
-;
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { User } from "../../types/User";
+import { useAuth } from "../../components/AuthContext";
 
 
 
 export default function AddUser () {
+    const navigate=useNavigate()
+    const {userId}=useAuth()
     const [formData, setFormData] = useState({                 
                 first_name: "",
                 last_name: "",
@@ -57,8 +60,14 @@ export default function AddUser () {
             method: "POST",
             body: form 
         });
+        
         const data = await res.json();
         console.log(data)
+         if(res.ok){
+            navigate(`/succesUser`)
+        } else {
+            console.log("Erreur backend :", data);
+            }
         setUsers(prev => [...prev, data]);
              }
                 catch (err) {

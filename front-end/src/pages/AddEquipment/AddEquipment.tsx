@@ -9,7 +9,7 @@ type AddEquipmentProps = {
 }
 
 export default function AddEquipment ({categories}: AddEquipmentProps) {
-
+    const navigate=useNavigate()
     const token = localStorage.getItem("token");
     const [formData, setFormData] = useState({
     title: "",
@@ -35,9 +35,6 @@ export default function AddEquipment ({categories}: AddEquipmentProps) {
              console.log(formData.photo)
             form.append("photo", formData.photo);
          }
-
-        // form.append("photo", formData.photo)
-
        const res= await  fetch("http://localhost:3000/new-equipment", {
             method: "POST",
              headers: {
@@ -46,7 +43,10 @@ export default function AddEquipment ({categories}: AddEquipmentProps) {
             body: form
         });
         const data = await res.json();
-        console.log(data);
+        if(res.ok){
+            navigate('/succes')
+        }
+        //  else gestion des erreurs 
         
         setEquipments(prev => [...prev, data]);
     }

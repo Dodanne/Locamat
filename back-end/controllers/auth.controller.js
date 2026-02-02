@@ -23,13 +23,12 @@ export const postLogin = async (req, res) => {
       {
         id: user.user_id,
         first_name: user.first_name,
-        // rajouter le role
+        role: user.role,
       },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN },
     );
-    console.log("Login OK," + token);
-    console.log(user.user_id);
+
     res.status(200).json({
       token,
       user: {

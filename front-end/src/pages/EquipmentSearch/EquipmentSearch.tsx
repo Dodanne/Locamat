@@ -13,10 +13,12 @@ type ItemCardProps = {
     users:User[]
     categories:Category []
 }
+
 export default function equipmentSearch ({equipment,categories, users }:ItemCardProps){
     //useStates
     const [selectedCategories, setSelectedCategories] =  useState<number[]>([]);
     const [search,setSearch]=useState("")
+    const [maxPrice, setMaxPrice] = useState<number>(1000);
 
     //handleChanges
     function handleChangeSearchBar(e:React.ChangeEvent<HTMLInputElement>){
@@ -27,13 +29,24 @@ export default function equipmentSearch ({equipment,categories, users }:ItemCard
         setSelectedCategories((prev) => 
             prev.includes(categoryId) ? prev.filter((id) => id !== categoryId): [...prev, categoryId]); 
     }
-        //filter => A FAIRE DANS LE BACK
-    const filteredItems=equipment.filter((i)=>{
-       const filterSearch= i.title.toLowerCase().includes(search.toLowerCase())
-       const filterCategory= selectedCategories.length === 0 ||selectedCategories.includes(i.category_id);    
-    return filterSearch&& filterCategory 
-    })
-    
+        
+   const filteredItems = equipment.filter((i) => {
+  const matchesSearch =
+    i.title.toLowerCase().includes(search.toLowerCase());
+
+  const matchesCategory =
+    selectedCategories.length === 0 ||
+    selectedCategories.includes(i.category_id);
+
+  const matchesPrice = Number(i.price) <= maxPrice;
+
+  return matchesSearch && matchesCategory && matchesPrice;
+});
+function resetFilters() {
+  setSearch("");
+  setSelectedCategories([]);
+  setMaxPrice(100);
+}
 
 const [searchParams] = useSearchParams();
   const categorieId = searchParams.get("categorie");
@@ -54,15 +67,19 @@ const [searchParams] = useSearchParams();
                 <div className="flex-1 relative">
                     <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input type="text" value={search} onChange={handleChangeSearchBar} className=" w-full h-10 pr-4 pl-10 text-blackText bg-gray-100 rounded-md border border-gray-100 focus:outline-none focus:ring-2 focus:ring-secondary placeholder:text-gray-600" placeholder="Rechercher du matériel..."/>
-                </div>
-               
+                </div> 
             </div>
+            {filteredItems.length === 0 && (
+                    <div className="text-center p-2 text-gray-500">
+                    Aucun matériel ne correspond à votre recherche
+                    </div>
+                    )}
            {search.trim() !== ""&&(
              <div className="text-gray-600 text-sm">
-            {filteredItems.length} resultats trouvés
+            {filteredItems.length}{filteredItems.length > 2 ? " résultats trouvés" : " résultat trouvé" } 
             </div>)}
         </div>
-        {/* Aside Bar */}
+        {/* barre de filtre */}
         <div className="flex gap-8">
             <aside className="hidden w-80 md:block">
                 <div  className="border rounded-lg p-6 space-y-6 bg-white ">
@@ -82,8 +99,9 @@ const [searchParams] = useSearchParams();
                              <div>
                                 <h3 className="text-lg mt-6 text-gray-900">Prix par jour</h3>
                                 <div className="flex justify-between text-sm text-gray-600">
-                                  <Slider max={100}/>
+                                  <Slider max={1000} value={maxPrice} onChange={(value: number) => setMaxPrice(value)}/>
                                 </div>
+                                <div className="text-sm text-gray-600 mt-1"> Jusqu’à {maxPrice} € / jour </div>
                              </div>
                              {/* Distance */}
                              <div>
@@ -92,7 +110,7 @@ const [searchParams] = useSearchParams();
                                  
                              </div>
                              {/* reset */}
-                            <button className="w-full mt-6 h-9 rounded-md border text-sm font-medium hover:bg-gray-100">
+                            <button onClick={resetFilters} className="w-full mt-6 h-9 rounded-md border text-sm font-medium hover:bg-gray-100">
                                 Réinitialiser les filtres
                              </button>
                         </div>

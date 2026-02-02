@@ -18,10 +18,13 @@ import ScrollToTop from "./components/ScrollToTop";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./components/AuthContext";
 import Deconnexion from "./pages/User/Deconnexion";
+import EquipmentSuccess from "./pages/AddEquipment/Succes";
+import UserSuccess from "./pages/User/succes";
 
 
 function App(){
  const [equipmentList,setEquipmentList]=useState<Equipment[]>([]);
+ const [equipment6FirstList,setEquipment6FirstList]=useState<Equipment[]>([]);
  const [usersList,setUsersList]=useState<User[]>([]);
  const [categoriesList,setCategoriesList]=useState<Category[]>([]);
  
@@ -38,6 +41,20 @@ catch (err) {
 }
 } 
   fetchEquipments();
+}, []);
+ useEffect(() => {
+  async function fetch6FirstEquipments() {
+  try { {
+    const res = await fetch("http://localhost:3000/equipment6first");
+    const data: Equipment[] = await res.json();
+    setEquipment6FirstList(data);
+  }
+}
+catch (err) {
+  console.error(err);
+}
+} 
+  fetch6FirstEquipments();
 }, []);
 
  useEffect(() => {
@@ -79,18 +96,18 @@ catch (err) {
     <ScrollToTop/>
     <div className="min-h-screen bg-gray-50">
     <Routes>
-      <Route path="/" element={<Home equipments={equipmentList} user={usersList} category={categoriesList}/>}/>
+      <Route path="/" element={<Home equipments={equipment6FirstList} user={usersList} category={categoriesList}/>}/>
       <Route path="/rechercher" element={<EquipmentSearch equipment={equipmentList} users={usersList} categories={categoriesList}/>}/>
-      {/* <Route path="/new-equipment" element={<ProtectedRoute><AddEquipment categories={categoriesList}/></ProtectedRoute>}/> */}
-      <Route path="/new-equipment" element={<AddEquipment categories={categoriesList}/>}/>
+      <Route path="/new-equipment" element={<ProtectedRoute><AddEquipment categories={categoriesList}/></ProtectedRoute>}/>
       <Route path="/chat" element={<ProtectedRoute><ChatPage/></ProtectedRoute>}/>
       <Route path="/connexion" element={<Connexion />}/>
       <Route path="/equipment/:id" element={<EquipmentItem />}/>
       <Route path="/user-profile/:id" element={<ProtectedRoute> <UserProfile /> </ProtectedRoute> }/>
       <Route path="/new-user" element={<AddUser /> }/>
       <Route path="/admin-dashboard" element={<ProtectedRoute> < Dashboard/> </ProtectedRoute> }/>
-     
       <Route path="/logout" element={<Deconnexion/> }/>
+      <Route path="/succes" element={<ProtectedRoute><EquipmentSuccess/></ProtectedRoute>}/>
+      <Route path="/succesUser" element={<UserSuccess/>}/>
       
     </Routes>
     </div>

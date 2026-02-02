@@ -1,18 +1,24 @@
 import express from "express";
 import {
   createEquipment,
-  getAllEquipment,
+  get6FirstEquipment,
+  getAllEquipments,
   getEquipmentById,
   getEquipmentByUser,
+  getFiltredEquipments,
+  getFiltredSearch,
 } from "../controllers/equipment.controller.js";
 import { uploadEquipment } from "../config/multer.config.js";
 import { authenticateToken } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.get("/equipment", getAllEquipment);
+router.get("/equipment", getAllEquipments);
+router.get("/equipment6first", get6FirstEquipment);
 router.get("/equipment/:id", getEquipmentById);
 router.get("/user/:id/equipment", getEquipmentByUser);
+router.get("/equipments/search", getFiltredEquipments);
+router.get("/equipments/search", getFiltredSearch);
 router.post(
   "/new-equipment",
   authenticateToken,

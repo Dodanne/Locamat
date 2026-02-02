@@ -1,4 +1,5 @@
 import { Owner } from "./Owner";
+import { Category } from "./Category";
 
 export type Equipment = {
   equipment_id: number
@@ -13,4 +14,5 @@ export type Equipment = {
   updated_at:string
 
   owner?: Owner;
+  category?: Category;
 }

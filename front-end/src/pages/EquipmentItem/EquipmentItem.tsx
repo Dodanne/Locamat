@@ -13,16 +13,19 @@ export default function EquipmentItem() {
         async function fetchEquipmentItem() {
             try {
                 const res = await fetch(`http://localhost:3000/equipment/${id}`);
-                console.log (id)
                 const data = await res.json();
-                setEquipment(data);
                 console.log(data)
+                setEquipment(data);            
             } catch (err) {
                 console.error(err);
             }
         }
         fetchEquipmentItem();
     }, [id]);
+    console.log(equipment.category?.name)
+    console.log(equipment.owner?.last_name);
+    
+    
     return (
         <div className="container py-8">
             <Link to="/rechercher" >
@@ -52,7 +55,7 @@ export default function EquipmentItem() {
                     </div>
                 </div>
                 <div className="flex gap-2">
-                    <span> catégorie : bricolage </span>
+                    <span> {equipment.category?.name} </span>
                 </div>
                 <div className="flex flex-col gap-6 rounded-xl border bg-white p-6 mt-8">
                     <div className="flex items-center gap-4 relative ">

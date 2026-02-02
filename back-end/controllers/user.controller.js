@@ -37,7 +37,7 @@ export const createUser = async (req, res) => {
       siret,
     } = req.body;
     const photo = req.file ? req.file.filename : null;
-    console.log(req.file);
+
     const data = await User.create({
       first_name,
       last_name,

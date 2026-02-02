@@ -4,6 +4,8 @@ type SliderProps = {
   max?: number;
   step?: number;
   unit?: string;
+  value?: number;
+  onChange?: (value: number) => void;
 };
 
 
