@@ -14,7 +14,7 @@ export const getUserById = async (req, res) => {
   try {
     const id = req.params.id;
     const data = await User.findByPk(id);
-    res.json(data);
+    res.json(data.toJSON());
   } catch (err) {
     console.error(err);
   }

@@ -5,7 +5,7 @@ import { NavLink, Link } from "react-router-dom";
 import AddEquipmentBtn from "./AddEquipmentBtn";
 import { useState, useEffect} from "react";
 import { IoMdMenu, IoMdClose } from "react-icons/io";
-import { useAuth } from "../components/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { IoLogOutSharp } from "react-icons/io5";
 
 
@@ -14,7 +14,7 @@ export default function Header() {
   const { isLogged, userId, user } = useAuth();
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>` transition-colors ${isActive ? "text-primary" : "text-secondary"}`;
   const [isMenuOpen, setIsMenuOpen] =  useState(false);
-
+console.log (user)
 
 
   
@@ -33,7 +33,6 @@ export default function Header() {
         <span className="text-primary text-3xl tracking-tight hover:text-accent transition-colors cursor-pointer">LocaMat</span>
         </Link>
 </div>
-
       <nav className=" hidden md:flex items-center gap-6">
             <NavLink to="/" end className={navLinkClass} >Accueil</NavLink>
             <NavLink to="/rechercher" className={navLinkClass}>Rechercher</NavLink>
@@ -50,8 +49,8 @@ export default function Header() {
             <FaBell className="icon-primary m-2"/><span>Notifications</span></button>
            
            {user&& (
-            <NavLink to={`/user-profile/${userId}`}> <button className="flex flex-col items-center text-sm icon-btn">
-            <img src={`http://localhost:3000/images/users/${user.photo}`} alt={user.first_name} className="w-10 h-10 rounded-full object-cover border border-gray-300"/> <span>Mon compte</span></button></NavLink>
+            <NavLink to={`/user-profile`}> <button className="flex flex-col items-center text-sm icon-btn">
+            <img src={`http://localhost:3033/images/users/${user.photo}`} alt={user.first_name} className="w-10 h-10 rounded-full object-cover border border-gray-300"/> <span>Mon compte</span></button></NavLink>
             )}
             <NavLink to={`/logout`}> <button className="flex flex-col items-center text-sm icon-btn">
             <IoLogOutSharp className="icon-primary m-1 text-4xl"/> <span>Deconnexion</span></button></NavLink>

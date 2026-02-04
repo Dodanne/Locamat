@@ -14,19 +14,21 @@ import { User } from "../../types/User";
 import { Equipment } from "../../types/Equipment";
 import { FaHandHolding } from "react-icons/fa";
 import { Rental } from "../../types/Rental";
-
+import { useAuth } from "../../context/AuthContext";
 
 
 export default function UserProfile (){
 const [activeDiv,setActiveDiv]=useState("equipment")
 const [user,setUser]=useState<User>({}as User)
 const [userEquipments,setUserEquipments]=useState<Equipment[]>([])
-const [userRentals,setUserRentals]=useState<Rental[]>([])
- const {id}=useParams();
+const [renterRentals,setRenterRentals]=useState<Rental[]>([])
+const [ownerRentals,setOwnerRentals]=useState<Rental[]>([])
+const {userId}=useAuth()
+
     useEffect(() => {
         async function fetchUsers() {
             try {
-                const res = await fetch(`http://localhost:3000/user/${id}`,{
+                const res = await fetch(`http://localhost:3033/user/${userId}`,{
                     headers:{
                         Authorization:`Bearer ${localStorage.getItem("token")}`
                     }
@@ -39,11 +41,11 @@ const [userRentals,setUserRentals]=useState<Rental[]>([])
             }
         }
         fetchUsers();
-    }, [id]);
+    }, [userId]);
     useEffect(() => {
         async function fetchUserEquipments() {
             try {
-                const res = await fetch(`http://localhost:3000/user/${id}/equipment`);
+                const res = await fetch(`http://localhost:3033/user/${userId}/equipment`);
                 const data = await res.json();
                 setUserEquipments(Array.isArray(data) ? data : []);
                 console.log(data)
@@ -52,27 +54,42 @@ const [userRentals,setUserRentals]=useState<Rental[]>([])
             }
         }
         fetchUserEquipments();
-    }, [id]);
+    }, [userId]);
 
     useEffect(() => {
-        async function fetchUserRentals() {
+        async function fetchRenterRentals() {
             try {
-                const res = await fetch(`http://localhost:3000/rental/${id}`);
+                const res = await fetch(`http://localhost:3033/rental/renter/${userId}`);
                 const data = await res.json();
-                console.log(data)
-                setUserRentals(Array.isArray(data) ? data : []); // pour ne pas avoir null=>tableau vide
+                setRenterRentals(Array.isArray(data) ? data : []); // pour ne pas avoir null=>tableau vide
                 console.log(data)
             } catch (err) {
                 console.error(err);
             }
         }
-        fetchUserRentals();
-    }, [id]);
- console.log(user)
+        fetchRenterRentals();
+    }, [userId]);
+    console.log("renterRentals :", renterRentals);
+    useEffect(() => {
+        async function fetchOwnerRentals() {
+            try {
+                const res = await fetch(`http://localhost:3033/rental/owner/${userId}`);
+                const data = await res.json();
+                setOwnerRentals(Array.isArray(data) ? data : []); // pour ne pas avoir null=>tableau vide
+                console.log(data)
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        fetchOwnerRentals();
+    }, [userId]);
+    console.log("OwnerRentals :", ownerRentals);
+
 function getInitials(user: User) {
      if (!user?.first_name || !user?.last_name) return "";
     return `${user.first_name.charAt(0).toUpperCase()}${user.last_name.charAt(0).toUpperCase()}`;
   };
+   
 
     return(
     <div className="container py-8">
@@ -80,7 +97,7 @@ function getInitials(user: User) {
             <div className="flex items-start gap-6 p-4">
                 <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-24 w-24">
                     {user.photo && user.photo !=="NULL" ? (  
-                        <img src={`http://localhost:3000/images/users/${user.photo}`} alt={user.first_name} className="w-full h-full object-cover"/>
+                        <img src={`http://localhost:3033/images/users/${user.photo}`} alt={user.first_name} className="w-full h-full object-cover"/>
                  ):(
                     <span className="flex items-center justify-center w-full h-full text-2xl font-bold text-white bg-accent rounded-full">{getInitials(user)}</span>
                  )
@@ -112,16 +129,13 @@ function getInitials(user: User) {
                     </div>
                 </div>   
             </div>
-            {user.role === "super-admin" && (
-                <div className="fixed bottom-4 left-4 right-4 z-50 lg:static lg:z-auto lg:flex lg:flex-col lg:rounded-xl lg:border lg:bg-white lg:p-4 m-4">
+            {user.role === "super-admin"|| user.role==="admin" && (
+                <div className="fixed bottom-4 left-4 right-4 z-50 lg:static lg:z-auto lg:flex lg:flex-col justify-center lg:bg-white lg:p-4 m-4">
                    {/* mobile */}
                    <button className="btn bg-accent text-white w-full shadow-lg lg:hidden"> Accès admin </button>
                   {/* ordi */}
-                  <div className="hidden lg:flex flex-col gap-4"> 
-                    <h2 className="text-lg font-semibold text-gray-900 text-center"> Administration </h2>
-                    <Link to="/dashboard"><button className="btn bg-accent text-white w-full">Accès admin</button></Link>
-                    <button className="btn  gap-2 bg-background hover:bg-gray-100">
-                      <IoSettingsOutline /> Paramètres admin </button>
+                  <div className="hidden lg:flex flex-col gap-4">    
+                    <Link to="/dashboard"><button className="btn bg-accent text-white w-full p-2">Accès admin</button></Link>
                      </div>
                   </div>
                 )}
@@ -130,16 +144,16 @@ function getInitials(user: User) {
         <div className="flex flex-col gap-2 my-6">
             <div className="bg-gray-200 h-9 items-center justify-center rounded-xl p-[3px] grid w-full grid-cols-4">
                 <button onClick={()=>setActiveDiv("equipment")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="equipment" ? 'bg-white' : ''} `}>
-                    <BsBoxSeam /> Mon matériel () </button>
+                    <BsBoxSeam /> Mon matériel  </button>
                 
                 <button onClick={()=>setActiveDiv("locations")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="locations" ? 'bg-white' : ''} `}>
-                    <PiClockCounterClockwise /> Mes locations () 
+                    <PiClockCounterClockwise /> Mes locations  
                 </button>
                 <button onClick={()=>setActiveDiv("prêts")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="prêts" ? 'bg-white' : ''} `}>
-                    <FaHandHolding className="flex items-center gap-2 relative -top-0.5"/> Mes prêts () 
+                    <FaHandHolding className="flex items-center gap-2 relative -top-0.5"/> Mes prêts 
                 </button>
                  <button onClick={()=>setActiveDiv("reviews")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="reviews" ? 'bg-white' : ''} `}>
-                    <FaRegStar /> Avis reçus() 
+                    <FaRegStar /> Avis reçus
                 </button>
             </div> 
        
@@ -158,8 +172,8 @@ function getInitials(user: User) {
                        <AddEquipmentBtn/>
                      </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                       {userEquipments.map ((i)=> (
-                                     <ItemCard key={i.equipment_id} equipment={i} user={user} />
+                       {userEquipments.map ((e)=> (
+                                     <ItemCard key={e.equipment_id} equipment={e}  />
                        ))}      
                     </div>
                     </>
@@ -168,7 +182,7 @@ function getInitials(user: User) {
                 )}
             {activeDiv==="locations"&&(
                 <>
-                {userRentals.length === 0 ? (
+                {renterRentals.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12 text-center text-gray-500">
                         <p className="text-lg mb-4">  Vous n’avez pas encore commencé à louer. </p>
                         <p className="mb-6"> Commencez dès à présent à louer du materiel près de chez vous. </p>
@@ -180,17 +194,17 @@ function getInitials(user: User) {
                        <h2 className="text-2xl text-gray-900 my-4"> Matériel que j’ai loué</h2>
                     </div>
                     <div className="space-y-4">
-                    {userRentals && userRentals.map ((e)=>(
+                    {renterRentals && renterRentals.map ((e)=>(
                         <div className="bg-white flex flex-col gap-6 rounded-xl border p-4">
                         <div className="flex gap-6">
-                            <img src={e.equipment?.photo} alt={e.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
+                            <img src={`http://localhost:3033/images/equipments/${e.equipment?.photo}`} alt={e.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
                             <div className="flex-1">
                                 <div className="flex items-start justify-between mb-2">
                                     <div>
                                      <h3 className="text-xl text-gray-900 mb-1">{e.equipment?.title}</h3>
                                      <p className="text-gray-600"> {e.renter?.first_name} {e.renter?.last_name}</p>
                                     </div>
-                                    <span className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit">passée</span>
+                                    <span className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit">passée/encours/bientot</span>
                                 </div>
                                 <hr className="my-4"/>
                                 <div className="flex items-center justify-between">
@@ -219,7 +233,7 @@ function getInitials(user: User) {
             )}
              {activeDiv==="prêts"&&(
                 <>
-                 {userRentals.length === 0 ? (
+                 {ownerRentals.length===0 ? (
                     <>
                     <div className="flex flex-col items-center justify-center py-12 text-center text-gray-500">
                         <p className="text-lg mb-4">  Vous n’avez pas encore commencé à louer. </p>
@@ -233,10 +247,10 @@ function getInitials(user: User) {
                        <h2 className="text-2xl text-gray-900 my-4"> Matériel que j’ai prêté</h2>
                  </div>
                 <div className="space-y-4">
-                    {userRentals && userRentals.map ((e)=>(
+                    {ownerRentals && ownerRentals.map ((e)=>(
                     <div className="bg-white flex flex-col gap-6 rounded-xl border p-4">
                         <div className="flex gap-6">
-                            <img src={e.equipment?.photo} alt={e.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
+                            <img src={`http://localhost:3033/images/equipments/${e.equipment?.photo}`} alt={e.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
                             <div className="flex-1">
                                 <div className="flex items-start justify-between mb-2">
                                     <div>

@@ -48,6 +48,33 @@ export const getRentalsByRenter = async (req, res) => {
         },
       ],
     });
+    console.log(data);
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.json({ error: "Erreur serveur" });
+  }
+};
+
+export const getRentalsByOwner = async (req, res) => {
+  try {
+    const ownerId = req.params.id;
+    const data = await Rental.findAll({
+      include: [
+        {
+          model: Equipment,
+          as: "equipment",
+          where: { owner_id: ownerId },
+          attributes: ["equipment_id", "title", "price", "photo", "owner_id"],
+        },
+        {
+          model: User,
+          as: "renter",
+          attributes: ["user_id", "first_name", "last_name", "photo", "email"],
+        },
+      ],
+    });
+    console.log(data);
     res.json(data);
   } catch (err) {
     console.error(err);

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../components/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Deconnexion() {
   const { logout } = useAuth();
@@ -11,7 +11,7 @@ export default function Deconnexion() {
 
     const timer = setTimeout(() => {
       navigate("/");
-    }, 4000);
+    }, 6000);
 
     return () => clearTimeout(timer);
   }, []);

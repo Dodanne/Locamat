@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { useAuth } from "./../../components/AuthContext"
+import { useAuth } from "../../context/AuthContext";
 
 export default function EquipmentSuccess() {
   const { userId } = useAuth();
 
   return (
-    <> 
+    <>
       <div className="py-20 bg-gradient-to-r from-accent to-primary text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex justify-center mb-6">
@@ -24,7 +24,7 @@ export default function EquipmentSuccess() {
 
           <div className="flex justify-center gap-4 flex-wrap">
             <Link
-              to={`/user-profile/${userId}`}
+              to="/user-profile"
               className="inline-flex items-center justify-center h-11 px-8 rounded-md bg-white text-primary text-sm font-medium hover:bg-gray-100 transition"
             >
               Voir mon équipement

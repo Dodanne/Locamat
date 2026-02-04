@@ -1,15 +1,15 @@
 import { FaEuroSign } from "react-icons/fa";
-import { Category } from "../../types/Category";
 import { useEffect, useState } from "react";
 import type { Equipment } from "../../types/Equipment";
 import { useNavigate } from "react-router-dom";
+import { useCategory } from "../../context/CategoryContext";
+import {useEquipment} from "../../context/EquipmentContext"
 
-type AddEquipmentProps = {
-    categories:Category []
-}
 
-export default function AddEquipment ({categories}: AddEquipmentProps) {
+export default function AddEquipment () {
+    const {fetchNewEquipment}=useEquipment()
     const navigate=useNavigate()
+    const { categories } = useCategory();
     const token = localStorage.getItem("token");
     const [formData, setFormData] = useState({
     title: "",
@@ -35,24 +35,11 @@ export default function AddEquipment ({categories}: AddEquipmentProps) {
              console.log(formData.photo)
             form.append("photo", formData.photo);
          }
-       const res= await  fetch("http://localhost:3000/new-equipment", {
-            method: "POST",
-             headers: {
-            Authorization: `Bearer ${token}`, 
-  },            
-            body: form
-        });
-        const data = await res.json();
-        if(res.ok){
-            navigate('/succes')
+         await fetchNewEquipment(form,token!)
+         navigate('/succes')
+        }catch (err){
+            console.log(err)
         }
-        //  else gestion des erreurs 
-        
-        setEquipments(prev => [...prev, data]);
-    }
-    catch (err) {
-        console.error(err);
-    }
     }
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {

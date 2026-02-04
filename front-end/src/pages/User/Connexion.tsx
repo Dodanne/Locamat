@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../components/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Connexion() {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ export default function Connexion() {
     e.preventDefault();
     try {
 
-      const res = await fetch("http://localhost:3000/login", {
+      const res = await fetch("http://localhost:3033/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

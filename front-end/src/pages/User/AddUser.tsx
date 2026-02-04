@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { User } from "../../types/User";
-import { useAuth } from "../../components/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 
 
@@ -56,7 +56,7 @@ export default function AddUser () {
             form.append("photo", formData.photo);
         }
 
-       const res= await  fetch("http://localhost:3000/new-user", {
+       const res= await  fetch("http://localhost:3033/new-user", {
             method: "POST",
             body: form 
         });

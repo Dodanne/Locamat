@@ -1,17 +1,15 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect, ReactNode } from "react";
+import { ReactNode } from "react";
+import { useAuth } from "../context/AuthContext";
+import Connexion from "../pages/User/Connexion";
 
 type PropsNode = { children: ReactNode };
 
-export default function ProtectedRoute({ children }: PropsNode){
+export default function ProtectedRoute({ children }: PropsNode) {
+  const { isLogged } = useAuth();
 
-    const navigate = useNavigate();
-    
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            navigate("/connexion");
-        }
-    }, [navigate]);
-     return <>{children}</>
+  if (!isLogged) {
+    return <Connexion />;
+  }
+
+  return <>{children}</>;
 }

@@ -8,7 +8,16 @@ export const getAllEquipments = async (req, res) => {
         {
           model: User,
           as: "owner",
-          attributes: ["user_id", "first_name", "photo", "city"],
+          attributes: [
+            "user_id",
+            "first_name",
+            "last_name",
+            "photo",
+            "city",
+            "rating_avg",
+            "rating_count",
+            "user_type",
+          ],
         },
         {
           model: Category,
@@ -29,7 +38,16 @@ export const get6FirstEquipment = async (req, res) => {
         {
           model: User,
           as: "owner",
-          attributes: ["user_id", "first_name", "photo", "city"],
+          attributes: [
+            "user_id",
+            "first_name",
+            "last_name",
+            "photo",
+            "city",
+            "rating_avg",
+            "rating_count",
+            "user_type",
+          ],
         },
         {
           model: Category,
@@ -55,7 +73,16 @@ export const getEquipmentById = async (req, res) => {
         {
           model: User,
           as: "owner",
-          //attribute
+          attributes: [
+            "user_id",
+            "first_name",
+            "last_name",
+            "photo",
+            "city",
+            "rating_avg",
+            "rating_count",
+            "user_type",
+          ],
         },
         {
           model: Category,
@@ -73,7 +100,30 @@ export const getEquipmentById = async (req, res) => {
 export const getEquipmentByUser = async (req, res) => {
   try {
     const id = req.params.id;
-    const data = await Equipment.findAll({ where: { owner_id: id } });
+    const data = await Equipment.findAll({
+      where: { owner_id: id },
+      include: [
+        {
+          model: User,
+          as: "owner",
+          attributes: [
+            "user_id",
+            "first_name",
+            "last_name",
+            "photo",
+            "city",
+            "rating_avg",
+            "rating_count",
+            "user_type",
+          ],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["name"],
+        },
+      ],
+    });
     res.json(data);
   } catch (err) {
     console.error(err);

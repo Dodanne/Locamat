@@ -4,28 +4,32 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { CiChat1 } from "react-icons/ci";
-
+import { useEquipment } from "../../context/EquipmentContext";
+import Loader from "../../components/Loader";
 
 export default function EquipmentItem() {
-    const [equipment,setEquipment]=useState<Equipment>({} as Equipment);
+    
     const {id}=useParams();
+    const {fetchEquipmentById}=useEquipment()
+    const [equipment, setEquipment] = useState<Equipment | null>(null);
+    
     useEffect(() => {
-        async function fetchEquipmentItem() {
+        if (!id) return;
+        const equipmentId:string=id
+
+        async function getEquipment() {
             try {
-                const res = await fetch(`http://localhost:3000/equipment/${id}`);
-                const data = await res.json();
-                console.log(data)
-                setEquipment(data);            
-            } catch (err) {
-                console.error(err);
-            }
+      const equipment = await fetchEquipmentById(equipmentId);
+      setEquipment(equipment);               
+         } catch (err) {
+      console.log(err);
+         }
         }
-        fetchEquipmentItem();
-    }, [id]);
-    console.log(equipment.category?.name)
-    console.log(equipment.owner?.last_name);
-    
-    
+
+  getEquipment();
+}, [id, fetchEquipmentById]);
+if (!equipment) return <Loader/>;
+
     return (
         <div className="container py-8">
             <Link to="/rechercher" >
@@ -34,7 +38,7 @@ export default function EquipmentItem() {
            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
                 <div className="relative overflow-hidden py-4">
-                   <img src={`http://localhost:3000/images/equipments/${equipment.photo}`} alt={equipment.title} className="img-cover w-full rounded-xl h-96"/>
+                   <img src={`http://localhost:3033/images/equipments/${equipment.photo}`} alt={equipment.title} className="img-cover w-full rounded-xl h-96"/>
                    <span className="inline-flex items-center justify-center rounded-md border px-2 py-1 m-2 text-xs font-medium w-fit bg-white text-primary absolute top-4 right-1"> 
                 {equipment.owner?.user_type}</span>
                 </div>
@@ -60,7 +64,7 @@ export default function EquipmentItem() {
                 <div className="flex flex-col gap-6 rounded-xl border bg-white p-6 mt-8">
                     <div className="flex items-center gap-4 relative ">
                         <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-16 w-16">
-                         <img src={`http://localhost:3000/images/users/${equipment.owner?.photo}`} alt={`${equipment.owner?.first_name} ${equipment.owner?.last_name}`} className="img-cover"/>
+                         <img src={`http://localhost:3033/images/users/${equipment.owner?.photo}`} alt={`${equipment.owner?.first_name} ${equipment.owner?.last_name}`} className="img-cover"/>
                         </span>
                         <div>
                             <div className="text-lg text-gray-900">{equipment.owner?.first_name} {equipment.owner?.last_name}</div>

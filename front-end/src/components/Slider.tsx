@@ -1,16 +1,16 @@
-import { useState } from "react";
+
 type SliderProps = {
   min?: number;
   max?: number;
   step?: number;
   unit?: string;
-  value?: number;
-  onChange?: (value: number) => void;
+  value: number;
+  onChange: (value: number) => void;
 };
 
 
-export default function Slider({ min = 0, max , step = 5, unit }:SliderProps) {
-  const [value, setValue] = useState(max);
+export default function Slider({ min = 0, max , step = 5, unit, value, onChange }:SliderProps) {
+  
   
   return (
     <div className="w-full">
@@ -22,11 +22,11 @@ export default function Slider({ min = 0, max , step = 5, unit }:SliderProps) {
           max={max}
           step={step}
           value={value}
-          onChange={(e) => setValue(Number(e.target.value))}
+          onChange={(e) => onChange(Number(e.target.value))}
           className="w-full h-6"
         />
         <div className="mt-1 text-xs text-gray-600 text-center">
-          {unit ? `Dans un rayon de ${value} ${unit}` : ` ${value}€`}
+           {!unit ? value === max ? `${value}€ et plus` : `${value}€`: `Dans un rayon de ${value} ${unit}`}     
         </div>
       </div>
     </div>

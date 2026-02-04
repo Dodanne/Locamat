@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
    useEffect(() => {
   if (userId) {
-    fetch(`http://localhost:3000/user/${userId}`)
+    fetch(`http://localhost:3033/user/${userId}`)
       .then(res => res.json())
       .then(data => setUser(data))
       .catch(err => console.error(err));
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("userId", id);
     setIsLogged(true);
     setUserId(id);
-    fetch(`http://localhost:3000/user/${id}`)
+    fetch(`http://localhost:3033/user/${id}`)
           .then(res => res.json())
           .then(data => setUser(data))
           .catch(err => console.error(err));
