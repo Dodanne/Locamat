@@ -200,3 +200,4 @@ export const getFiltredSearch = async (req, res) => {
   const equipments = await Equipment.findAll(options);
   res.json(equipments);
 };
+export const deleteEquipment = async (req, res) => {};

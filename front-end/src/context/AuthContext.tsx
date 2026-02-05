@@ -8,45 +8,56 @@ type AuthContextType = {
   logout: () => void;
 };
 
-const AuthContext = createContext<AuthContextType>({
-  isLogged: false,
-  userId: null,
-  user:null,
-  login: () => {},
-  logout: () => {},
-});
+type User = {
+  id: string;
+  email?: string;
+  first_name?: string;
+};
+
+const AuthContext=createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isLogged, setIsLogged] = useState(!!localStorage.getItem("token"));
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [userId, setUserId] = useState(localStorage.getItem("userId"));
-   const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const isLogged = !!token;
 
    useEffect(() => {
-  if (userId) {
-    fetch(`http://localhost:3033/user/${userId}`)
-      .then(res => res.json())
-      .then(data => setUser(data))
-      .catch(err => console.error(err));
-  }
-}, [userId]);
+   const fetchUser = async () => {
+      if (!token || !userId) return;
+      try {
+        const res = await fetch(`http://localhost:3033/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) {
+          throw new Error();
+        }
+        const data = await res.json();
+        setUser(data);
+      } catch (err) {
+        console.log(err)
+        logout();
+      }
+    };
 
-  const login = (token: string, id: string) => {
+    fetchUser();
+  }, [token, userId]);
+
+   const login = (token: string, id: string) => {
+    setToken(token);
+    setUserId(id);
     localStorage.setItem("token", token);
     localStorage.setItem("userId", id);
-    setIsLogged(true);
-    setUserId(id);
-    fetch(`http://localhost:3033/user/${id}`)
-          .then(res => res.json())
-          .then(data => setUser(data))
-          .catch(err => console.error(err));
-      
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
-    setIsLogged(false);
+    setToken(null);
     setUserId(null);
+    setUser(null);
   };
 
   return (
@@ -56,4 +67,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useAuth= () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error();
+  }
+  return context
+}

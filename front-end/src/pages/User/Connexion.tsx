@@ -6,9 +6,11 @@ export default function Connexion() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const {login}=useAuth()
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null)
     try {
 
       const res = await fetch("http://localhost:3033/login", {
@@ -18,16 +20,17 @@ export default function Connexion() {
         },
         body: JSON.stringify({ email, password }),
       });
-      if (!res.ok) {
-        throw new Error("Identifiants incorrects");
-      }
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
        login(data.token, data.user.id);
-      navigate(`/user-profile/${data.user.id}`)
+      navigate(`/user-profile`)
       
       
-    } catch (err) {
-      console.error(err);
+    } catch (err:any) {
+      console.log(err);
+      setError(err.message);
     }
   }
    
@@ -57,6 +60,10 @@ export default function Connexion() {
                         value={password} 
                         onChange={(e) => setPassword(e.target.value)}/>
                     </div>
+                    {error && (
+                        <div className="text-red-600 text-sm text-center mt-2 bg-red-50 p-2 rounded"> {error}
+                        </div>
+                      )}
                     <button type="submit" className="w-full items-center h-10 rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Continuer</button>
                     <div className="text-center italic underline text-sm"> <Link to="/new-user"> Pas encore de compte LocaMat ? Inscrivez-vous ici </Link></div>
                 </form>

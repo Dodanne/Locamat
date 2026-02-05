@@ -129,13 +129,16 @@ function getInitials(user: User) {
                     </div>
                 </div>   
             </div>
-            {user.role === "super-admin"|| user.role==="admin" && (
+            {(user.role === "SUPER-ADMIN"
+            || user.role==="ADMIN")
+             && 
+            (
                 <div className="fixed bottom-4 left-4 right-4 z-50 lg:static lg:z-auto lg:flex lg:flex-col justify-center lg:bg-white lg:p-4 m-4">
                    {/* mobile */}
                    <button className="btn bg-accent text-white w-full shadow-lg lg:hidden"> Accès admin </button>
                   {/* ordi */}
                   <div className="hidden lg:flex flex-col gap-4">    
-                    <Link to="/dashboard"><button className="btn bg-accent text-white w-full p-2">Accès admin</button></Link>
+                    <Link to="/admin-dashboard"><button className="btn bg-accent text-white w-full p-2">Accès admin</button></Link>
                      </div>
                   </div>
                 )}

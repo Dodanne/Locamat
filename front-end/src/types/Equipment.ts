@@ -10,8 +10,8 @@ export type Equipment = {
   price: number
   caution: number
   owner_id: number
-  created_at: string
-  updated_at:string
+  createdAt: string
+  updatedAt:string
 
   owner?: Owner;
   category?: Category;

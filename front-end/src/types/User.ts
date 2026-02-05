@@ -12,9 +12,10 @@ export type User = {
   postal_code: string;
   phone: string;
   user_type: string;
-  company_name?: string;
-  siret_number?: string;
-  created_at: string;
+  compagny_name?: string;
+  siret?: string;
+  createdAt: string;
+  updatedAt:string;
   rating_avg: number;
   rating_count: number;
   status: string;

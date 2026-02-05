@@ -1,0 +1,119 @@
+import { useEffect, useState } from "react";
+import { User } from "./../../types/User"
+import { MdDelete } from "react-icons/md";
+import { IoIosWarning } from "react-icons/io";
+
+export default function ListeUtilisateurs() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [filterName, setFilterName] = useState<string>("")
+  const [filterType, setFilterType] = useState<string>("all");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [sortDate, setSortDate] = useState<string>("recent");
+  const baseUrl=import.meta.env.VITE_BASE_URL
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const res = await fetch(baseUrl+"/role/users", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+        const data = await res.json();
+        setUsers(data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchUsers();
+  }, []);
+  
+  
+     const handleBan = async (userId: number, isBanned: boolean) => {
+     if (!confirm(`Êtes-vous sûr de vouloir ${isBanned ? "débannir":"bannir"} cet utilisateur ?`)) return;
+  try {
+     await fetch(baseUrl+`/${userId}/ban`, {
+      method: "PATCH", 
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ banned: !isBanned }),
+    });
+
+    setUsers(prev =>
+      prev.map(u =>
+        u.user_id === userId ? { ...u, status: !isBanned ? "banned" : "active" } : u
+      )
+    );
+  } catch (err) {
+    console.log(err);
+    alert("Impossible de modifier le statut");
+  }
+};
+const filteredUsers = users
+  .filter(u => (`${u.first_name} ${u.last_name}`).toLowerCase().includes(filterName.toLowerCase()) )
+  .filter(u => filterType === "all" || u.user_type === filterType)
+  .filter(u => filterStatus === "all" || u.status === filterStatus)
+    .sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return sortDate === "recent" ? dateB - dateA : dateA - dateB;
+    });
+  return (
+  <div className="overflow-x-auto">
+    <h2 className="text-2xl font-semibold mb-4">Liste des utilisateurs</h2>
+     <input type="text" placeholder="Rechercher un utilisateur..." className="border p-2 rounded mb-4 w-full" value={filterName} onChange={e => setFilterName(e.target.value)} />
+     <div className="pb-4 m-2">
+        <select className="border p-2 mx-2 " value={filterType} onChange={e => setFilterType(e.target.value) } >
+          <option value="all">Tous types</option>
+          <option value="professionnel">Professionnel</option>
+          <option value="particulier">Particulier</option>
+        </select>
+         <select className="border p-2 mx-2 " value={filterStatus} onChange={e => setFilterStatus(e.target.value)} >
+          <option value="all">Tous statuts </option>
+          <option value="active">Actif</option>
+          <option value="banned">Bannis</option>
+        </select>
+        <select className="border p-2 mx-2 " value={sortDate} onChange={e => setSortDate(e.target.value) }>
+          <option value="recent">Inscriptions recentes</option>
+          <option value="oldest">Premieres inscriptions</option>
+        </select>
+      </div>
+    <table className="min-w-full bg-white border rounded shadow">
+      <thead className="bg-gray-100">
+        <tr>
+          <th className="py-2 px-2 border">Nom</th>
+          <th className="py-2 px-2 border">Prénom</th>
+          <th className="py-2 px-2 border">Email</th>
+          <th className="py-2 px-2 border">Type utilisateur</th>
+          <th className="py-2 px-2 border">Société</th>
+          <th className="py-2 px-2 border">SIRET</th>
+          <th className="py-2 px-2 border">Statut</th>
+          <th className="py-2 px-2 border">Créé le</th>
+          <th className="py-2 px-2 border">Message d'avertissement</th>
+          <th className="py-2 px-2 border">Bannir</th>
+        </tr>
+      </thead>
+      <tbody>
+        {filteredUsers.map(u => (
+          <tr key={u.user_id} className="hover:bg-gray-50">
+            <td className="py-2 px-2 border cursor-pointer"  onClick={() => setFilterName(`${u.first_name} ${u.last_name}`)}>{u.last_name}</td>
+            <td className="py-2 px-2 border cursor-pointer"  onClick={() => setFilterName(`${u.first_name} ${u.last_name}`)}>{u.first_name}</td>
+            <td className="py-2 px-2 border">{u.email}</td>
+            <td className="py-2 px-2 border">{u.user_type}</td>
+            <td className="py-2 px-2 border">{u.compagny_name || "-"}</td>
+            <td className="py-2 px-2 border">{u.siret || "-"}</td>
+            <td className="py-2 px-2 border">{u.status || "-"}</td>
+            <td className="py-2 px-2 border">{new Date(u.createdAt).toLocaleDateString()}</td>
+            <td className="justify-center border text-center"> <button ><IoIosWarning /></button></td>  
+            <td className="justify-center border text-center ">
+               <button  onClick={() => handleBan(u.user_id, u.status === "banned")} className={`flex items-center gap-1 mx-auto 
+               ${ u.status === "banned" ? "text-red-600" : "text-primary"}`} >
+              {u.status === "banned" ? "Débannir" : "Bannir"}<MdDelete /></button></td>  
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+}

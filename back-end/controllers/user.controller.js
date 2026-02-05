@@ -1,4 +1,5 @@
 import { User } from "./../Models/index.js";
+import { Op } from "sequelize";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -58,5 +59,57 @@ export const createUser = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: err.message });
+  }
+};
+export const getAllRoleUsers = async (req, res) => {
+  try {
+    const data = await User.findAll({ where: { role: "user" } });
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ err: "Erreur serveur" });
+  }
+};
+export const getAllRoleAdmin = async (req, res) => {
+  try {
+    const data = await User.findAll({
+      where: { role: "ADMIN" },
+    });
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ err: "Erreur serveur" });
+  }
+};
+export const patchBannedUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { banned } = req.body;
+    if (req.user.id === id) {
+      return res
+        .status(403)
+        .json({ message: "Impossible de se bannir soi-même" });
+    }
+    console.log(banned);
+    const data = await User.findByPk(id);
+    data.status = banned ? "banned" : "active";
+    console.log(data.status);
+    await data.save();
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ err: "Erreur serveur" });
+  }
+};
+export const patchIsAdmin = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await User.findByPk(id);
+    data.role = "user";
+    await data.save();
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ err: "Erreur serveur" });
   }
 };

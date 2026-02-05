@@ -13,6 +13,11 @@ export const postLogin = async (req, res) => {
         .status(401)
         .json({ message: "Email ou mot de passe invalide" });
     }
+    if (user.status === "banned") {
+      return res.status(403).json({
+        message: "Votre compte est suspendu. Contactez un administrateur.",
+      });
+    }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res
