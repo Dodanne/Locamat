@@ -1,10 +1,10 @@
-import User from "./../models/User.js";
+import User from "./../Models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET, JWT_EXPIRES_IN } from "../config/jwt.config.js";
 
 export const postLogin = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email: email.trim() } });

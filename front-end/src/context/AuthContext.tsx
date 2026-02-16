@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import type { User } from "./../types/User"
 import api from "../api/axios";
+import apiAuth from "../api/axiosAuth";
 
 type AuthContextType = {
   isLogged: boolean;
@@ -23,7 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
    const fetchUser = async () => {
       if (!token || !user_id) return;
       try {
-        const res = await api.get(`/user/${user_id}`);
+        const res = await apiAuth.get(`/user/${user_id}`);
         setUser(res.data);
       } catch (err) {
         console.log(err)

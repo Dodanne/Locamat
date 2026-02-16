@@ -1,4 +1,4 @@
-import { User } from "../models/index.js";
+import User from "./../Models/User.js";
 import sendEmail from "../services/email.service.js";
 import {
   signEmailVerifyToken,
@@ -20,7 +20,7 @@ export const getUserById = async (req, res) => {
     const data = await User.findByPk(id);
     res.json(data.toJSON());
   } catch (err) {
-    console.error(err);
+    console.log(err);
   }
 };
 export const createUser = async (req, res) => {

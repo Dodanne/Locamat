@@ -1,5 +1,5 @@
 import sequelize from "./sequelize.js";
-import "../Models/index.js";
+import "../models/index.js";
 
 export default async function initDb() {
   try {

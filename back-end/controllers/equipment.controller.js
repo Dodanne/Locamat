@@ -1,4 +1,4 @@
-import { Equipment, User, Category } from "../models/index.js";
+import { Equipment, User, Category } from "../Models/index.js";
 import { Op } from "sequelize";
 
 export const getAllEquipments = async (req, res) => {

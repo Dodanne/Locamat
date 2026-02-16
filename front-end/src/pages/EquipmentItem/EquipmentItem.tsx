@@ -1,7 +1,7 @@
 import type { Equipment } from "../../types/Equipment.js";
 import { IoLocationSharp, IoArrowBack } from "react-icons/io5";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { CiChat1 } from "react-icons/ci";
 import { useEquipment } from "../../context/EquipmentContext";
@@ -9,16 +9,23 @@ import Loader from "../../components/Loader";
 import { DayPicker, DateRange } from "react-day-picker";
 import { fr } from "react-day-picker/locale";
 import "react-day-picker/dist/style.css"
+import apiAuth from "../../api/axiosAuth";
+import { useNavigate } from "react-router-dom";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+import { useAuth } from "../../context/AuthContext";
+import { RiSecurePaymentFill } from "react-icons/ri";
+import { TbCalendarCancel } from "react-icons/tb";
 
 
 
 export default function EquipmentItem() {
-    
+    const {user_id}=useAuth()
     const {id}=useParams();
     const {fetchEquipmentById}=useEquipment()
     const [equipment, setEquipment] = useState<Equipment | null>(null);
     const [selected, setSelected] = useState<DateRange|undefined>()
     const baseUrl=import.meta.env.VITE_BASE_URL
+    const navigate=useNavigate()
  
 
     useEffect(() => {
@@ -36,8 +43,27 @@ export default function EquipmentItem() {
       getEquipment();
         }, [id, fetchEquipmentById]);
 
-    function handleClick (){
-        
+    const handleClick = async ()=> {
+        if (!equipment) return;
+        if (user_id && equipment.owner_id===parseInt(user_id)){
+            alert ("Vous ne pouvez pas réserver votre propre matériel")
+        return 
+        }
+        if (!selected?.from || !selected?.to) {
+            alert("Merci de bien vouloir selectionner des dates");
+                return}
+        try {
+                await apiAuth.post("/rental/new-rental",{
+                start_date: selected.from.toISOString().split("T")[0],
+                end_date: selected.to.toISOString().split("T")[0],
+                status: "pending",
+                equipment_id: equipment.equipment_id,
+            })
+            console.log (equipment.equipment_id)
+            navigate("/user-profile")
+        }catch (err){
+            console.log(err)
+        }
     }
 
         if (!equipment) return <Loader/>;
@@ -127,11 +153,20 @@ export default function EquipmentItem() {
                             today: "text-primary font-bold",   
                         }}
                         className=" p-2 " 
+                        components={{
+                            Chevron: ({ orientation }) => {
+                                 return orientation === "left"
+                                ? <IoChevronBack className="text-accent w-6 h-6 " />
+                                : <IoChevronForward  className="text-accent w-6 h-6" />;
+                                 }
+                                    }}
                         navLayout="around"
                         locale={fr}
                          />
                 
                 <button onClick={handleClick} className="btn flex-1 items-center rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Réserver</button> 
+                <span className="flex text-sm text-gray-600"><RiSecurePaymentFill className="text-xl mr-4"/> Paiement sécurisé</span>
+                <span className="flex text-sm text-gray-600"><TbCalendarCancel className="text-xl mr-4"/> Annulation gratuite 24h avant</span>
             </div>
             </div>
         </div>

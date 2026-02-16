@@ -17,7 +17,6 @@ export const getAllRentals = async (req, res) => {
       ],
     });
     res.json(data);
-    console.log(data);
   } catch (err) {
     console.error(err);
   }
@@ -48,7 +47,7 @@ export const getRentalsByRenter = async (req, res) => {
         },
       ],
     });
-    console.log(data);
+
     res.json(data);
   } catch (err) {
     console.error(err);
@@ -74,10 +73,26 @@ export const getRentalsByOwner = async (req, res) => {
         },
       ],
     });
-    console.log(data);
     res.json(data);
   } catch (err) {
     console.error(err);
     res.json({ error: "Erreur serveur" });
+  }
+};
+export const createRental = async (req, res) => {
+  try {
+    const { start_date, end_date, equipment_id } = req.body;
+    const renter_id = req.user.id;
+    console.log("quipment_id" + req.equipment_id);
+    const data = await Rental.create({
+      start_date,
+      end_date,
+      status: "pending",
+      equipment_id,
+      renter_id: renter_id,
+    });
+    res.status(201).json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
