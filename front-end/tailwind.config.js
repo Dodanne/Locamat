@@ -5,11 +5,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#0d3b66" /* Dark Blue */,
-        secondary: "#718096" /* Gray */,
-        accent: "#00A8E8" /* Bright Blue */,
-        background: "#F9FAFB" /* Light Gray */,
-        blackText: "#1A202C" /* Black */,
+        primary: "#0d3b66" /* Bleu Fonce */,
+        secondary: "#718096" /* gris */,
+        accent: "#00A8E8" /* Bleu Clair */,
+        background: "#F9FAFB" /* Gris fonce */,
+        blackText: "#1A202C" /* Noir */,
       },
       fontFamily: {
         sans: [

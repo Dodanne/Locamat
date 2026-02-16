@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Equipment } from "../../types/Equipment";
 import { MdDelete } from "react-icons/md";
+import apiAuth from "../../api/axiosAuth";
 
 export default function ListeEquipments() {
   const [equipments, setEquipments] = useState<Equipment[]>([]);
@@ -8,13 +9,8 @@ export default function ListeEquipments() {
   useEffect(() => {
     async function fetchEquipments() {
       try {
-        const res = await fetch(baseUrl+"/equipment", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        const data = await res.json();
-        setEquipments(data);
+        const res = await apiAuth.get("/equipment");
+        setEquipments(res.data);
       } catch (err) {
         console.error(err);
       }
@@ -23,37 +19,17 @@ export default function ListeEquipments() {
   }, []);
 
   const handleDeleteEquipment = async (equipmentId: number) => {
-  const reason = prompt(
-    "Veuillez indiquer le motif de suppression de cet équipement :\n- trop cher\n- inapproprié\n- signalé"
-  );
-  if (!reason) {
-    alert("Suppression annulée : motif obligatoire.");
-    return;
-  }
-
-  try {
-    const res = await fetch(baseUrl +`/equipment/${equipmentId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({ reason }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      alert(err.message);
-      return;
-    }
-
-    setEquipments((prev) => prev.filter((e) => e.equipment_id !== equipmentId));
-    alert("Équipement supprimé avec succès !");
-  } catch (err) {
-    console.log(err);
-    alert("Erreur lors de la suppression.");
-  }
-};
+    const confirmChoise =  confirm( "Etes-vous sûr de vouloir supprimer cet équipment ?");
+    if(!confirmChoise)return
+    try {
+       await apiAuth.delete(`/equipment/${equipmentId}`)
+     setEquipments((prev) => prev.filter((e) => e.equipment_id !== equipmentId));
+     alert("Équipement supprimé avec succès !");
+   } catch (err) {
+     console.log(err);
+     alert("Erreur lors de la suppression.");
+   }
+  };
 
 
   return (
@@ -83,7 +59,7 @@ export default function ListeEquipments() {
               <td className="px-4 py-2 border">
                 {e.photo ? (
                   <img
-                    src={`http://localhost:3033/images/equipments/${e.photo}`}
+                    src={`${baseUrl}/images/equipments/${e.photo}`}
                     alt={e.title}
                     className="w-16 h-16 object-cover rounded"
                   />

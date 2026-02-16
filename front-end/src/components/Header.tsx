@@ -7,17 +7,16 @@ import { useState, useEffect} from "react";
 import { IoMdMenu, IoMdClose } from "react-icons/io";
 import { useAuth } from "../context/AuthContext";
 import { IoLogOutSharp } from "react-icons/io5";
+import getInitials from "./GetInitials";
 
 
 
 export default function Header() {
-  const { isLogged, userId, user } = useAuth();
+  const { isLogged,  user } = useAuth();
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>` transition-colors ${isActive ? "text-primary" : "text-secondary"}`;
   const [isMenuOpen, setIsMenuOpen] =  useState(false);
-console.log (user)
+  const baseUrl=import.meta.env.VITE_BASE_URL
 
-
-  
 
   return (
     <header className="bg-white text-primary border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -50,7 +49,13 @@ console.log (user)
            
            {user&& (
             <NavLink to={`/user-profile`}> <button className="flex flex-col items-center text-sm icon-btn">
-            <img src={`http://localhost:3033/images/users/${user.photo}`} alt={user.first_name} className="w-10 h-10 rounded-full object-cover border border-gray-300"/> <span>Mon compte</span></button></NavLink>
+             {user.photo && user.photo !=="NULL" ? (  
+                                    <img src={`${baseUrl}/images/users/${user.photo}`} alt={user.first_name} className="w-full h-full object-cover"/>
+                             ):(
+                                <span className="flex items-center justify-center h-full text-2xl p-1  text-white bg-accent rounded-full">{getInitials(user)}</span>
+                             )}
+                             <span>Mon compte</span>
+            </button></NavLink>
             )}
             <NavLink to={`/logout`}> <button className="flex flex-col items-center text-sm icon-btn">
             <IoLogOutSharp className="icon-primary m-1 text-4xl"/> <span>Deconnexion</span></button></NavLink>

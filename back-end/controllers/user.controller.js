@@ -1,6 +1,9 @@
-import { User } from "./../Models/index.js";
-import { Op } from "sequelize";
-
+import { User } from "../models/index.js";
+import sendEmail from "../services/email.service.js";
+import {
+  signEmailVerifyToken,
+  verifyEmailVerifyToken,
+} from "../services/emailToken.service.js";
 export const getAllUsers = async (req, res) => {
   try {
     const data = await User.findAll();
@@ -54,7 +57,19 @@ export const createUser = async (req, res) => {
       user_type,
       compagny_name: user_type === "professionnel" ? compagny_name : null,
       siret: user_type === "professionnel" ? siret : null,
+      email_verified: false,
     });
+    //   const emailToken = signEmailVerifyToken(email);
+    //   const verifyUrl = `${process.env.FRONT_URL}/verify-email?token=${emailToken}`;
+    //   await sendEmail(
+    //     email,
+    //     "Locamat - Veuillez confirmer votre adresse mail",
+    //     `<h1> Bienvenue chez LocaMat</h1>
+    //      <p>Merci d'avoir créé un compte ! Pour profiter de celui-ci, veuillez confirmer votre adresse mail en cliquant ci-dessous :</p>
+    //   <a href="${verifyUrl}">Confirmer mon adresse email (ce lien est valide pendant 24h).</a>
+    //   <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
+    // `,
+    //   );
     res.status(201).json(data);
   } catch (err) {
     console.log(err);
@@ -111,5 +126,33 @@ export const patchIsAdmin = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ err: "Erreur serveur" });
+  }
+};
+export const verifyEmail = async (req, res) => {
+  const { token } = req.query;
+
+  try {
+    const decoded = verifyEmailVerifyToken(token);
+
+    const user = await User.findOne({
+      where: { email: decoded.email },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Utilisateur introuvable" });
+    }
+
+    user.email_verified = true;
+    await user.save();
+
+    res.status(200).json({
+      message: "Email vérifié avec succès ",
+    });
+    return res.redirect(`${process.env.FRONT_URL}/email-verified`);
+  } catch (err) {
+    res.status(400).json({
+      message: "Lien invalide ou expiré",
+    });
+    console.log(err);
   }
 };

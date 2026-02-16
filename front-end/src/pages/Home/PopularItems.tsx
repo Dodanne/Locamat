@@ -1,4 +1,4 @@
-import ItemCard from "./ItemCard";
+import ItemCard from "./../../components/ItemCard";
 import { Link } from "react-router-dom";
 import { useEquipment } from "../../context/EquipmentContext";
 

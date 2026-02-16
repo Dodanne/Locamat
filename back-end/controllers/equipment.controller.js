@@ -1,4 +1,4 @@
-import { Equipment, User, Category } from "../Models/index.js";
+import { Equipment, User, Category } from "../models/index.js";
 import { Op } from "sequelize";
 
 export const getAllEquipments = async (req, res) => {
@@ -200,4 +200,47 @@ export const getFiltredSearch = async (req, res) => {
   const equipments = await Equipment.findAll(options);
   res.json(equipments);
 };
-export const deleteEquipment = async (req, res) => {};
+export const deleteEquipment = async (req, res) => {
+  try {
+    console.log("ok");
+    const { id } = req.params;
+    const { reason } = req.body;
+    if (!reason) {
+      return res.status(400).json({
+        message: "Motif de suppression obligatoire",
+      });
+    }
+    const deletedEquipment = await Equipment.destroy({
+      where: { equipment_id: Number(id) },
+    });
+    return res.status(200).json({
+      message: "Équipement supprimé avec succès",
+      equipment: deletedEquipment,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "Erreur lors de la suppression de l'équipement",
+    });
+  }
+};
+export const updateEquipment = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { title, price, description, category } = req.body;
+    const data = await Equipment.findByPk(id);
+    data.title = title;
+    data.price = price;
+    data.description = description;
+    data.categoryId = category;
+
+    if (req.file) {
+      data.photo = req.file.filename;
+    }
+    await data.save(); //updatedAt
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ err: "Erreur serveur" });
+  }
+};

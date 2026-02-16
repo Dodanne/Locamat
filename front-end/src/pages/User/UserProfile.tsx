@@ -7,7 +7,7 @@ import { PiClockCounterClockwise } from "react-icons/pi";
 import { FaRegStar } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import ItemCard from "../Home/ItemCard";
+import ItemCard from "../../components/ItemCard";
 import AddEquipmentBtn from "../../components/AddEquipmentBtn";
 import StarRating from "../../components/StarRating";
 import { User } from "../../types/User";
@@ -15,80 +15,92 @@ import { Equipment } from "../../types/Equipment";
 import { FaHandHolding } from "react-icons/fa";
 import { Rental } from "../../types/Rental";
 import { useAuth } from "../../context/AuthContext";
+import EquipmentItem from "../EquipmentItem/EquipmentItem";
+import apiAuth from "../../api/axiosAuth";
+import getInitials from "../../components/GetInitials";
 
 
 export default function UserProfile (){
-const [activeDiv,setActiveDiv]=useState("equipment")
-const [user,setUser]=useState<User>({}as User)
-const [userEquipments,setUserEquipments]=useState<Equipment[]>([])
-const [renterRentals,setRenterRentals]=useState<Rental[]>([])
-const [ownerRentals,setOwnerRentals]=useState<Rental[]>([])
-const {userId}=useAuth()
+    const baseUrl=import.meta.env.VITE_BASE_URL
+    const [activeDiv,setActiveDiv]=useState("equipment")
+    const [user,setUser]=useState<User>({}as User)
+    const [userEquipments,setUserEquipments]=useState<Equipment[]>([])
+    const [renterRentals,setRenterRentals]=useState<Rental[]>([])
+    const [ownerRentals,setOwnerRentals]=useState<Rental[]>([])
+    const {user_id}=useAuth()
 
     useEffect(() => {
         async function fetchUsers() {
             try {
-                const res = await fetch(`http://localhost:3033/user/${userId}`,{
-                    headers:{
-                        Authorization:`Bearer ${localStorage.getItem("token")}`
-                    }
-                });
-                const data = await res.json();
-                setUser(data);
-                console.log(data)
+                const res = await apiAuth.get(`/user/${user_id}`);
+                setUser(res.data);
             } catch (err) {
                 console.error(err);
             }
         }
         fetchUsers();
-    }, [userId]);
+    }, [user_id]);
     useEffect(() => {
         async function fetchUserEquipments() {
             try {
-                const res = await fetch(`http://localhost:3033/user/${userId}/equipment`);
-                const data = await res.json();
-                setUserEquipments(Array.isArray(data) ? data : []);
-                console.log(data)
+                const res = await apiAuth.get(`/user/${user_id}/equipment`);
+                setUserEquipments(Array.isArray(res.data) ? res.data : []);
             } catch (err) {
-                console.error(err);
+                console.log(err);
             }
         }
         fetchUserEquipments();
-    }, [userId]);
+    }, [user_id]);
 
     useEffect(() => {
         async function fetchRenterRentals() {
             try {
-                const res = await fetch(`http://localhost:3033/rental/renter/${userId}`);
-                const data = await res.json();
-                setRenterRentals(Array.isArray(data) ? data : []); // pour ne pas avoir null=>tableau vide
-                console.log(data)
+                const res = await apiAuth.get(`/rental/renter/${user_id}`);
+                setRenterRentals(Array.isArray(res.data) ? res.data : []); // pour ne pas avoir null=>tableau vide
             } catch (err) {
                 console.error(err);
             }
         }
         fetchRenterRentals();
-    }, [userId]);
-    console.log("renterRentals :", renterRentals);
+    }, [user_id]);
+    
     useEffect(() => {
         async function fetchOwnerRentals() {
             try {
-                const res = await fetch(`http://localhost:3033/rental/owner/${userId}`);
-                const data = await res.json();
-                setOwnerRentals(Array.isArray(data) ? data : []); // pour ne pas avoir null=>tableau vide
-                console.log(data)
+                const res = await apiAuth.get(`/rental/owner/${user_id}`);
+                setOwnerRentals(Array.isArray(res.data) ? res.data : []); // pour ne pas avoir null=>tableau vide
             } catch (err) {
                 console.error(err);
             }
         }
         fetchOwnerRentals();
-    }, [userId]);
-    console.log("OwnerRentals :", ownerRentals);
+    }, [user_id]);
+    
 
-function getInitials(user: User) {
-     if (!user?.first_name || !user?.last_name) return "";
-    return `${user.first_name.charAt(0).toUpperCase()}${user.last_name.charAt(0).toUpperCase()}`;
-  };
+ const handleDeleteEquipment = async (id: number) => {
+  if (!confirm("Supprimer cet équipement ?")) return;
+
+  await apiAuth.delete(`${baseUrl}/equipment/${id}`)
+  setUserEquipments((prev) =>
+    prev.filter((e) => e.equipment_id !== id)
+  );
+};   
+
+const handleUpdateEquipment = async (id: number, data: Equipment) => {
+  try {
+    await apiAuth.put(`/equipment/${id}`)
+    setUserEquipments((prev) =>
+      prev.map((e) =>
+        e.equipment_id === id ? { ...e, ...data } : e
+      )
+    );
+  } catch (error) {
+    console.log(error);
+    alert("Impossible de mettre à jour l’équipement");
+  }
+};
+
+
    
 
     return(
@@ -97,7 +109,7 @@ function getInitials(user: User) {
             <div className="flex items-start gap-6 p-4">
                 <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-24 w-24">
                     {user.photo && user.photo !=="NULL" ? (  
-                        <img src={`http://localhost:3033/images/users/${user.photo}`} alt={user.first_name} className="w-full h-full object-cover"/>
+                        <img src={`${baseUrl}/images/users/${user.photo}`} alt={user.first_name} className="w-full h-full object-cover"/>
                  ):(
                     <span className="flex items-center justify-center w-full h-full text-2xl font-bold text-white bg-accent rounded-full">{getInitials(user)}</span>
                  )
@@ -174,9 +186,9 @@ function getInitials(user: User) {
                        <h2 className="text-2xl text-gray-900 my-4">Mon matériel</h2>
                        <AddEquipmentBtn/>
                      </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
                        {userEquipments.map ((e)=> (
-                                     <ItemCard key={e.equipment_id} equipment={e}  />
+                            <ItemCard key={e.equipment_id} equipment={e}  editable onUpdate={handleUpdateEquipment} onDelete={handleDeleteEquipment} /> 
                        ))}      
                     </div>
                     </>
@@ -200,7 +212,7 @@ function getInitials(user: User) {
                     {renterRentals && renterRentals.map ((e)=>(
                         <div className="bg-white flex flex-col gap-6 rounded-xl border p-4">
                         <div className="flex gap-6">
-                            <img src={`http://localhost:3033/images/equipments/${e.equipment?.photo}`} alt={e.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
+                            <img src={`${baseUrl}/images/equipments/${e.equipment?.photo}`} alt={e.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
                             <div className="flex-1">
                                 <div className="flex items-start justify-between mb-2">
                                     <div>
@@ -253,7 +265,7 @@ function getInitials(user: User) {
                     {ownerRentals && ownerRentals.map ((e)=>(
                     <div className="bg-white flex flex-col gap-6 rounded-xl border p-4">
                         <div className="flex gap-6">
-                            <img src={`http://localhost:3033/images/equipments/${e.equipment?.photo}`} alt={e.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
+                            <img src={`${baseUrl}/images/equipments/${e.equipment?.photo}`} alt={e.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
                             <div className="flex-1">
                                 <div className="flex items-start justify-between mb-2">
                                     <div>

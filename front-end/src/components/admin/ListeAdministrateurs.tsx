@@ -1,22 +1,17 @@
 import { useEffect, useState } from "react";
 import { User } from "../../types/User";
-
+import apiAuth from "../../api/axiosAuth";
 import { MdDelete } from "react-icons/md";
 import { TiPlus } from "react-icons/ti";
 
 export default function ListeAdministrateurs() {
   const [administrateurs, setAdmin] = useState<User[]>([]);
-  const baseUrl=import.meta.env.VITE_BASE_URL
+ 
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const res = await fetch(baseUrl+ "/role/admin", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        });
-        const data = await res.json();
-        setAdmin(data);
+        const res = await apiAuth.get( "/role/admin");
+        setAdmin(res.data);
       } catch (err) {
         console.error(err);
       }
@@ -27,15 +22,7 @@ export default function ListeAdministrateurs() {
    const handleDeleteAdmin = async (userId: number) => {
      if (!confirm(`Êtes-vous sûr de vouloir remettre le rôle de "user" à cet administrateur ? Celui-ci perdra tous ses droits`)) return;
   try {
-     await fetch(baseUrl+`/${userId}/isAdmin`, {
-      method: "PATCH", 
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ role:"user "}),
-    });
-
+     await apiAuth.patch(`/${userId}/isAdmin`, {role:"user "}),
      setAdmin(prev => prev.filter(a => a.user_id !== userId));
   } catch (err) {
     console.log(err);

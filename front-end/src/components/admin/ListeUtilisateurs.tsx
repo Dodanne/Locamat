@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { User } from "./../../types/User"
 import { MdDelete } from "react-icons/md";
 import { IoIosWarning } from "react-icons/io";
+import apiAuth from "../../api/axiosAuth";
 
 export default function ListeUtilisateurs() {
   const [users, setUsers] = useState<User[]>([]);
@@ -10,20 +11,15 @@ export default function ListeUtilisateurs() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [sortDate, setSortDate] = useState<string>("recent");
   const baseUrl=import.meta.env.VITE_BASE_URL
+
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const res = await fetch(baseUrl+"/role/users", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        });
-        const data = await res.json();
-        setUsers(data);
+        const res = await apiAuth("/role/users");
+        setUsers(res.data);
       } catch (err) {
-        console.error(err);
-      }
-    }
+        console.log(err);
+      }}
     fetchUsers();
   }, []);
   
@@ -31,14 +27,8 @@ export default function ListeUtilisateurs() {
      const handleBan = async (userId: number, isBanned: boolean) => {
      if (!confirm(`Êtes-vous sûr de vouloir ${isBanned ? "débannir":"bannir"} cet utilisateur ?`)) return;
   try {
-     await fetch(baseUrl+`/${userId}/ban`, {
-      method: "PATCH", 
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ banned: !isBanned }),
-    });
+     await apiAuth.patch(`/${userId}/ban`, { banned: !isBanned }),
+   
 
     setUsers(prev =>
       prev.map(u =>

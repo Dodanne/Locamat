@@ -1,0 +1,184 @@
+import { IoLocationSharp } from "react-icons/io5";
+import { FaStar } from "react-icons/fa";
+import type {Equipment} from "../types/Equipment"
+import { useState } from "react";
+import { FiEdit2, FiTrash2, FiCheck, FiX } from "react-icons/fi";
+import apiAuth from "../api/axiosAuth"
+
+
+type ItemCardProps = {
+    equipment:Equipment
+    editable?: boolean;
+    onUpdate?: (id: number, data: Equipment) => void
+    onDelete?: (id: number) => void;
+};
+
+export default function ItemCard({equipment, editable=false, onUpdate, onDelete}:ItemCardProps) {
+    const baseUrl=import.meta.env.VITE_BASE_URL
+    const [isEditing, setIsEditing] = useState(false);
+    const [form, setForm] = useState<{
+  title: string;
+  price: number;
+  description: string;
+  photo: string;
+  categorie?: string|undefined;
+  file?: File | null;
+}>({
+  title: equipment.title,
+  price: equipment.price,
+  description: equipment.description,
+  photo: equipment.photo,
+  categorie: equipment.category?.name,
+  file: null, 
+});
+    const[actualEquipment, setActualEquipment]=useState(equipment)
+   
+    function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+        const { name, type, value } = e.target;
+         if (type === "file") {
+            const input = e.target as HTMLInputElement;
+           const file = input.files?.[0] ?? null; 
+           if (!file) return;
+        setForm((prev) => ({
+            ...prev,
+            file,
+            photo: URL.createObjectURL(file), //preview
+        }));
+        return
+    }
+     setForm((prevData) => ({
+            ...prevData,
+            [name]: e.target.value
+        }));
+}
+const handleCancel = () => {
+  setForm({
+    title: actualEquipment.title,
+    price: actualEquipment.price,
+    description: actualEquipment.description,
+    photo: actualEquipment.photo,
+    categorie: actualEquipment.category?.name,
+    file: null,
+  });
+  setIsEditing(false);
+};
+  const handleSave = async () => {
+  const formData = new FormData();
+  formData.append("title", form.title);
+  formData.append("price", form.price.toString());
+  formData.append("description",form.description)
+    if (form.categorie) {
+    formData.append("category", form.categorie);
+  }
+  if (form.file) {
+    formData.append("photo", form.file);
+  }
+  
+  await apiAuth.patch(`/equipment/${equipment.equipment_id}`, formData);
+      setActualEquipment(prev => ({
+       ...prev,
+       title: form.title,
+       price: form.price,
+       description: form.description,
+        photo: form.file ? form.photo : prev.photo,
+      }));
+  setIsEditing(false);
+};
+const startEditing = () => {
+  setForm({
+    title: actualEquipment.title,
+    price: actualEquipment.price,
+    description: actualEquipment.description,
+    photo: actualEquipment.photo,
+    categorie: actualEquipment.category?.name,
+    file: null,
+  });
+  setIsEditing(true);
+};
+ 
+const displayPhoto = form.file 
+  ? form.photo
+  : `${baseUrl}/images/equipments/${equipment.photo}`;
+return (
+    <div className="relative flex flex-col border rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition h-full bg-white">
+         
+        {/* Supression et modification UserProfile */}
+        <div className="relative h-48">
+             {editable && (
+          
+            <div className="absolute bg-white/80 text-primary text-xs font-medium px-2 py-0.5 rounded-md border">
+              {!isEditing ? (
+                <>
+                  <button onClick={startEditing} className="flex items-center gap-1 px-2 py-1 text-sm hover:bg-gray-100 rounded" >
+                    <FiEdit2 /> Modifier</button>
+                  <button onClick={() => onDelete?.(equipment.equipment_id)} className="flex items-center gap-1 px-2 py-1 text-sm text-red-600 hover:bg-red-50 rounded">
+                    <FiTrash2 /> Supprimer </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={handleSave} className="flex items-center gap-1 px-2 py-1 text-sm text-green-600 hover:bg-green-50 rounded" >
+                    <FiCheck /> Sauvegarder </button>
+                  <button onClick={handleCancel} className="flex items-center gap-1 px-2 py-1 text-sm hover:bg-gray-100 rounded">
+                    <FiX /> Annuler </button>
+                </>
+              )}
+            </div>
+        )}
+         {/* Image */}
+        <img
+          src={displayPhoto}
+          className="img-cover z-10 w-full h-full object-cover"
+        />
+
+        {isEditing && (
+          <label className="absolute top-2 right-2 z-20 cursor-pointer bg-white rounded-full p-2 shadow">
+            <FiEdit2 className="text-primary" />
+            <input name="photo" type="file" accept="image/*" className="hidden" onChange={handleChange} />
+          </label>
+        )}
+
+        {!isEditing && (
+          <span className="absolute top-3 right-3 bg-white text-primary text-xs font-medium px-2 py-0.5 rounded-md border">
+            {equipment.owner?.user_type}
+          </span>
+        )}
+
+      </div>
+    {/* Contenu */}
+        <div className="p-4 flex flex-col gap-4">
+            {/* Titre + Localisation */}
+            <div className="flex items-center justify-between gap-2 mb-2">
+                {isEditing ? (
+            <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })}className="border rounded px-2 py-1 w-full" />
+          ) : (
+                <h3 className="text-lg text-gray-900 mb-1">{actualEquipment.title}</h3>
+          )}
+                <span className="text-sm text-black bg-primary/10 px-1 py-1 rounded-full text-center">{actualEquipment.category?.name}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+                <IoLocationSharp />
+      <span>{equipment.owner?.city}</span>  
+    </div>
+
+        {/* Note + Prix */}
+<div className="flex items-center justify-between">
+        <div className="flex items-center gap-1 text-sm">
+            <FaStar  className="text-yellow-400"/>
+            <span className="text-gray-900">{equipment.owner?.rating_avg} </span>
+            <span className="text-gray-500">{equipment.owner?.rating_count}</span>
+        </div>
+        <div className="text-right">
+            <div className="text-2xl text-primary">
+                {isEditing ? (
+            <input value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} className="border rounded px-2 py-1 w-full" />
+          ) : (
+            <p>{actualEquipment.price}€</p>
+        )}
+        </div>
+             <div className="text-sm text-gray-500">par jour</div>
+             </div>
+         </div>
+     </div>
+</div>
+)
+}

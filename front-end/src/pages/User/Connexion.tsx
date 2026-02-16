@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import api from "../../api/axios";
 
 export default function Connexion() {
   const navigate = useNavigate();
@@ -12,22 +13,10 @@ export default function Connexion() {
     e.preventDefault();
     setError(null)
     try {
-
-      const res = await fetch("http://localhost:3033/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.message);
-      }
-       login(data.token, data.user.id);
+       
+      const res = await api.post("/login", { email, password})
+       login(res.data.token, res.data.user.id);
       navigate(`/user-profile`)
-      
-      
     } catch (err:any) {
       console.log(err);
       setError(err.message);

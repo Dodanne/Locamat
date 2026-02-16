@@ -8,8 +8,9 @@ import {
   getFiltredEquipments,
   getFiltredSearch,
   deleteEquipment,
+  updateEquipment,
 } from "../controllers/equipment.controller.js";
-import { uploadEquipment } from "../config/multer.config.js";
+import { uploadEquipment } from "../middleware/multer.js";
 import { authenticateToken } from "../middleware/authentificateToken.js";
 import { isAdmin } from "./../middleware/isAdmin.js";
 const router = express.Router();
@@ -20,7 +21,13 @@ router.get("/equipment/:id", getEquipmentById);
 router.get("/user/:id/equipment", getEquipmentByUser);
 router.get("/equipments/search", getFiltredEquipments);
 router.get("/equipments/search", getFiltredSearch);
-router.delete("/equipment/:id", isAdmin, deleteEquipment);
+router.delete("/equipment/:id", authenticateToken, isAdmin, deleteEquipment);
+router.patch(
+  "/equipment/:id",
+  authenticateToken,
+  uploadEquipment.single("photo"),
+  updateEquipment,
+);
 router.post(
   "/new-equipment",
   authenticateToken,

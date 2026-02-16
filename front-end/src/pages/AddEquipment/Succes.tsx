@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export default function EquipmentSuccess() {
-  const { userId } = useAuth();
+  const { user_id } = useAuth();
 
   return (
     <>

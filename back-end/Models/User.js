@@ -210,6 +210,10 @@ const User = sequelize.define(
       allowNull: false,
       defaultValue: "user",
     },
+    email_verified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     timestamps: true,

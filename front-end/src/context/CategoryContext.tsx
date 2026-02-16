@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { Category } from "../types/Category";
+import api from "./../api/axios"
+
 
 type CategoryContextType = {
   categories: Category[];
@@ -11,14 +13,11 @@ const CategoryContext = createContext<CategoryContextType | undefined>(undefined
 export const CategoryProvider = ({ children }: { children: ReactNode }) => {
   const [categories, setCategories] = useState<Category[]>([]);
 
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-
   const fetchCategories = async () => {
    
     try {
-      const res = await fetch(`${baseUrl}/category`);
-      const data: Category[] = await res.json();
-      setCategories(data); 
+      const res = await api.get(`/category`);
+      setCategories(res.data); 
     } catch (err) {
       console.log(err)
     }
@@ -29,12 +28,7 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <CategoryContext.Provider
-      value={{
-        categories,
-        fetchCategories,
-      }}
-    >
+    <CategoryContext.Provider value={{categories,fetchCategories,}}>
       {children}
     </CategoryContext.Provider>
   );

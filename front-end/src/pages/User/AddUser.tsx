@@ -1,13 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { User } from "../../types/User";
-import { useAuth } from "../../context/AuthContext";
+import api from "./../../api/axios"
 
 
 
 export default function AddUser () {
     const navigate=useNavigate()
-    const {userId}=useAuth()
     const [formData, setFormData] = useState({                 
                 first_name: "",
                 last_name: "",
@@ -56,43 +55,31 @@ export default function AddUser () {
             form.append("photo", formData.photo);
         }
 
-       const res= await  fetch("http://localhost:3033/new-user", {
-            method: "POST",
-            body: form 
-        });
+       const res= await api.post("/new-user", form);
         
-        const data = await res.json();
-        console.log(data)
-         if(res.ok){
             navigate(`/succesUser`)
-        } else {
-            console.log("Erreur backend :", data);
-            }
-        setUsers(prev => [...prev, data]);
+            setUsers(prev => [...prev, res.data]);
              }
                 catch (err) {
                  console.log(err);
                 }
          }
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+    function handleChangeFile(e: any){
+        const file = e.target.files?.[0] ?? null; 
+        setFormData((prev) => ({...prev, [e.target.name]: file }));
+     }
+    
+    function handleChange (e: any) {
         const { name } = e.target;
-         if (e.target instanceof HTMLInputElement && e.target.type === "file") {
-           const file = e.target.files?.[0] ?? null; 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: file,
-    }));
-    return;
-  }
+        if (e.target.type==="file" ) {
+            return handleChangeFile(e)}
         setFormData((prevData) => ({
             ...prevData,
             [name]: e.target.value
         }));
-        if (name === "password" || name === "confirm_password") {
-        setNoMatchPassword("");
     }
-    }
+    
 
     return(
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

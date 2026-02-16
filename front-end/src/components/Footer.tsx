@@ -1,6 +1,7 @@
 import { FiFacebook } from "react-icons/fi";
 import { FaInstagram } from "react-icons/fa";
 import { FiLinkedin } from "react-icons/fi";
+import {Link} from "react-router-dom"
 
 export default function Footer (){
 return (
@@ -21,19 +22,19 @@ return (
             <h3 className="text-primary mb-4">Plan du site</h3>
             <ul className="space-y-2 text-sm">
                 <li>
-                     <a href="#" className="footer-link">Accueil</a>
+                     <Link to="/" className="footer-link">Accueil</Link>
                 </li>
                 <li>
-                     <a href="#" className="footer-link">Rechercher du matériel</a>
+                     <Link to="/" className="footer-link">Rechercher du matériel</Link>
                 </li>
                 <li>
-                     <a href="#" className="footer-link">Louer mon matériel</a>
+                     <Link to="/" className="footer-link">Louer mon matériel</Link>
                 </li>
                 <li>
-                     <a href="#" className="footer-link">Comment ça marche</a>
+                     <Link to="/" className="footer-link">Comment ça marche</Link>
                 </li>
                 <li>
-                   <a href="#" className="footer-link">FAQ</a> 
+                   <Link to="/" className="footer-link">FAQ</Link> 
                 </li>
             </ul>
         </div>
@@ -41,19 +42,19 @@ return (
             <h3 className="footer-title">Informations légales</h3>
                 <ul className="space-y-2 text-sm">
                     <li>
-                        <a href="#" className="footer-link">Mentions légales</a>
+                        <Link to="/" className="footer-link">Mentions légales</Link>
                     </li>
                     <li>
-                        <a href="#" className="footer-link">Politique de confidentialité</a>
+                        <Link to="/" className="footer-link">Politique de confidentialité</Link>
                     </li>
                     <li>
-                        <a href="#" className="footer-link">RGPD</a>
+                        <Link to="/" className="footer-link">RGPD</Link>
                     </li>
                     <li>
-                        <a href="#" className="footer-link">CGU/CGV</a>
+                        <Link to="/" className="footer-link">CGU/CGV</Link>
                     </li>
                     <li>
-                        <a href="#" className="text-gray-600 hover:text-accent transition-colors">Cookies</a>
+                        <Link to="/" className="text-gray-600 hover:text-accent transition-colors">Cookies</Link>
                     </li>
                 </ul>
         </div>
@@ -61,10 +62,10 @@ return (
             <h3 className="text-primary mb-4">A propos</h3>
             <ul className="space-y-3 text-sm text-gray-600">
                 <li className="flex items-start gap-2">
-                     <a href="#" className="footer-link">Contactez-nous</a>
+                     <Link to="/" className="footer-link">Contactez-nous</Link>
                 </li>
                 <li>
-                     <a href="#" className="footer-link">Qui sommes-nous ?</a>
+                     <Link to="/" className="footer-link">Qui sommes-nous ?</Link>
                 </li>
             </ul>
         </div>

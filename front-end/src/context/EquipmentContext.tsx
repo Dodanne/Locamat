@@ -1,13 +1,15 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 import { Equipment } from "../types/Equipment";
+import api from "./../api/axios"
+import apiAth from "./../api/axiosAuth"
 
 type EquipmentContextType = {
   equipmentList: Equipment[];
   equipment6First: Equipment[];
-  fetchEquipments: () => Promise<Equipment[]>;
+  fetchEquipments: () => Promise<void>;
   fetchEquipment6First: () => Promise<void>;
   fetchEquipmentById: (id: string) => Promise<Equipment | null>;
-  fetchNewEquipment: (form:FormData, token:string)=>Promise <Equipment| undefined>
+  fetchNewEquipment: (form:FormData)=>Promise <Equipment| undefined>
   fetchSearchEquipment: (params: SearchParams) => Promise<Equipment[]>;
 };
 export type SearchParams = {
@@ -20,59 +22,43 @@ const EquipmentContext = createContext<EquipmentContextType | undefined>(undefin
 export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
   const [equipmentList, setEquipmentList] = useState<Equipment[]>([]);
   const [equipment6First, setEquipment6First] = useState<Equipment[]>([]);
-   const [searchResults, setSearchResults] = useState<Equipment[]>([]);
-  const baseUrl = import.meta.env.VITE_BASE_URL;
 
-  const fetchEquipments = useCallback(async (): Promise<Equipment[]> => {
-    try {
-      const res = await fetch(`${baseUrl}/equipment`);
-      if (!res.ok) throw new Error("Erreur lors du chargement des équipements");
-      const data: Equipment[] = await res.json();
-      setEquipmentList(data);
-      return data;
-    } catch (err) {
+  //tous les équipments
+
+  const fetchEquipments= async () => {
+    try{
+      const res = await api.get(`/equipment`);
+      setEquipmentList(res.data);
+    } catch (err){
       console.log(err)
-      return [];
     }
-  }, [baseUrl]);
+  };
+
+  //les 6 premiers équipments
 
   async function fetchEquipment6First ()  {
     try {
-      const res = await fetch(`${baseUrl}/equipment6first`);
-      if (!res.ok) throw new Error("Erreur lors du chargement des 6 premiers équipements");
-      const data: Equipment[] = await res.json();
-      setEquipment6First(data);
-     
+      const res = await api.get(`/equipment6first`);
+      setEquipment6First(res.data);
     } catch (err) {
       console.log(err)
     } 
   };
-
-  async function fetchEquipmentById (id: string): Promise<Equipment | null> {
-    
+  // equipment by Id
+  async function fetchEquipmentById (id: string) {
     try {
-      const res = await fetch(`${baseUrl}/equipment/${id}`);
-      if (!res.ok) throw new Error("Erreur lors du chargement de l'équipement");
-      const data: Equipment = await res.json();
-      return data;
+      const res = await api.get(`/equipment/${id}`);
+      return res.data
     } catch (err) {
       console.log(err)
-      return null
   };
   }
 
-  async function fetchNewEquipment (form: FormData, token:string){
+  async function fetchNewEquipment (form: FormData){
     try {
-   const res= await  fetch("http://localhost:3033/new-equipment", {
-            method: "POST",
-             headers: {
-            Authorization: `Bearer ${token}`, 
-  },            
-            body: form
-        });
-        const data:Equipment = await res.json();
-        setEquipmentList(prev => [...prev, data]);
-        return data
+   const res= await  apiAth.post("/new-equipment", form);
+        setEquipmentList(prev => [...prev, res.data]);
+        return res.data
     }
     catch (err) {
         console.log(err);
@@ -88,21 +74,15 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
       params.categories.forEach((cat) => query.append("categories", String(cat)));
     }
 
-    const res = await fetch(`${baseUrl}/equipments/search?${query.toString()}`);
-    if (!res.ok) throw new Error("Erreur recherche équipements");
-
-    const data: Equipment[] = await res.json();
-
-    setEquipmentList(data);
-
-    return data;
+    const res = await api.get(`/equipments/search?${query.toString()}`);
+    setEquipmentList(res.data);
+    return res.data;
   }
   
     //demarrage de l'app
-  useEffect(() => { 
+    useEffect(() => { 
     fetchEquipments();
-    fetchEquipment6First();
-    
+    fetchEquipment6First(); 
   }, []);
   
   return (
@@ -115,8 +95,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
         fetchEquipmentById,
         fetchNewEquipment,
         fetchSearchEquipment
-      }}
-    >
+      }}>
       {children}
     </EquipmentContext.Provider>
   );
@@ -124,9 +103,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
 
 export const useEquipment = (): EquipmentContextType => {
   const context = useContext(EquipmentContext);
-  if (!context) {
-    throw new Error();
-  }
+  if (!context) { throw new Error();}
   return context;
 }
   

@@ -19,7 +19,7 @@ export default function AddEquipment () {
     caution: "",
     photo: null as File | null,
   });
-  const [equipments, setEquipments] = useState<Equipment[]>([]);
+ 
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,7 +35,7 @@ export default function AddEquipment () {
              console.log(formData.photo)
             form.append("photo", formData.photo);
          }
-         await fetchNewEquipment(form,token!)
+         await fetchNewEquipment(form)
          navigate('/succes')
         }catch (err){
             console.log(err)

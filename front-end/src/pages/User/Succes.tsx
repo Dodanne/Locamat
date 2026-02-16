@@ -18,6 +18,7 @@ export default function UserSuccess() {
           </h1>
 
           <p className="text-lg sm:text-xl text-blue-100 mb-10">
+            Un email à été envoyé à votre adresse mail. Veuillez le confirmer dans les 24h, sinon votre compte sera bloqué. <br />
             Vous êtes maintenant prêt à louer sur LocaMat.
           </p>
 

@@ -20,7 +20,7 @@ import UserProfile from "./pages/User/UserProfile";
 import Deconnexion from "./pages/User/Deconnexion";
 import ChatPage from "./pages/Chat/ChatPage";
 import Dashboard from "./pages/Admin/Dashboard";
-
+import EmailChecked from "./pages/User/EmailChecked";
 
 function App() {
   return (
@@ -44,6 +44,7 @@ function App() {
                 <Route path="/logout" element={<Deconnexion />} />
                 <Route path="/succes" element={<ProtectedRoute><EquipmentSuccess /></ProtectedRoute>} />
                 <Route path="/succesUser" element={<UserSuccess />} />
+                <Route path="/verify-email" element={<EmailChecked />} />
               </Routes>
             </div>
             <Footer />
