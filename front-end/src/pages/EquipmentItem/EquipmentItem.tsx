@@ -18,12 +18,13 @@ import { TbCalendarCancel } from "react-icons/tb";
 
 
 
+
 export default function EquipmentItem() {
     const {user_id}=useAuth()
     const {id}=useParams();
     const {fetchEquipmentById}=useEquipment()
     const [equipment, setEquipment] = useState<Equipment | null>(null);
-    const [selected, setSelected] = useState<DateRange|undefined>()
+    const [selected, setSelected] = useState<DateRange| undefined>()
     const baseUrl=import.meta.env.VITE_BASE_URL
     const navigate=useNavigate()
  
@@ -43,6 +44,7 @@ export default function EquipmentItem() {
       getEquipment();
         }, [id, fetchEquipmentById]);
 
+
     const handleClick = async ()=> {
         if (!equipment) return;
         if (user_id && equipment.owner_id===parseInt(user_id)){
@@ -51,13 +53,15 @@ export default function EquipmentItem() {
         }
         if (!selected?.from || !selected?.to) {
             alert("Merci de bien vouloir selectionner des dates");
-                return}
-        try {
+            return}
+            console.log(totalPrice)
+            try {
                 await apiAuth.post("/rental/new-rental",{
-                start_date: selected.from.toISOString().split("T")[0],
-                end_date: selected.to.toISOString().split("T")[0],
-                status: "pending",
-                equipment_id: equipment.equipment_id,
+                    start_date: selected.from.toISOString().split("T")[0],
+                    end_date: selected.to.toISOString().split("T")[0],
+                    total_price: totalPrice,
+                    status: "pending",
+                    equipment_id: equipment.equipment_id,
             })
             console.log (equipment.equipment_id)
             navigate("/user-profile")
@@ -66,7 +70,22 @@ export default function EquipmentItem() {
         }
     }
 
+        const  numberOfDays : any= ()=>{
+            if (!selected?.from || !selected?.to) return 
+            console.log (selected.from)
+            const start:any= selected.from
+            const end:any= selected.to
+            console.log(end)
+            console.log(start)
+            const diffDate=end.getTime() - start.getTime()
+            console.log(diffDate)
+            return diffDate
+        }
+        const days=numberOfDays()/(1000 * 60 * 60 * 24) + 1;
+
         if (!equipment) return <Loader/>;
+        const totalPrice=days*equipment.price
+        
         
         return (
         <div className="container py-8">
@@ -163,8 +182,29 @@ export default function EquipmentItem() {
                         navLayout="around"
                         locale={fr}
                          />
-                
+                    {selected && (
+                        <div className="flex flex-col gap-3">
+                            <div className="flex justify-between">
+                            <span className="font-semibold">{equipment.price} € x {days} {days===1?"jour":"jours"}</span> <br />
+                            <span className="font-bold">{totalPrice} €</span>
+                            </div>
+                            <div className="flex justify-between">
+                            <span className="font-semibold ">Caution </span>
+                            <span className="font-semibold">{equipment.caution } €</span>
+                            </div>
+                            <hr className="border-gray-400"/>
+                            <div className="flex justify-between">
+                            <span className="font-bold text-primary text-xl ">Total </span>
+                            <span className="font-semibold text-3xl text-primary">{totalPrice} €</span> 
+                            </div>
+                            <span className="flex text-sm text-gray-600 text-center">La caution sera restituée après le retour du matériel en bon état</span>
+                        </div>
+                    
+                )
+
+                }
                 <button onClick={handleClick} className="btn flex-1 items-center rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Réserver</button> 
+                
                 <span className="flex text-sm text-gray-600"><RiSecurePaymentFill className="text-xl mr-4"/> Paiement sécurisé</span>
                 <span className="flex text-sm text-gray-600"><TbCalendarCancel className="text-xl mr-4"/> Annulation gratuite 24h avant</span>
             </div>

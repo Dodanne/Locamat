@@ -8,4 +8,5 @@ export type Rental = {
   status: string;
   equipment?: Equipment; 
   renter?: User;
+  total_price:number
 }

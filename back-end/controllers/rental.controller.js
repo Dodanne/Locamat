@@ -36,7 +36,13 @@ export const getRentalsByRenter = async (req, res) => {
             {
               model: User,
               as: "owner",
-              attributes: ["user_id", "first_name", "last_name", "photo"],
+              attributes: [
+                "user_id",
+                "first_name",
+                "last_name",
+                "photo",
+                "city",
+              ],
             },
           ],
         },
@@ -81,18 +87,19 @@ export const getRentalsByOwner = async (req, res) => {
 };
 export const createRental = async (req, res) => {
   try {
-    const { start_date, end_date, equipment_id } = req.body;
+    const { start_date, end_date, equipment_id, total_price } = req.body;
     const renter_id = req.user.id;
-    console.log("quipment_id" + req.equipment_id);
+    console.log("total price " + req.body.total_price);
     const data = await Rental.create({
       start_date,
       end_date,
+      total_price,
       status: "pending",
       equipment_id,
       renter_id: renter_id,
     });
-    res.status(201).json(data);
+    res.json(data);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.log(err);
   }
 };

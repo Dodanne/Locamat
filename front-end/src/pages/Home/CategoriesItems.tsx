@@ -15,7 +15,7 @@ export default function CategoriesItems() {
         gap-6 justify-items-center max-w-full">
           {categories.map((category) => (
             <Link className="w-full" key={category.category_id} to={`/rechercher?categorie=${category.category_id}`}>
-              <div className="flex flex-col items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors  h-full cursor-pointer">
+              <div className="flex flex-col items-center p-4 bg-gray-300 rounded-xl hover:bg-gray-100 transition-colors  h-full cursor-pointer">
                 <span className="text-3xl">{category.icon}</span>
                 <span className="text-sm text-gray-700 text-center mt-2">{category.name}</span>
               </div>

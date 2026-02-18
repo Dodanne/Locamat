@@ -40,9 +40,20 @@ const Rental = sequelize.define(
       },
     },
     status: {
-      type: DataTypes.ENUM("pending", "accepted", "refused"),
+      type: DataTypes.ENUM(
+        "pending",
+        "accepted",
+        "refused",
+        "completed",
+        "cancelled",
+        "confirmed",
+      ),
       allowNull: false,
       defaultValue: "pending",
+    },
+    total_price: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
     },
   },
   {
