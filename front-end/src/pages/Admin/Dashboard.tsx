@@ -35,7 +35,7 @@ const AdminDashboard = () => {
       {/* Header */}
       <header className="bg-primary text-white flex justify-between items-center p-6 shadow-md">
         <h1 className="text-2xl font-bold">
-          Dashboard {user.role} de {user.first_name}
+          Dashboard {user?.role} de {user?.first_name}
         </h1>
         <div className="flex items-center gap-4">
           <Link to="/user-profile">
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
             <FaUsers /> Utilisateurs
           </button>
 
-          {user.role === "SUPER-ADMIN" && (
+          {user?.role === "SUPER-ADMIN" && (
             <button onClick={() => setActiveTab("admins")}
                     className={`flex items-center gap-3 p-3 w-full text-left rounded hover:bg-gray-100 transition ${
                       activeTab === "admins" ? "bg-gray-200 font-semibold" : ""

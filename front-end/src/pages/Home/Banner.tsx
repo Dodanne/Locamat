@@ -1,36 +1,18 @@
 import { FaSearch } from "react-icons/fa";
-import {useState, useEffect} from "react"
-import { Link } from "react-router-dom";
+import {useState, } from "react"
 import { useNavigate } from "react-router-dom";
-import { useEquipment } from "../../context/EquipmentContext";
 
 export default function Banner(){
   const [search, setSearch]=useState("")
-  const [results, setResults] = useState<any[]>([]);
   const navigate = useNavigate();
-  const { fetchSearchEquipment } = useEquipment();
 
     function handleSearchSubmit() {
         navigate(`/rechercher?q=${encodeURIComponent(search)}`);
         }
  
-  useEffect(() => {
-  async function fetchData() {
-    try {
-      const data = await fetchSearchEquipment({ query: search });
-      setResults(data);
-    } catch (err) {
-      console.log( err);
-      setResults([]); 
-    }
-  }
-  fetchData();
-}, [search]);
-     
-
-function handleChange (e:React.ChangeEvent<HTMLInputElement>){
-    setSearch(e.target.value)
-}
+    function handleChange (e:React.ChangeEvent<HTMLInputElement>){
+        setSearch(e.target.value)
+        }
 
 
     return (

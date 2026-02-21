@@ -1,25 +1,18 @@
 import StarRating from "../../components/StarRating";
-import { User } from "../../types/User";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import apiAuth from "../../api/axiosAuth";
+import { useUsers } from "../../hook/useUsers";
 
 
 export default function ReviewsUserProfile(){
-    const [user,setUser]=useState<User>({}as User)
-       const {user_id}=useAuth()
+    const {user_id}=useAuth()
+    const {user, getUserById}=useUsers()
 
      useEffect(() => {
-        async function fetchUsers() {
-            try {
-                const res = await apiAuth.get(`/user/${user_id}`);
-                setUser(res.data);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-        fetchUsers();
+        if(!user_id)return
+       getUserById(user_id)
     }, [user_id]);
+    
     return (
         <>
                 <div className="space-y-6">

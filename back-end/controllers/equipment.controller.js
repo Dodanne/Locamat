@@ -1,4 +1,4 @@
-import { Equipment, User, Category } from "../Models/index.js";
+import { Equipment, User, Category } from "../models/index.js";
 import { Op } from "sequelize";
 
 export const getAllEquipments = async (req, res) => {
@@ -60,7 +60,7 @@ export const get6FirstEquipment = async (req, res) => {
     });
     res.json(data);
   } catch (err) {
-    console.error(err);
+    console.log(err);
   }
 };
 
@@ -241,6 +241,5 @@ export const updateEquipment = async (req, res) => {
     res.json(data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ err: "Erreur serveur" });
   }
 };

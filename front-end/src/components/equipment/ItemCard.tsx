@@ -1,10 +1,10 @@
 import { IoLocationSharp } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
-import type {Equipment} from "../types/Equipment"
+import type { Equipment } from "../../types/Equipment";
 import { useState } from "react";
 import { FiEdit2, FiTrash2, FiCheck, FiX } from "react-icons/fi";
-import apiAuth from "../api/axiosAuth"
-
+import { useNavigate } from "react-router-dom";
+import { useEquipmentContext } from "../../context/EquipmentContext";
 
 type ItemCardProps = {
     equipment:Equipment
@@ -15,7 +15,9 @@ type ItemCardProps = {
 
 export default function ItemCard({equipment, editable=false, onUpdate, onDelete}:ItemCardProps) {
     const baseUrl=import.meta.env.VITE_BASE_URL
+    const navigate=useNavigate()
     const [isEditing, setIsEditing] = useState(false);
+    const {patchEquipment}=useEquipmentContext()
     const [form, setForm] = useState<{
   title: string;
   price: number;
@@ -61,29 +63,29 @@ const handleCancel = () => {
     file: null,
   });
   setIsEditing(false);
-};
+}
+
   const handleSave = async () => {
-  const formData = new FormData();
-  formData.append("title", form.title);
-  formData.append("price", form.price.toString());
-  formData.append("description",form.description)
-    if (form.categorie) {
-    formData.append("category", form.categorie);
-  }
-  if (form.file) {
-    formData.append("photo", form.file);
-  }
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("price", form.price.toString());
+    formData.append("description",form.description)
+     if (form.categorie) {
+       formData.append("category", form.categorie);
+   }
+    if (form.file) {
+      formData.append("photo", form.file);
+   }
   
-  await apiAuth.patch(`/equipment/${equipment.equipment_id}`, formData);
-      setActualEquipment(prev => ({
-       ...prev,
-       title: form.title,
-       price: form.price,
-       description: form.description,
-        photo: form.file ? form.photo : prev.photo,
-      }));
-  setIsEditing(false);
-};
+  try {
+    const update= await patchEquipment(equipment.equipment_id, formData)
+      setActualEquipment(update);
+     setIsEditing(false);
+     onUpdate?.(equipment.equipment_id, update)
+  } catch (err){
+    console.log(err)
+  }
+}
 const startEditing = () => {
   setForm({
     title: actualEquipment.title,
@@ -178,6 +180,9 @@ return (
              <div className="text-sm text-gray-500">par jour</div>
              </div>
          </div>
+         {editable&&(
+          <button className="text-primary btn border-primary bg-gray-100" onClick={() => navigate(`/equipment/${equipment.equipment_id}`)}>Accéder à la page du matériel</button>
+         )}
      </div>
 </div>
 )

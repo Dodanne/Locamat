@@ -1,29 +1,19 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import api from "../../api/axios";
+
 
 export default function Connexion() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const {login}=useAuth()
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+ 
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const {postLogin }=useAuth()
+  const handleSubmit =  (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     setError(null)
-    try {
-       
-      const res = await api.post("/login", { email, password})
-       login(res.data.token, res.data.user.id);
-      navigate(`/user-profile`)
-    } catch (err:any) {
-      console.log(err);
-      setError(err.message);
-    }
+    postLogin(email, password)
   }
-   
-
     return (
        
         <div className=" grid min-h-screen grid-cols-1 lg:grid-cols-[1fr_420px_1fr] gap-6 rounded-xl border bg-accent/25">

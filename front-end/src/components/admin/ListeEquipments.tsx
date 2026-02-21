@@ -2,33 +2,19 @@ import { useEffect, useState } from "react";
 import { Equipment } from "../../types/Equipment";
 import { MdDelete } from "react-icons/md";
 import apiAuth from "../../api/axiosAuth";
+import { useEquipmentContext } from "../../context/EquipmentContext";
 
 export default function ListeEquipments() {
-  const [equipments, setEquipments] = useState<Equipment[]>([]);
+  const {equipments, getEquipments, deleteEquipment}=useEquipmentContext()
   const baseUrl=import.meta.env.VITE_BASE_URL
   useEffect(() => {
-    async function fetchEquipments() {
-      try {
-        const res = await apiAuth.get("/equipment");
-        setEquipments(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    fetchEquipments();
+   getEquipments()
   }, []);
 
   const handleDeleteEquipment = async (equipmentId: number) => {
     const confirmChoise =  confirm( "Etes-vous sûr de vouloir supprimer cet équipment ?");
     if(!confirmChoise)return
-    try {
-       await apiAuth.delete(`/equipment/${equipmentId}`)
-     setEquipments((prev) => prev.filter((e) => e.equipment_id !== equipmentId));
-     alert("Équipement supprimé avec succès !");
-   } catch (err) {
-     console.log(err);
-     alert("Erreur lors de la suppression.");
-   }
+    deleteEquipment(equipmentId)
   };
 
 

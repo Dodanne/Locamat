@@ -4,6 +4,7 @@ import PopularItems from "./PopularItems";
 import ProcessSteps from "./ProcessSteps";
 import ActionSection from "./ActionSection";
 
+
 export default function Home() {
   return (
     <>
@@ -13,5 +14,6 @@ export default function Home() {
       <ProcessSteps />
       <ActionSection />
     </>
+    
   );
 }

@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
-import { useEquipment } from "../../context/EquipmentContext";
-import { useCategory } from "../../context/CategoryContext";
-import ItemCard from "../../components/ItemCard";
+import { useEquipmentContext } from "../../context/EquipmentContext";
+import ItemCard from "../../components/equipment/ItemCard";
 import Slider from "../../components/Slider";
-import { Equipment } from "../../types/Equipment";
 import { useNavigate } from "react-router-dom";
+import { useCategories } from "../../hook/useCategories";
 
 
 export default function EquipmentSearch() {
-  const { categories } = useCategory();
-  const {equipmentList,fetchEquipments}=useEquipment()
+  const { categories } = useCategories()
+  const {equipments,getEquipments}=useEquipmentContext()
   const [searchParams] = useSearchParams();
   const [hasSearched, setHasSearched] = useState(false);
   const navigate = useNavigate();
@@ -31,7 +30,7 @@ export default function EquipmentSearch() {
     setSelectedCategories([]);
     setMaxPrice(300);
   };
-const filteredItems = equipmentList.filter((item) => {
+const filteredItems = equipments.filter((item) => {
   const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase());
   const matchesCategory =
     selectedCategories.length === 0 || selectedCategories.includes(item.category_id);
@@ -44,9 +43,12 @@ const filteredItems = equipmentList.filter((item) => {
 console.log(maxPrice, filteredItems.map(i => i.price))
 
 useEffect(() => {
-  fetchEquipments(); 
+  try{
+  getEquipments(); 
   setHasSearched(true);
-
+  } catch (err){
+    console.log (err)
+  }
 }, []);
    
   useEffect(() => {

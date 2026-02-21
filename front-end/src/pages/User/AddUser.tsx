@@ -1,9 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import type { User } from "../../types/User";
-import api from "./../../api/axios"
-
-
+import { useState } from "react";
+import { useUsers } from "../../hook/useUsers";
 
 export default function AddUser () {
     const navigate=useNavigate()
@@ -24,8 +21,8 @@ export default function AddUser () {
                 compagny_name: "",          
                 siret: "",                                                  
             });
-  const [users, setUsers] = useState<User[]>([]);
   const [noMatchPassword,setNoMatchPassword]=useState("")
+  const {postUser}=useUsers()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -54,11 +51,9 @@ export default function AddUser () {
             if (formData.photo) {
             form.append("photo", formData.photo);
         }
-
-       const res= await api.post("/new-user", form);
-        
+            await postUser(form)
             navigate(`/succesUser`)
-            setUsers(prev => [...prev, res.data]);
+            
              }
                 catch (err) {
                  console.log(err);

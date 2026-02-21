@@ -1,44 +1,23 @@
 import { useEffect, useState } from "react";
-import { User } from "./../../types/User"
 import { MdDelete } from "react-icons/md";
 import { IoIosWarning } from "react-icons/io";
 import apiAuth from "../../api/axiosAuth";
+import { useUsers } from "../../hook/useUsers";
 
 export default function ListeUtilisateurs() {
-  const [users, setUsers] = useState<User[]>([]);
+  const {users, getUsers, deleteUser}=useUsers()
   const [filterName, setFilterName] = useState<string>("")
   const [filterType, setFilterType] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [sortDate, setSortDate] = useState<string>("recent");
-  const baseUrl=import.meta.env.VITE_BASE_URL
 
   useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const res = await apiAuth("/role/users");
-        setUsers(res.data);
-      } catch (err) {
-        console.log(err);
-      }}
-    fetchUsers();
+        getUsers();
   }, []);
-  
   
      const handleBan = async (userId: number, isBanned: boolean) => {
      if (!confirm(`Êtes-vous sûr de vouloir ${isBanned ? "débannir":"bannir"} cet utilisateur ?`)) return;
-  try {
-     await apiAuth.patch(`/${userId}/ban`, { banned: !isBanned }),
-   
-
-    setUsers(prev =>
-      prev.map(u =>
-        u.user_id === userId ? { ...u, status: !isBanned ? "banned" : "active" } : u
-      )
-    );
-  } catch (err) {
-    console.log(err);
-    alert("Impossible de modifier le statut");
-  }
+     deleteUser(userId,isBanned)
 };
 const filteredUsers = users
   .filter(u => (`${u.first_name} ${u.last_name}`).toLowerCase().includes(filterName.toLowerCase()) )

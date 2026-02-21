@@ -1,40 +1,32 @@
 import { FaStar } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
-import { IoSettingsOutline } from "react-icons/io5";
 import { BsBoxSeam } from "react-icons/bs";
 import { PiClockCounterClockwise } from "react-icons/pi";
 import { FaRegStar } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { User } from "../../types/User";
+import { Link, useLocation} from "react-router-dom";
 import { FaHandHolding } from "react-icons/fa";
 import getInitials from "../../components/GetInitials";
 import EquipmentUserProfile from "../../components/user/EquipmentUserProfile";
-import OwnerRentalsUserProfile from "../../components/user/OwnerRentalsUserProfile";
-import RenterREntalsUserProfile from "../../components/user/RenterREntalsUserProfile";
+import OwnerRentalsUserProfile from "../../components/user/RenterRentalUserProfile";
+import RenterREntalsUserProfile from "../../components/user/OwnerRentalUserProfile";
 import ReviewsUserProfile from "../../components/user/ReviewsUserProfile";
-import apiAuth from "../../api/axiosAuth";
 import { useAuth } from "../../context/AuthContext";
+import { useUsers } from "../../hook/useUsers";
 
 
 export default function UserProfile (){
     const baseUrl=import.meta.env.VITE_BASE_URL
-    const [activeDiv,setActiveDiv]=useState("equipment")
-    
- const [user,setUser]=useState<User>({}as User)
-       const {user_id}=useAuth()
+    const location = useLocation()
+    const state = location.state?.activeDiv;
+    const [activeDiv,setActiveDiv]=useState(state||"equipment")
+    const {user_id}=useAuth()
+    const {user, getUserById}=useUsers()
 
      useEffect(() => {
-        async function fetchUsers() {
-            try {
-                const res = await apiAuth.get(`/user/${user_id}`);
-                setUser(res.data);
-            } catch (err) {
-                console.error(err);
-            }
-        }
-        fetchUsers();
+        if(!user_id) return
+        getUserById(user_id)
     }, [user_id])
  
     return(
@@ -69,9 +61,9 @@ export default function UserProfile (){
                         <button className="btn border-gray-200 bg-background hover:bg-gray-200 h-9 px-4 py-2">
                         <FaRegEdit /> Modifier les informations du profil
                         </button>
-                        <button className="btn border-gray-200 bg-background hover:bg-gray-200 h-9 px-4 py-2">
+                        {/* <button className="btn border-gray-200 bg-background hover:bg-gray-200 h-9 px-4 py-2">
                         <IoSettingsOutline /> Paramètres
-                        </button>
+                        </button> */}
                     </div>
                 </div>   
             </div>

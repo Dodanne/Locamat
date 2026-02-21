@@ -1,13 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import  {AuthProvider}  from "./context/AuthContext";
 import { EquipmentProvider } from "./context/EquipmentContext";
-import { CategoryProvider } from "./context/CategoryContext";
-
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import ProtectedRoute from "./components/ProtectedRoute";
-
 import Home from "./pages/Home/Home";
 import EquipmentSearch from "./pages/EquipmentSearch/EquipmentSearch";
 import EquipmentItem from "./pages/EquipmentItem/EquipmentItem";
@@ -21,13 +18,16 @@ import Deconnexion from "./pages/User/Deconnexion";
 import ChatPage from "./pages/Chat/ChatPage";
 import Dashboard from "./pages/Admin/Dashboard";
 import EmailChecked from "./pages/User/EmailChecked";
+import Summary from "./pages/EquipmentItem/Summary";
+import StatusProvider from "./context/StatusContext";
+
 
 function App() {
   return (
+  <BrowserRouter>
     <AuthProvider>
+      <StatusProvider>
       <EquipmentProvider>
-        <CategoryProvider>
-          <BrowserRouter>
             <Header />
             <ScrollToTop />
             <div className="min-h-screen bg-gray-50">
@@ -45,13 +45,14 @@ function App() {
                 <Route path="/succes" element={<ProtectedRoute><EquipmentSuccess /></ProtectedRoute>} />
                 <Route path="/succesUser" element={<UserSuccess />} />
                 <Route path="/verify-email" element={<EmailChecked />} />
+                <Route path="/summary-rental" element={<ProtectedRoute><Summary /></ProtectedRoute>} />
               </Routes>
             </div>
             <Footer />
-          </BrowserRouter>
-        </CategoryProvider>
       </EquipmentProvider>
+      </StatusProvider>
     </AuthProvider>
+  </BrowserRouter>
   );
 }
 

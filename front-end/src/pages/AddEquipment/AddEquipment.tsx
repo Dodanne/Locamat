@@ -1,16 +1,15 @@
 import { FaEuroSign } from "react-icons/fa";
-import { useEffect, useState } from "react";
-import type { Equipment } from "../../types/Equipment";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCategory } from "../../context/CategoryContext";
-import {useEquipment} from "../../context/EquipmentContext"
+
+import {useEquipmentContext} from "../../context/EquipmentContext"
+import { useCategories } from "../../hook/useCategories";
 
 
 export default function AddEquipment () {
-    const {fetchNewEquipment}=useEquipment()
+    const {postNewEquipment}=useEquipmentContext()
     const navigate=useNavigate()
-    const { categories } = useCategory();
-    const token = localStorage.getItem("token");
+    const { categories } = useCategories()
     const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -35,7 +34,7 @@ export default function AddEquipment () {
              console.log(formData.photo)
             form.append("photo", formData.photo);
          }
-         await fetchNewEquipment(form)
+         await postNewEquipment(form)
          navigate('/succes')
         }catch (err){
             console.log(err)
@@ -87,17 +86,17 @@ export default function AddEquipment () {
                 </div>
                 <div className='form-div'>
                     <label className="form-label" htmlFor="photo">Photo </label>
-                    <input className="form-input"  name="photo" type="file" accept="image/*" onChange={handleChange} />
+                    <input className="form-input"  name="photo" type="file"  accept="image/*" onChange={handleChange} />
                 </div>
                 <div className="form-div relative">
                     <label className="form-label" htmlFor="price">Prix de la location (par jour)</label>
                     <FaEuroSign className="absolute left-3 top-10 -translate-y-1/2  text-gray-400" />
-                    <input className="form-input pl-10 " type="number" name="price" value={formData.price} onChange={handleChange} placeholder="20" required/>
+                    <input className="form-input pl-10 " type="number" name="price" min="0" max="99999" step="1" value={formData.price} onChange={handleChange} placeholder="20" required/>
                 </div>
                 <div className="form-div relative">
                     <label className="form-label" htmlFor="price">Caution </label>
                     <FaEuroSign className="absolute left-3 top-10 -translate-y-1/2  text-gray-400" />
-                    <input className="form-input pl-10 " type="number" name="caution" value={formData.caution} onChange={handleChange} placeholder="100" required/>
+                    <input className="form-input pl-10 " type="number" name="caution" min="0" max="99999" step="1" value={formData.caution} onChange={handleChange} placeholder="100" required/>
                     <p className="text-sm text-gray-500">Montant qui sera bloqué et restitué après retour du matériel</p>
                 </div>
              </div>

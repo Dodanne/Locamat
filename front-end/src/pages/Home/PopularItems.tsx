@@ -1,9 +1,13 @@
-import ItemCard from "./../../components/ItemCard";
+import ItemCard from "../../components/equipment/ItemCard";
 import { Link } from "react-router-dom";
-import { useEquipment } from "../../context/EquipmentContext";
+import { useEquipment } from "../../hook/useEquipments";
+import { useEffect } from "react";
 
 export default function PopularItems() {
-  const { equipment6First } = useEquipment();
+  const { equipment6First, getEquipment6First } = useEquipment();
+     useEffect(()=>{
+        getEquipment6First()
+      },[])
 
   return (
     <div className="py-16 bg-gray-50">

@@ -51,27 +51,31 @@ const Equipment = sequelize.define(
       defaultValue: "images/default.png",
     },
     price: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.SMALLINT.UNSIGNED,
       allowNull: false,
       validate: {
         notNull: { msg: "Le prix est obligatoire" },
         isDecimal: { msg: "Le prix doit être un nombre décimal" },
         min: {
-          args: [0],
-          msg: "Le prix ne peut pas être négatif",
+          args: 1,
+          msg: "Le prix ne peut pas être égal à zéro ou négatif",
         },
+        max: 99999,
+        isInt: true,
       },
     },
     caution: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.SMALLINT.UNSIGNED,
       allowNull: false,
       validate: {
         notNull: { msg: "La caution est obligatoire" },
         isDecimal: { msg: "La caution doit être un nombre décimal" },
         min: {
-          args: [0],
+          args: 1,
           msg: "La caution ne peut pas être négative",
         },
+        max: 99999,
+        isInt: true,
       },
     },
     owner_id: {

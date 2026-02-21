@@ -1,14 +1,19 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import type { User } from "./../types/User"
-import api from "../api/axios";
 import apiAuth from "../api/axiosAuth";
+import api from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 type AuthContextType = {
-  isLogged: boolean;
-  user_id: string | null;
-  user: User|null;
-  login: (token: string, user_id: string) => void;
-  logout: () => void;
+  isLogged: boolean
+  user_id?: string | null
+  user: User|null
+  error: string |null
+  login: (token: string, user_id: string) => void
+  logout: () => void
+  postLogin: (email: string, password: string)=> void
+  getVerifiedEmail:()=> void
+  setError: (error: string | null)=> void
 };
 
 
@@ -18,10 +23,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user_id, setUser_id] = useState(localStorage.getItem("user_id"));
   const [user, setUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
   const isLogged = !!token;
 
    useEffect(() => {
-   const fetchUser = async () => {
+   const getUser = async () => {
       if (!token || !user_id) return;
       try {
         const res = await apiAuth.get(`/user/${user_id}`);
@@ -31,17 +38,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         logout();
       }
     };
-    fetchUser();
+    getUser();
   }, [token, user_id]);
 
-   const login = (token: string, user_id: string) => {
+   function login  (token: string, user_id: string) {
     setToken(token);
     setUser_id(user_id);
     localStorage.setItem("token", token);
     localStorage.setItem("user_id", user_id);
   };
 
-  const logout = () => {
+  function logout  () {
     localStorage.removeItem("token");
     localStorage.removeItem("user_id");
     setToken(null);
@@ -49,8 +56,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
   };
 
+  async function postLogin(email: string, password: string){
+    try {
+      const res = await api.post("/login", { email, password})
+       login(res.data.token, res.data.user.id);
+      navigate(`/user-profile`)
+    } catch (err:any) {
+      console.log(err);
+      setError(err.message);
+    }
+  }
+  
+  async  function getVerifiedEmail (){
+    if(!token) return
+     try {
+      await api.get(`/verify-email?token=${token}`)
+      navigate("/connexion")
+    } catch (err) {
+      console.log(err)
+    }
+  }
   return (
-    <AuthContext.Provider value={{ isLogged, user_id, user, login, logout }}>
+    <AuthContext.Provider value={{error, isLogged, user_id, user, setError: (err) => setError(err), login, logout, postLogin, getVerifiedEmail }}>
       {children}
     </AuthContext.Provider>
   );
