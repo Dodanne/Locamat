@@ -1,4 +1,4 @@
-import { createContext, useContext, useState,  ReactNode } from "react";
+import { createContext, useContext, useState,  ReactNode, useEffect } from "react";
 import { Equipment } from "../types/Equipment";
 import api from "./../api/axios"
 import apiAth from "./../api/axiosAuth"
@@ -10,7 +10,6 @@ type EquipmentContextType = {
   getEquipments: () => Promise<void> 
   postNewEquipment: (form:FormData)=>Promise <Equipment| undefined>
   deleteEquipment:(id:number)=>Promise <void>
-  putEquipment: (id: number, data: Equipment)=>Promise <void>
   patchEquipment: (id: number, formData: FormData)=>Promise <Equipment >
   getUserEquipments: (id: string)=>Promise <void>
 };
@@ -29,6 +28,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
     try{
       const res = await api.get(`/equipment`);
       setEquipments(res.data);
+      return res.data
     } catch (err){
       console.log(err)
     }
@@ -56,23 +56,21 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
        }
      }
     
-  async function putEquipment (id: number, data: Equipment){
-         try {
-            await apiAuth.put(`/equipment/${id}`,data)
-            setEquipments((prev) =>
-              prev.map((e) =>
-                e.equipment_id === id ? { ...e, ...data } : e
-              )
-            );
-          } catch (err) {
-            console.log(err);
-          }
-        
-    }
-
   async function patchEquipment(id:number, formData: FormData){
         try{
-        const res = await apiAuth.patch(`/equipment/${id}`, formData);
+        const res = await apiAuth.patch(`/equipment/${id}`, formData)
+        //liste globale
+        setEquipments((prev) =>
+              prev.map((e) =>
+                e.equipment_id === id ? res.data : e
+              )
+            )
+            //liste userProfile
+            setUserEquipments((prev) =>
+              prev.map((e) =>
+                e.equipment_id === id ? res.data : e
+              )
+            )
         return res.data
         } catch (err){
         console.log (err)
@@ -86,6 +84,9 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
                     console.log(err);
                 }
     }
+
+    
+    
   
   return (
     <EquipmentContext.Provider
@@ -95,7 +96,6 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
         getEquipments,
         postNewEquipment,
         deleteEquipment, 
-        putEquipment,
         patchEquipment,
         getUserEquipments
       }}>

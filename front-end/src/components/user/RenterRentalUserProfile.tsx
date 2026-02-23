@@ -1,5 +1,5 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { Link } from "react-router-dom";
 import { IoLocationOutline } from "react-icons/io5";
@@ -7,19 +7,34 @@ import getInitials from "../GetInitials";
 import { useStatus } from "../../context/StatusContext";
 import Loader from "../Loader";
 import { useRentals } from "../../hook/useRentals";
+import { Rental } from "../../types/Rental";
 
 export default function RenterRentalsUserProfile(){
     const baseUrl=import.meta.env.VITE_BASE_URL
-    const {renterRentals,getRenterRentals}=useRentals()
+    const [renterRentals,setRenterRentals]=useState<Rental[]>([])
+    const {getRenterRentals,patchStatusRental}=useRentals()
     const {user_id}=useAuth()
     const {status}=useStatus()
 
     useEffect(() => {
-       if (user_id){
-         getRenterRentals(user_id)
-       }
+       if (!user_id) return
+       const id=user_id
+        async function fetchRenterRental(){
+            try{
+                const data= await getRenterRentals(id)
+                setRenterRentals(data||[])
+            }catch(err){
+                console.log(err)
+            }
+        } 
+        fetchRenterRental()
        }, [user_id])
        
+    async function handleChangeStatus (rental_id:number){  
+       await patchStatusRental(rental_id, "confirmed")
+       setRenterRentals(prev =>prev.map(r =>r.rental_id === rental_id ? { ...r, status: "confirmed"} : r))
+
+    }
        if (!renterRentals) return <Loader/>
     return (
  <>
@@ -60,7 +75,14 @@ export default function RenterRentalsUserProfile(){
                                      </div>
                                      </div>
                                     </div>
-                                   <span className={`inline-flex items-center justify-center rounded-md border px-2 py-1 font-medium w-fit ${status[e.status].className}`}>{status[e.status].label}</span>
+                                     {e.status==="accepted" && (
+                                    <div className="flex flex-col text-center items-center">
+                                        <p className="text-gray-900 p-2">{e.equipment?.owner?.first_name} {e.equipment?.owner?.last_name} a accepté votre demande de réservation. <br /> Pour la confirmer, payez dès maintenant : </p>
+                                        <button className="btn bg-accent text-white w-80 " onClick={()=>handleChangeStatus(e.rental_id)}>Payer</button>
+                                    </div>
+                                   )}
+                                    <span className={`inline-flex items-center justify-center rounded-md border px-2 py-1 font-medium w-fit ${status[e.status].className}`}>{status[e.status].label}</span>
+                                  
                                    
                                 </div>
                                 <hr className="my-1 border-gray-300"/>
@@ -74,8 +96,12 @@ export default function RenterRentalsUserProfile(){
                                         <p className="text-sm text-gray-500">Caution : {e.equipment?.caution} €</p>
                                     </div>
                                 </div>
+                                 {status[e.status].label==="completed"&&(
+                                    <>
+                                        <button className="btn hover:bg-gray-300">Laisser un avis </button>
+                                    </>
+                                   )}
                                 <div >
-                                    <button className="btn hover:bg-gray-300">Laisser un avis </button>
                                 </div>
                             </div>
                         </div>

@@ -153,53 +153,49 @@ export const createEquipment = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-export const getFiltredEquipments = async (req, res) => {
-  const { q } = req.query;
-  console.log(q);
-  if (!q) {
-    return res.json([]);
-  }
-
+export const getSearchEquipments = async (req, res) => {
   try {
+    const { q, categories, maxPrice } = req.query;
+    const where = {};
+    console.log("req.query : ", req.query);
+    console.log("q:", q);
+    console.log("categories:", categories);
+    console.log("maxPrice:", maxPrice);
+    if (q && q.length >= 2) {
+      where[Op.or] = [{ title: { [Op.like]: `%${q}%` } }];
+    }
+    if (categories) {
+      const categoryArray = Array.isArray(categories)
+        ? categories.map(Number)
+        : categories.split(",").map(Number);
+
+      where.category_id = { [Op.in]: categoryArray };
+    }
+
+    if (maxPrice) {
+      where.price = { [Op.lte]: Number(maxPrice) };
+    }
+
     const equipments = await Equipment.findAll({
-      where: {
-        [Op.or]: [
-          { title: { [Op.like]: `%${q}%` } },
-          { description: { [Op.like]: `%${q}%` } },
-        ],
-      },
-      limit: 6,
+      where,
+      include: [
+        { model: Category, as: "category" },
+        {
+          model: User,
+          as: "owner",
+          attributes: ["user_id", "city", "rating_avg", "rating_count"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
     });
 
     res.json(equipments);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Erreur serveur" });
+    console.log(err);
+    res.json();
   }
 };
-export const getFiltredSearch = async (req, res) => {
-  const { q, limit } = req.query;
 
-  if (!q || q.length < 2) {
-    return res.json([]);
-  }
-
-  const options = {
-    where: {
-      [Op.or]: [
-        { title: { [Op.like]: `%${q}%` } },
-        { description: { [Op.like]: `%${q}%` } },
-      ],
-    },
-  };
-
-  if (limit) {
-    options.limit = Number(limit);
-  }
-
-  const equipments = await Equipment.findAll(options);
-  res.json(equipments);
-};
 export const deleteEquipment = async (req, res) => {
   try {
     console.log("ok");
@@ -232,7 +228,7 @@ export const updateEquipment = async (req, res) => {
     data.title = title;
     data.price = price;
     data.description = description;
-    data.categoryId = category;
+    data.category_id = category;
 
     if (req.file) {
       data.photo = req.file.filename;

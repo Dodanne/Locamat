@@ -1,13 +1,22 @@
 import { Link } from "react-router-dom";
 import { useCategories } from "../../hook/useCategories";
-import { useEffect } from "react";
+import { useEffect, useState} from "react";
+import { Category } from "../../types/Category";
 
 
 export default function CategoriesItems() {
-  const { categories, getCategories } = useCategories()
+  const { getCategories } = useCategories()
+   const [categories, setCategories] = useState<Category[]>([]); 
 
   useEffect(()=>{
-    getCategories()
+    async function fetchCategories(){
+      try {
+      const data= await getCategories()
+      setCategories(data||[])
+    } catch (err) {
+      console.log(err)
+    }}
+    fetchCategories()
   },[])
   
   return (

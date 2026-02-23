@@ -1,28 +1,46 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
-import { useEquipmentContext } from "../../context/EquipmentContext";
 import ItemCard from "../../components/equipment/ItemCard";
 import Slider from "../../components/Slider";
 import { useNavigate } from "react-router-dom";
 import { useCategories } from "../../hook/useCategories";
+import { Category } from "../../types/Category";
+import { useEquipment } from "../../hook/useEquipments";
+import { Equipment } from "../../types/Equipment";
+import { useEquipmentContext } from "../../context/EquipmentContext";
 
 
 export default function EquipmentSearch() {
-  const { categories } = useCategories()
-  const {equipments,getEquipments}=useEquipmentContext()
+  const { getCategories } = useCategories()
+  const {getSearchEquipment}=useEquipment()
+  const { getEquipments}=useEquipmentContext()
   const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("q") ?? "")
   const [hasSearched, setHasSearched] = useState(false);
   const navigate = useNavigate();
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [maxPrice, setMaxPrice] = useState<number>(300);
   const [maxDistance, setMaxDistance] = useState<number>(1000);
-  const [search, setSearch] = useState(searchParams.get("q") ?? "");
+  const [results, setResults] = useState<Equipment[]>([]);
  
+   useEffect(()=>{
+    async function fetchCategories(){
+    try{
+        const data=await getCategories()
+        setCategories(data)
+      console.log(data)
+    } catch (err){
+      console.log (err)
+    }} fetchCategories()
+  },[])
+
   const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const categoryId = Number(e.target.value);
+    const category_id = Number(e.target.value);
+    console.log(category_id)
     setSelectedCategories((prev) =>
-      prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId]
+      prev.includes(category_id) ? prev.filter((id) => id !== category_id) : [...prev, category_id]
     );
   };
 
@@ -30,34 +48,44 @@ export default function EquipmentSearch() {
     setSelectedCategories([]);
     setMaxPrice(300);
   };
-const filteredItems = equipments.filter((item) => {
-  const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase());
-  const matchesCategory =
-    selectedCategories.length === 0 || selectedCategories.includes(item.category_id);
-  const matchesPrice = Number(item.price) <= Number(maxPrice);
-  console.log(matchesPrice)
-  console.log(item.price)
-  return matchesSearch && matchesCategory && matchesPrice;
+
+  useEffect(() => {
+  const query = searchParams.get("q") ?? "";
+  setSearch(query);
+}, [searchParams]);
+
+const fetchResults = async () => {
+  try {
+    const params:any= {};
+    if (search) params.q = search;
+    if (selectedCategories.length) params.categories = selectedCategories;
+    if (maxPrice) params.maxPrice = maxPrice;
+    console.log(search)
+    const data = await getSearchEquipment(params);
+    setResults(Array.isArray(data) ? data : []);
+    setHasSearched(true);
+  } catch (err) {
+    console.log(err);
+  }
+};
+useEffect(() => {
+  fetchResults();
+}, [search]);
   
-});
-console.log(maxPrice, filteredItems.map(i => i.price))
+useEffect(() => {
+  fetchResults();
+}, [selectedCategories]);
 
 useEffect(() => {
-  try{
-  getEquipments(); 
-  setHasSearched(true);
-  } catch (err){
-    console.log (err)
-  }
-}, []);
-   
-  useEffect(() => {
-    const categoryId = searchParams.get("categorie");
-    if (categoryId) {
-      setSelectedCategories([Number(categoryId)]);
-    }
-  }, [searchParams]);
-console.log(filteredItems)
+  fetchResults();
+}, [maxPrice]);
+
+ useEffect(() => {
+  setSearch(searchParams.get("q") ?? "")
+}, [searchParams])
+
+
+  
   return (
     <div className="container py-8">
       <div className="mb-8 space-y-4">
@@ -79,13 +107,13 @@ console.log(filteredItems)
             />
           </div>
         </div>
-        {hasSearched&& filteredItems.length === 0 && (
+        {hasSearched&& results.length === 0 && (
           <div className="text-center p-2 text-gray-500">Aucun matériel ne correspond à votre recherche</div>
         )}
         
           <div className="text-gray-600 text-sm">
-            {filteredItems.length}
-            {filteredItems.length > 1 ? " résultats trouvés" : " résultat trouvé"}
+            {results.length}
+            {results.length > 1 ? " résultats trouvés" : " résultat trouvé"}
           </div>
         
       </div>
@@ -137,7 +165,7 @@ console.log(filteredItems)
 
         <div className="flex-1">
           <div className="loop-div">
-            {filteredItems.map((equipment) => (
+            {results.map((equipment) => (
               <Link key={equipment.equipment_id} to={`/equipment/${equipment.equipment_id}`}>
                 <ItemCard equipment={equipment} />
               </Link>

@@ -1,12 +1,22 @@
 import ItemCard from "../../components/equipment/ItemCard";
 import { Link } from "react-router-dom";
 import { useEquipment } from "../../hook/useEquipments";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Equipment } from "../../types/Equipment";
 
 export default function PopularItems() {
-  const { equipment6First, getEquipment6First } = useEquipment();
+  const { getEquipment6First } = useEquipment();
+  const [equipment6First, setEquipment6First] = useState<Equipment[]>([])
+
      useEffect(()=>{
-        getEquipment6First()
+      async function fetchPopularEquipment(){
+        try{
+        const data = await getEquipment6First()
+        setEquipment6First(data)
+        } catch (err){
+          console.log(err)
+        }
+      } fetchPopularEquipment()
       },[])
 
   return (

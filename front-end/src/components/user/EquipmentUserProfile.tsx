@@ -1,13 +1,12 @@
 import ItemCard from "../equipment/ItemCard";
 import { useEffect } from "react";
-import { Equipment } from "../../types/Equipment";
 import AddEquipmentBtn from "../AddEquipmentBtn";
 import { useAuth } from "../../context/AuthContext";
 import { useEquipmentContext } from "../../context/EquipmentContext";
 
 
 export default function EquipmentUserProfile(){
-  const {getUserEquipments, deleteEquipment, userEquipments, putEquipment}=useEquipmentContext()
+  const {getUserEquipments, deleteEquipment, userEquipments, patchEquipment}=useEquipmentContext()
   const {user_id}=useAuth()
   
      useEffect(() => {
@@ -18,11 +17,9 @@ export default function EquipmentUserProfile(){
          const handleDeleteEquipment = async (id: number) => {
           if (!confirm("Supprimer cet équipement ?")) return;
             await deleteEquipment(id)
-          
-        };   
-        
-        const handleUpdateEquipment = async (id: number, data: Equipment) => {
-            await putEquipment(id,data)
+        };     
+        const handleUpdateEquipment = async (id: number, formData: FormData) => {
+            await patchEquipment(id,formData)
         }
         if (!userEquipments) return null;
     return(
@@ -42,10 +39,7 @@ export default function EquipmentUserProfile(){
                      </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
                        {userEquipments.map ((e)=> (
-                      
                             <ItemCard key={e.equipment_id} equipment={e}  editable onUpdate={handleUpdateEquipment} onDelete={handleDeleteEquipment} /> 
-                            
-                        
                         ))}      
                     </div>
                     </>

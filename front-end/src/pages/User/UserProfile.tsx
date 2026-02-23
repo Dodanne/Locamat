@@ -14,6 +14,8 @@ import RenterREntalsUserProfile from "../../components/user/OwnerRentalUserProfi
 import ReviewsUserProfile from "../../components/user/ReviewsUserProfile";
 import { useAuth } from "../../context/AuthContext";
 import { useUsers } from "../../hook/useUsers";
+import { User } from "../../types/User";
+import Loader from "../../components/Loader";
 
 
 export default function UserProfile (){
@@ -22,12 +24,23 @@ export default function UserProfile (){
     const state = location.state?.activeDiv;
     const [activeDiv,setActiveDiv]=useState(state||"equipment")
     const {user_id}=useAuth()
-    const {user, getUserById}=useUsers()
+    const {getUserById}=useUsers()
+    const [user, setUser] = useState<User|null>(null);
 
      useEffect(() => {
         if(!user_id) return
-        getUserById(user_id)
+        const id= user_id
+        async function fetchUserById(){
+        try{
+        const data= await getUserById(id)
+         setUser(data)
+        }catch(err){
+            console.log(err)
+        }
+    }fetchUserById()
     }, [user_id])
+
+    if(!user) return <Loader/>
  
     return(
     <div className="container py-8">

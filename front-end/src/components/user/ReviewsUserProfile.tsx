@@ -2,16 +2,29 @@ import StarRating from "../../components/StarRating";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useUsers } from "../../hook/useUsers";
+import Loader from "../Loader";
+import { User } from "../../types/User";
 
 
 export default function ReviewsUserProfile(){
     const {user_id}=useAuth()
-    const {user, getUserById}=useUsers()
+    const {getUserById}=useUsers()
+    const [user, setUser] = useState<User|null>(null);
 
      useEffect(() => {
-        if(!user_id)return
-       getUserById(user_id)
-    }, [user_id]);
+        if(!user_id) return
+        const id= user_id
+        async function fetchUserById(){
+        try{
+        const data= await getUserById(id)
+         setUser(data)
+        }catch(err){
+            console.log(err)
+        }
+    }fetchUserById()
+    }, [user_id])
+
+    if(!user) return <Loader/>
     
     return (
         <>

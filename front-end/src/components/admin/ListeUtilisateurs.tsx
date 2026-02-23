@@ -1,24 +1,36 @@
 import { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { IoIosWarning } from "react-icons/io";
-import apiAuth from "../../api/axiosAuth";
 import { useUsers } from "../../hook/useUsers";
+import { User } from "../../types/User";
 
 export default function ListeUtilisateurs() {
-  const {users, getUsers, deleteUser}=useUsers()
+  const { getUsers, deleteUser}=useUsers()
   const [filterName, setFilterName] = useState<string>("")
   const [filterType, setFilterType] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [sortDate, setSortDate] = useState<string>("recent");
+  const [users,setUsers]=useState<User []>([])
 
   useEffect(() => {
-        getUsers();
+    async function fetchUsers(){
+      try{
+        const data= await getUsers();
+        setUsers(data||[])
+        }catch(err){
+          console.log (err)
+        }
+      } fetchUsers()
   }, []);
   
      const handleBan = async (userId: number, isBanned: boolean) => {
      if (!confirm(`Êtes-vous sûr de vouloir ${isBanned ? "débannir":"bannir"} cet utilisateur ?`)) return;
-     deleteUser(userId,isBanned)
-};
+     try{
+      await deleteUser(userId,isBanned)
+      setUsers(prev =>prev.map(u => u.user_id === userId ? { ...u, status: !isBanned ? "banned" : "active" } : u ))
+        }catch(err){
+          console.log(err)
+        }}
 const filteredUsers = users
   .filter(u => (`${u.first_name} ${u.last_name}`).toLowerCase().includes(filterName.toLowerCase()) )
   .filter(u => filterType === "all" || u.user_type === filterType)

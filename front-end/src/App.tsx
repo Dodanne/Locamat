@@ -26,8 +26,8 @@ function App() {
   return (
   <BrowserRouter>
     <AuthProvider>
-      <StatusProvider>
       <EquipmentProvider>
+      <StatusProvider>
             <Header />
             <ScrollToTop />
             <div className="min-h-screen bg-gray-50">
@@ -49,8 +49,8 @@ function App() {
               </Routes>
             </div>
             <Footer />
-      </EquipmentProvider>
       </StatusProvider>
+      </EquipmentProvider>
     </AuthProvider>
   </BrowserRouter>
   );

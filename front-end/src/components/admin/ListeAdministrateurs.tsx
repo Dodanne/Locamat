@@ -1,18 +1,33 @@
 import { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { TiPlus } from "react-icons/ti";
-import { useUsers } from "../../hook/useUsers";
+import { User } from "../../types/User";
+import { useAdmins } from "../../hook/useAdmin";
 
 
 export default function ListeAdministrateurs() {
-  
-  const {admin, deleteAdmin, getAdmins}=useUsers()
+  const [admin, setAdmin] = useState<User[]>([]);
+  const { deleteAdmin, getAdmins}=useAdmins()
+
   useEffect(() => {
-    getAdmins();
+    async function fetchAdmins(){
+      try{
+        const data= await getAdmins();
+        setAdmin(data||[])
+      }catch(err){
+        console.log(err)
+      }
+    }fetchAdmins()
   }, [getAdmins]);
 
    const handleDeleteAdmin = async (userId: number) => {
+    if (!confirm(`Êtes-vous sûr de vouloir remettre le rôle de "user" à cet administrateur ? Celui-ci perdra tous ses droits`)) return;
+     try{ 
     deleteAdmin(userId)
+    setAdmin(prev => prev.filter(a => a.user_id !== userId))
+     }catch(err){
+      console.log(err)
+     }
 };
 
   return (

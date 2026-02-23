@@ -4,12 +4,12 @@ import type { Equipment } from "../../types/Equipment";
 import { useState } from "react";
 import { FiEdit2, FiTrash2, FiCheck, FiX } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { useEquipmentContext } from "../../context/EquipmentContext";
+
 
 type ItemCardProps = {
     equipment:Equipment
     editable?: boolean;
-    onUpdate?: (id: number, data: Equipment) => void
+    onUpdate?: (id: number, formData: FormData) => void
     onDelete?: (id: number) => void;
 };
 
@@ -17,7 +17,6 @@ export default function ItemCard({equipment, editable=false, onUpdate, onDelete}
     const baseUrl=import.meta.env.VITE_BASE_URL
     const navigate=useNavigate()
     const [isEditing, setIsEditing] = useState(false);
-    const {patchEquipment}=useEquipmentContext()
     const [form, setForm] = useState<{
   title: string;
   price: number;
@@ -33,10 +32,10 @@ export default function ItemCard({equipment, editable=false, onUpdate, onDelete}
   categorie: equipment.category?.name,
   file: null, 
 });
-    const[actualEquipment, setActualEquipment]=useState(equipment)
+    
    
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
-        const { name, type, value } = e.target;
+        const { name, type} = e.target;
          if (type === "file") {
             const input = e.target as HTMLInputElement;
            const file = input.files?.[0] ?? null; 
@@ -53,19 +52,19 @@ export default function ItemCard({equipment, editable=false, onUpdate, onDelete}
             [name]: e.target.value
         }));
 }
-const handleCancel = () => {
+    function handleCancel () {
   setForm({
-    title: actualEquipment.title,
-    price: actualEquipment.price,
-    description: actualEquipment.description,
-    photo: actualEquipment.photo,
-    categorie: actualEquipment.category?.name,
+    title: equipment.title,
+    price: equipment.price,
+    description: equipment.description,
+    photo: equipment.photo,
+    categorie: equipment.category?.name,
     file: null,
   });
   setIsEditing(false);
 }
 
-  const handleSave = async () => {
+   async function handleSave () {
     const formData = new FormData();
     formData.append("title", form.title);
     formData.append("price", form.price.toString());
@@ -76,23 +75,20 @@ const handleCancel = () => {
     if (form.file) {
       formData.append("photo", form.file);
    }
-  
   try {
-    const update= await patchEquipment(equipment.equipment_id, formData)
-      setActualEquipment(update);
      setIsEditing(false);
-     onUpdate?.(equipment.equipment_id, update)
+     onUpdate?.(equipment.equipment_id, formData)
   } catch (err){
     console.log(err)
   }
 }
-const startEditing = () => {
+  function startEditing (){
   setForm({
-    title: actualEquipment.title,
-    price: actualEquipment.price,
-    description: actualEquipment.description,
-    photo: actualEquipment.photo,
-    categorie: actualEquipment.category?.name,
+    title: equipment.title,
+    price: equipment.price,
+    description: equipment.description,
+    photo: equipment.photo,
+    categorie: equipment.category?.name,
     file: null,
   });
   setIsEditing(true);
@@ -153,9 +149,9 @@ return (
                 {isEditing ? (
             <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })}className="border rounded px-2 py-1 w-full" />
           ) : (
-                <h3 className="text-lg text-gray-900 mb-1">{actualEquipment.title}</h3>
+                <h3 className="text-lg text-gray-900 mb-1">{equipment.title}</h3>
           )}
-                <span className="text-sm text-black bg-primary/10 px-1 py-1 rounded-full text-center">{actualEquipment.category?.name}</span>
+                <span className="text-sm text-black bg-primary/10 px-1 py-1 rounded-full text-center">{equipment.category?.name}</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-600">
                 <IoLocationSharp />
@@ -174,7 +170,7 @@ return (
                 {isEditing ? (
             <input value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} className="border rounded px-2 py-1 w-full" />
           ) : (
-            <p>{actualEquipment.price}€</p>
+            <p>{equipment.price}€</p>
         )}
         </div>
              <div className="text-sm text-gray-500">par jour</div>

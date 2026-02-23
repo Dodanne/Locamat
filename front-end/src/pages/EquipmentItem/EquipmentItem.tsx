@@ -7,17 +7,23 @@ import { useEquipment } from "../../hook/useEquipments";
 import Loader from "../../components/Loader";
 import "react-day-picker/dist/style.css"
 import Reservations from "../../components/equipment/Reservation";
+import { Equipment } from "../../types/Equipment";
 
 export default function EquipmentItem() {
-    
+    const [equipment, setEquipmentById] = useState<Equipment | null>(null)
     const {id}=useParams();
-    const {equipment,getEquipmentById}=useEquipment()
-    
+    const {getEquipmentById}=useEquipment()
     const baseUrl=import.meta.env.VITE_BASE_URL
    
     useEffect(() => {
-        if (!id) return;
-        getEquipmentById(id)        
+        if (!id) return
+        async function fetchEquipmentById(){
+        try{
+        const data=await getEquipmentById(id)
+        setEquipmentById (data) 
+        }catch(err){
+            console.log(err)
+        }} fetchEquipmentById()   
         }, [id, getEquipmentById]);
 
         if (!equipment) return <Loader/>;
