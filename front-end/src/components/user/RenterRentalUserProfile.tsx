@@ -8,6 +8,7 @@ import { useStatus } from "../../context/StatusContext";
 import Loader from "../Loader";
 import { useRentals } from "../../hook/useRentals";
 import { Rental } from "../../types/Rental";
+import StripePaiement from "../StripePaiement";
 
 export default function RenterRentalsUserProfile(){
     const baseUrl=import.meta.env.VITE_BASE_URL
@@ -78,7 +79,7 @@ export default function RenterRentalsUserProfile(){
                                      {e.status==="accepted" && (
                                     <div className="flex flex-col text-center items-center">
                                         <p className="text-gray-900 p-2">{e.equipment?.owner?.first_name} {e.equipment?.owner?.last_name} a accepté votre demande de réservation. <br /> Pour la confirmer, payez dès maintenant : </p>
-                                        <button className="btn bg-accent text-white w-80 " onClick={()=>handleChangeStatus(e.rental_id)}>Payer</button>
+                                        <StripePaiement rental_id={Number(e.rental_id)}></StripePaiement> 
                                     </div>
                                    )}
                                     <span className={`inline-flex items-center justify-center rounded-md border px-2 py-1 font-medium w-fit ${status[e.status].className}`}>{status[e.status].label}</span>

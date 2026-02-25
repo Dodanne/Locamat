@@ -23,7 +23,7 @@ export default function ListeAdministrateurs() {
    const handleDeleteAdmin = async (userId: number) => {
     if (!confirm(`Êtes-vous sûr de vouloir remettre le rôle de "user" à cet administrateur ? Celui-ci perdra tous ses droits`)) return;
      try{ 
-    deleteAdmin(userId)
+    await deleteAdmin(userId)
     setAdmin(prev => prev.filter(a => a.user_id !== userId))
      }catch(err){
       console.log(err)

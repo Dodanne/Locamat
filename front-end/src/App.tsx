@@ -20,6 +20,8 @@ import Dashboard from "./pages/Admin/Dashboard";
 import EmailChecked from "./pages/User/EmailChecked";
 import Summary from "./pages/EquipmentItem/Summary";
 import StatusProvider from "./context/StatusContext";
+import PaiementSuccess from "./pages/Reservation/SuccesPaiement";
+import PaiementFail from "./pages/Reservation/FailPaiement";
 
 
 function App() {
@@ -46,6 +48,8 @@ function App() {
                 <Route path="/succesUser" element={<UserSuccess />} />
                 <Route path="/verify-email" element={<EmailChecked />} />
                 <Route path="/summary-rental" element={<ProtectedRoute><Summary /></ProtectedRoute>} />
+                <Route path="/paiement-success" element={<ProtectedRoute><PaiementSuccess /></ProtectedRoute>} />
+                <Route path="/paiement-cancel" element={<ProtectedRoute><PaiementFail /></ProtectedRoute>} />
               </Routes>
             </div>
             <Footer />

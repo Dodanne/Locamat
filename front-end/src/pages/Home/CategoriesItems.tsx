@@ -19,6 +19,7 @@ export default function CategoriesItems() {
     fetchCategories()
   },[])
   
+  
   return (
     <div className="section-white">
       <div className="container-max">

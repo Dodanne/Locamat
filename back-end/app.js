@@ -3,8 +3,10 @@ import cors from "cors";
 import path from "path";
 import routes from "./routes/index.routes.js";
 import { fileURLToPath } from "url";
+import { postWebHook } from "./controllers/paiement.controller.js";
 
 const app = express();
+app.post("/webhook", express.raw({ type: "application/json" }), postWebHook);
 
 app.use(express.json());
 app.use(express.urlencoded());

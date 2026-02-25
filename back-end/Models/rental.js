@@ -52,7 +52,7 @@ const Rental = sequelize.define(
       defaultValue: "pending",
     },
     total_price: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.SMALLINT.UNSIGNED,
       allowNull: false,
     },
   },

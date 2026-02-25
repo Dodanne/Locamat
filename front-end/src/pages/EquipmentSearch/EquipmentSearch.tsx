@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link,  } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import ItemCard from "../../components/equipment/ItemCard";
 import Slider from "../../components/Slider";
@@ -35,56 +35,50 @@ export default function EquipmentSearch() {
       console.log (err)
     }} fetchCategories()
   },[])
+ 
 
-  const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+  const q = searchParams.get("q") ?? "";
+  const qCategory=searchParams.get("categorie")
+  setSearch(q);
+  if (qCategory){
+    setSelectedCategories(qCategory.split(",").map(Number))
+  }else {
+    setSelectedCategories([])
+  }
+}, [searchParams]);
+
+useEffect(() => {
+  const fetchResults = async () => {
+    try {
+      const params: any = {};
+      if (search) params.q = search;
+      if (selectedCategories.length) params.categories = selectedCategories;
+      if (maxPrice) params.maxPrice = maxPrice;
+
+      const data = await getSearchEquipment(params);
+      setResults(Array.isArray(data) ? data : []);
+      setHasSearched(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  fetchResults();
+}, [search, selectedCategories, maxPrice])
+
+const resetFilters = () => {
+    setSelectedCategories([]);
+    setMaxPrice(300);
+  };
+
+const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
     const category_id = Number(e.target.value);
     console.log(category_id)
     setSelectedCategories((prev) =>
       prev.includes(category_id) ? prev.filter((id) => id !== category_id) : [...prev, category_id]
     );
   };
-
-  const resetFilters = () => {
-    setSelectedCategories([]);
-    setMaxPrice(300);
-  };
-
-  useEffect(() => {
-  const query = searchParams.get("q") ?? "";
-  setSearch(query);
-}, [searchParams]);
-
-const fetchResults = async () => {
-  try {
-    const params:any= {};
-    if (search) params.q = search;
-    if (selectedCategories.length) params.categories = selectedCategories;
-    if (maxPrice) params.maxPrice = maxPrice;
-    console.log(search)
-    const data = await getSearchEquipment(params);
-    setResults(Array.isArray(data) ? data : []);
-    setHasSearched(true);
-  } catch (err) {
-    console.log(err);
-  }
-};
-useEffect(() => {
-  fetchResults();
-}, [search]);
-  
-useEffect(() => {
-  fetchResults();
-}, [selectedCategories]);
-
-useEffect(() => {
-  fetchResults();
-}, [maxPrice]);
-
- useEffect(() => {
-  setSearch(searchParams.get("q") ?? "")
-}, [searchParams])
-
-
   
   return (
     <div className="container py-8">
