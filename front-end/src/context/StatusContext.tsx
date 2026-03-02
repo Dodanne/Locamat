@@ -17,7 +17,11 @@ type StatusType ={
          label:string,
         className:string
     },
-    cancelled: {
+    cancelled_by_owner: {
+         label:string,
+        className:string
+    },
+    cancelled_by_renter: {
          label:string,
         className:string
     },
@@ -47,7 +51,11 @@ export default function StatusProvider({ children }: {children: ReactNode} ){
       label: "Terminé",
       className: "bg-gray-100 text-gray-800 border-gray-300"
     },
-    cancelled: {
+    cancelled_by_owner: {
+      label: "Annulé",
+      className: "bg-red-100 text-red-800 border-red-300"
+    },
+    cancelled_by_renter: {
       label: "Annulé",
       className: "bg-red-100 text-red-800 border-red-300"
     },

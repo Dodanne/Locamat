@@ -5,6 +5,7 @@ import categoryRoutes from "./category.routes.js";
 import rentalRoutes from "./rental.routes.js";
 import authRoutes from "./auth.routes.js";
 import paiementRoutes from "./paiement.routes.js";
+import reviewRoutes from "./review.routes.js";
 const router = express.Router();
 
 router.use(equipmentRoutes);
@@ -13,5 +14,6 @@ router.use(categoryRoutes);
 router.use(rentalRoutes);
 router.use(authRoutes);
 router.use(paiementRoutes);
+router.use(reviewRoutes);
 
 export default router;

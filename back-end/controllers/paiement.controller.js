@@ -1,5 +1,5 @@
 import { stripe } from "../services/stripe.service.js";
-import { patchRentalStatus } from "./rental.controller.js";
+import Rental from "../models/Rental.js";
 
 export const postPaiementSession = async (req, res) => {
   try {
@@ -23,7 +23,6 @@ export const postPaiementSession = async (req, res) => {
       cancel_url: `${process.env.FRONT_URL}/paiement-cancel`,
       metadata: { rental_id: rental_id.toString() },
     });
-
     res.json({ url: data.url });
   } catch (err) {
     console.log(err);
@@ -31,6 +30,7 @@ export const postPaiementSession = async (req, res) => {
 };
 
 export const postWebHook = async (req, res) => {
+  console.log("coucou");
   const signature = req.headers["stripe-signature"];
   const endpointSecret = process.env.STRIPE_WEBHOOK_KEY;
 
@@ -40,21 +40,23 @@ export const postWebHook = async (req, res) => {
       throw new Error("Secret manquant ou faux");
     }
     event = stripe.webhooks.constructEvent(req.body, signature, endpointSecret);
+
+    if (event.type === "checkout.session.completed") {
+      console.log("session completed");
+      const session = event.data.object;
+      if (session.payment_status === "paid") {
+        console.log("Paiement confirme");
+      }
+      const rental_id = session.metadata?.rental_id;
+      if (rental_id) {
+        const rental = await Rental.findByPk(rental_id);
+        rental.status = "confirmed";
+        await rental.save();
+      }
+      console.log(rental_id);
+    }
+    res.json({ received: true });
   } catch (err) {
     console.log(err);
   }
-
-  if (event.type === "checkout.session.completed") {
-    console.log("session completed");
-
-    const session = event.data.object;
-    const rental_id = session.metadata?.rental_id;
-    if (rental_id) {
-      const rental = await Rental.findByPk(rental_id);
-      rental.status = "confirmed";
-      await rental.save();
-    }
-    console.log(rental_id);
-  }
-  res.json({ received: true });
 };

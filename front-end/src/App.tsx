@@ -22,6 +22,7 @@ import Summary from "./pages/EquipmentItem/Summary";
 import StatusProvider from "./context/StatusContext";
 import PaiementSuccess from "./pages/Reservation/SuccesPaiement";
 import PaiementFail from "./pages/Reservation/FailPaiement";
+import Reviews from "./components/reviews/Reviews";
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
                 <Route path="/summary-rental" element={<ProtectedRoute><Summary /></ProtectedRoute>} />
                 <Route path="/paiement-success" element={<ProtectedRoute><PaiementSuccess /></ProtectedRoute>} />
                 <Route path="/paiement-cancel" element={<ProtectedRoute><PaiementFail /></ProtectedRoute>} />
+                
               </Routes>
             </div>
             <Footer />

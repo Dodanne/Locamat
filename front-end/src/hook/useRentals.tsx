@@ -3,7 +3,7 @@ import { RentalStatus } from "../types/Rental";
 
 export function useRentals(){
 
-    async function getRenterRentals(user_id:string) {
+    async function getRenterRentals(user_id:number) {
 
             try {
                 const res = await apiAuth.get(`/rental/renter/${user_id}`);
@@ -13,7 +13,7 @@ export function useRentals(){
                 console.log(err);
             }
         }
-    async function getOwnerRentals(user_id:string) {
+    async function getOwnerRentals(user_id:number) {
             try {
                 const res = await apiAuth.get(`/rental/owner/${user_id}`);
                 return Array.isArray(res.data) ? res.data : [] // pour ne pas avoir null=>tableau vide  

@@ -87,6 +87,20 @@ const Equipment = sequelize.define(
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
+    rating_avg: {
+      type: DataTypes.DECIMAL(2, 1),
+      validate: {
+        min: 1,
+        max: 5,
+      },
+    },
+    rating_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      validate: {
+        min: 0,
+      },
+    },
   },
   {
     timestamps: true,

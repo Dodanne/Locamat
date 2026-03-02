@@ -37,6 +37,45 @@ Rental.hasMany(Reviews_user, {
 });
 Reviews_user.belongsTo(Rental, { foreignKey: "rental_id", as: "rental" });
 
+//review_user&user (who give )
+Reviews_user.belongsTo(User, {
+  foreignKey: { name: "reviewer_id", allowNull: true },
+  as: "reviewer",
+});
+User.hasMany(Reviews_user, {
+  foreignKey: { name: "reviewer_id", allowNull: true },
+  as: "giveUserReview",
+});
+
+//review_user&user (who receive )
+Reviews_user.belongsTo(User, {
+  foreignKey: { name: "reviewed_user_id", allowNull: true },
+  as: "reviewedUser",
+});
+User.hasMany(Reviews_user, {
+  foreignKey: { name: "reviewed_user_id", allowNull: true },
+  as: "recieveUserReview",
+});
+
+//review_equipment&user (who give)
+Reviews_equipment.belongsTo(User, {
+  foreignKey: { name: "reviewer_id", allowNull: true },
+  as: "reviewer",
+});
+User.hasMany(Reviews_equipment, {
+  foreignKey: { name: "reviewer_id", allowNull: true },
+  as: "giveEquipmentReview",
+});
+
+//review_user&user (who receive )
+Reviews_equipment.belongsTo(User, {
+  foreignKey: { name: "reviewed_user_id", allowNull: true },
+  as: "reviewedEquipmentUser",
+});
+User.hasMany(Reviews_equipment, {
+  foreignKey: { name: "reviewed_user_id", allowNull: true },
+  as: "recieveEquipmentReview",
+});
 export {
   sequelize,
   User,

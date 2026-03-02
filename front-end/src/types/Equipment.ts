@@ -12,6 +12,8 @@ export type Equipment = {
   owner_id: number
   createdAt: string
   updatedAt:string
+  rating_avg:number
+  rating_count:number
 
   owner?: Owner;
   category?: Category;

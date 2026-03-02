@@ -11,7 +11,7 @@ type EquipmentContextType = {
   postNewEquipment: (form:FormData)=>Promise <Equipment| undefined>
   deleteEquipment:(id:number)=>Promise <void>
   patchEquipment: (id: number, formData: FormData)=>Promise <Equipment >
-  getUserEquipments: (id: string)=>Promise <void>
+  getUserEquipments: (id: number)=>Promise <void>
 };
 export type SearchParams = {
   query?: string
@@ -76,7 +76,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
         console.log (err)
         }
     }
-  async function getUserEquipments(id:string) {
+  async function getUserEquipments(id:number) {
                 try {
                     const res = await apiAuth.get(`/user/${id}/equipment`);
                     setUserEquipments(Array.isArray(res.data) ? res.data : []);

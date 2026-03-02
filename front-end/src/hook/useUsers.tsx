@@ -20,7 +20,7 @@ export function useUsers(){
     alert("Impossible de modifier le statut");
   }
     }
-    async function getUserById(user_id:string){
+    async function getUserById(user_id:number){
        try {
               const res = await apiAuth.get(`/user/${user_id}`);
                return res.data

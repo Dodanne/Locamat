@@ -22,10 +22,7 @@ export default function Reservations({equipment}: ReservationsProps){
     
     const handleClick = async ()=> {
         if (!equipment) return;
-        if (user_id && equipment.owner_id===parseInt(user_id)){
-            alert ("Vous ne pouvez pas réserver votre propre matériel")
-        return 
-        }
+       
         if (!selected?.from || !selected?.to) {
             alert("Merci de bien vouloir selectionner des dates");
              return 
@@ -60,6 +57,8 @@ export default function Reservations({equipment}: ReservationsProps){
 
     return(
          <>
+         {equipment.owner_id && equipment.owner_id!==Number(user_id )&& (
+
             <div className="lg:col-span-1 ">
                 <div  className="bg-white flex flex-col gap-6 rounded-xl border sticky top-24 p-8 ">
                 <div className=" flex-col text-center ">
@@ -85,10 +84,10 @@ export default function Reservations({equipment}: ReservationsProps){
                         }}
                         className=" p-2 " 
                         components={{
-                            Chevron: ({ orientation }) => {
+                            Chevron: ({ orientation, onClick}:any ) => {
                                  return orientation === "left"
-                                ? <IoChevronBack className="text-accent w-6 h-6 " />
-                                : <IoChevronForward  className="text-accent w-6 h-6" />;
+                                ? <IoChevronBack className="text-accent w-6 h-6 " onClick={onClick}/>
+                                : <IoChevronForward  className="text-accent w-6 h-6" onClick={onClick}/>;
                                  }
                                     }}
                         navLayout="around"
@@ -115,12 +114,19 @@ export default function Reservations({equipment}: ReservationsProps){
                 )
 
                 }
+                
                 <button onClick={handleClick} className="btn flex-1 items-center rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Réserver</button> 
                 
                 <span className="flex text-sm text-gray-600"><RiSecurePaymentFill className="text-xl mr-4"/> Paiement sécurisé</span>
                 <span className="flex text-sm text-gray-600"><TbCalendarCancel className="text-xl mr-4"/> Annulation gratuite 24h avant</span>
             </div>
             </div>
+                )}
+                {equipment.owner_id && equipment.owner_id==Number(user_id )&& (
+                    <div className=" flex mt-48">
+                        <p className="text-center font-semibold">Vous ne pouvez pas réserver votre propre équipement </p>
+                    </div>
+                )}
             </>
     )
 

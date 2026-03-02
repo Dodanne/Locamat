@@ -8,11 +8,17 @@ import Loader from "../Loader";
 import { Rental, RentalStatus } from "../../types/Rental";
 import getInitials from "../GetInitials";
 import { IoLocationOutline } from "react-icons/io5";
+import Reviews from "../reviews/Reviews";
+import { useReviews } from "../../hook/useReviews";
+import FormatDate from "../FormatDate";
 
 export default function OwnerRentalsUserProfile(){
     const {status}=useStatus()
     const {getOwnerRentals, patchStatusRental}=useRentals()
+     const [showReview, setShowReview]=useState<{ [rental_id: number]: boolean }>({});
+    const [hasReview, setHasReview] =  useState<{ [rental_id: number]: boolean }>({});
     const [ownerRentals,setOwnerRentals]=useState<Rental[]>([])
+    const { getUserReviews}=useReviews()
     const baseUrl=import.meta.env.VITE_BASE_URL
     const {user_id} =useAuth()
     
@@ -34,7 +40,27 @@ export default function OwnerRentalsUserProfile(){
         patchStatusRental(id, newStatus)
           setOwnerRentals(prev =>prev.map(r =>r.rental_id === id ? { ...r, status: newStatus } : r))
     }
+     useEffect(()=>{
+      async function isReview(){
+        for(const rental of ownerRentals)
+        try{
+        const resUser= await getUserReviews(rental.rental_id)
+     
+        setHasReview(prev => ({
+          ...prev,
+          [rental.rental_id]: resUser.hasReview 
+        }));
+        
+        } catch(err){
+          console.log(err)
+        }
+      }isReview()
+    },[ ownerRentals])
+
     
+    const handleClick=()=>{
+        confirm("Êtes-vous sûr de vouloir annuler cette location ?")
+    }
     if (!ownerRentals) return <Loader/>
     return (
        <>
@@ -66,16 +92,20 @@ export default function OwnerRentalsUserProfile(){
                                        
                                     </div>
                                     <span className={`inline-flex items-center justify-center rounded-md border px-2 py-1 font-medium w-fit ${status[e.status].className}`}>{status[e.status].label}</span>
+                                    {e.status==="confirmed"&& (
+                                    <div className="">
+                                        <button onClick={handleClick} className="btn border-red-400 bg-red-200 ">Annuler la location</button>
+                                    </div>
+                                )}
                                 </div>
+                                
                                 <hr className="my-4"/>
                                 <div className="flex items-center justify-between">
                                     <div className="text-gray-600">
-                                        <p>Du {e.start_date}</p>
-                                        <p>Au {e.end_date}</p>
+                                        <p>Du {FormatDate(e.start_date)}</p>
+                                        <p>Au {FormatDate(e.end_date)}</p>
                                     </div>
                                      <div className="flex items-center">
-                                    
-
                                     
                                          {e.renter?.photo && e.renter?.photo !=="NULL" ? (  
                                                  <img src={`${baseUrl}/images/users/${e.renter?.photo}`} alt={e.renter?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
@@ -101,14 +131,32 @@ export default function OwnerRentalsUserProfile(){
                                       )
                                     }
                                     <div className="text-right">
-                                        <p className="text-2xl text-primary">{e.equipment?.price} €</p>
+                                        <p className="text-2xl text-primary">{e.total_price} €</p>
                                         <p className="text-sm text-gray-500">Total</p>
                                     </div>
                                 </div>
-                                {e.status==="completed" && (
-                                <div className="flex gap-2 mt-4">
-                                    <button className="btn hover:bg-gray-300">Laisser un avis</button>
-                                </div>
+                                
+                                {e.status === "completed" && (
+                                 <>
+                                   {!showReview[e.rental_id] ? (
+                                     hasReview[e.rental_id]? (
+                                       <p className=" text-gray-500">Vous avez déjà laissé un avis.</p>
+                                     ) : (
+                                       <button
+                                         onClick={()=> setShowReview(prev=>({...prev,[e.rental_id]:true}))}
+                                         className="btn hover:bg-gray-300"
+                                       >
+                                         Laisser un avis
+                                       </button>
+                                    )
+                                   ) : (
+                                     <Reviews rental={e}
+                                      reviewSubmitted={() => {
+                                         setShowReview(prev => ({...prev, [e.rental_id]: false}))
+                                         setHasReview(prev => ({...prev, [e.rental_id]: true}))
+                                        }}/>
+                                   )}
+                                 </>
                                 )}
                             </div>
                         </div>

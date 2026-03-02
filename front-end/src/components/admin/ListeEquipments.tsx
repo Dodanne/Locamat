@@ -3,6 +3,7 @@ import { Equipment } from "../../types/Equipment";
 import { MdDelete } from "react-icons/md";
 import apiAuth from "../../api/axiosAuth";
 import { useEquipmentContext } from "../../context/EquipmentContext";
+import FormatDate from "../FormatDate";
 
 export default function ListeEquipments() {
   const {equipments, getEquipments, deleteEquipment}=useEquipmentContext()
@@ -53,7 +54,7 @@ export default function ListeEquipments() {
                   "-"
                 )}
               </td>
-              <td className="px-4 py-2">{new Date(e.createdAt).toLocaleDateString()}</td>
+              <td className="px-4 py-2">{FormatDate(e.createdAt)}</td>
               <td className="py-2 px-2 border text-center">
                            <button  onClick={() => handleDeleteEquipment(e.equipment_id)} className="flex items-center gap-1 mx-auto text-red-600 hover:text-red-800" >
                             <MdDelete /></button></td>  

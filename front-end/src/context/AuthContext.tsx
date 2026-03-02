@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 type AuthContextType = {
   isLogged: boolean
-  user_id?: string | null
+  user_id?: number | null
   user: User|null
   error: string |null
-  login: (token: string, user_id: string) => void
+  login: (token: string, user_id: number) => void
   logout: () => void
   postLogin: (email: string, password: string)=> void
   getVerifiedEmail:()=> void
@@ -21,7 +21,7 @@ const AuthContext=createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [user_id, setUser_id] = useState(localStorage.getItem("user_id"));
+  const [user_id, setUser_id] = useState(Number(localStorage.getItem("user_id"))||null);
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -41,11 +41,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     getUser();
   }, [token, user_id]);
 
-   function login  (token: string, user_id: string) {
+   function login  (token: string, user_id: number) {
     setToken(token);
     setUser_id(user_id);
     localStorage.setItem("token", token);
-    localStorage.setItem("user_id", user_id);
+    localStorage.setItem("user_id", String(user_id));
   };
 
   function logout  () {

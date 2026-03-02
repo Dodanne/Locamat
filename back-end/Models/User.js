@@ -179,6 +179,7 @@ const User = sequelize.define(
     siret: {
       type: DataTypes.STRING,
       allowNull: true,
+      unique: true,
       validate: {
         is: {
           args: /^[0-9]{14}$/,

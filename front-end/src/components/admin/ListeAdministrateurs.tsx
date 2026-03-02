@@ -3,6 +3,7 @@ import { MdDelete } from "react-icons/md";
 import { TiPlus } from "react-icons/ti";
 import { User } from "../../types/User";
 import { useAdmins } from "../../hook/useAdmin";
+import FormatDate from "../FormatDate";
 
 
 export default function ListeAdministrateurs() {
@@ -60,7 +61,7 @@ export default function ListeAdministrateurs() {
             <td className="py-2 px-2 border">{a.compagny_name || "-"}</td>
             <td className="py-2 px-2 border">{a.siret || "-"}</td>
             <td className="py-2 px-2 border">{a.status}</td>
-            <td className="py-2 px-2 border">{new Date(a.createdAt).toLocaleDateString()}</td>
+            <td className="py-2 px-2 border">{FormatDate(a.createdAt)}</td>
             <td className="py-2 px-2 border text-center">
              <button  onClick={() => handleDeleteAdmin(a.user_id,)} className="flex items-center gap-1 mx-auto text-red-600 hover:text-red-800" >
               <MdDelete /></button></td>  

@@ -8,11 +8,18 @@ import Loader from "../../components/Loader";
 import "react-day-picker/dist/style.css"
 import Reservations from "../../components/equipment/Reservation";
 import { Equipment } from "../../types/Equipment";
+import getInitials from "../../components/GetInitials";
+import { useReviews } from "../../hook/useReviews";
+import { ReviewEquipment } from "../../types/Review_equipment";
+import { IoLocationOutline } from "react-icons/io5";
+import StarRating from "../../components/StarRating";
 
 export default function EquipmentItem() {
     const [equipment, setEquipmentById] = useState<Equipment | null>(null)
+    const [equipmentReview, setEquipmentReview] = useState<ReviewEquipment[]>([])
     const {id}=useParams();
     const {getEquipmentById}=useEquipment()
+    const {getEquipmentReviews}=useReviews()
     const baseUrl=import.meta.env.VITE_BASE_URL
    
     useEffect(() => {
@@ -24,7 +31,21 @@ export default function EquipmentItem() {
         }catch(err){
             console.log(err)
         }} fetchEquipmentById()   
-        }, [id, getEquipmentById]);
+        }, [id]);
+    
+     useEffect(() => {
+        if(!equipment?.equipment_id) return
+        const id= equipment.equipment_id
+        async function fetchEquipmentReviews(){
+    try{
+        const data= await getEquipmentReviews(id)
+         setEquipmentReview(data)
+         console.log(data)
+     }catch(err){
+            console.log(err)
+        }
+    }fetchEquipmentReviews()
+    }, [equipment?.equipment_id])
 
         if (!equipment) return <Loader/>;
         return (
@@ -61,7 +82,12 @@ export default function EquipmentItem() {
                 <div className="flex flex-col gap-6 rounded-xl border bg-white p-6 mt-8">
                     <div className="flex items-center gap-4 relative ">
                         <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-16 w-16">
-                         <img src={`${baseUrl}/images/users/${equipment.owner?.photo}`} alt={`${equipment.owner?.first_name} ${equipment.owner?.last_name}`} className="img-cover"/>
+                        {equipment.owner?.photo && equipment.owner?.photo!=="NULL" ? (  
+                            <img src={`${baseUrl}/images/users/${equipment.owner?.photo}`} alt={equipment.owner?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
+                                 ):(
+                                    <span className="flex items-center justify-center w-12 h-12 text-2xl font-bold text-white bg-accent rounded-full mr-4">{getInitials(equipment.owner)}</span>
+                                 )
+                                   } 
                         </span>
                         <div>
                             <div className="text-lg text-gray-900">{equipment.owner?.first_name} {equipment.owner?.last_name}</div>
@@ -82,13 +108,56 @@ export default function EquipmentItem() {
                 </div>
                  <div className="flex flex-col gap-6 rounded-xl border bg-white p-6 mt-8">
                     <h4 className=" font-semibold text-gray-900 mb-1">Avis </h4>
-                    <div>
-                        <p className="text-gray-700 leading-relaxed">Pas encore d'avis pour le moment.</p>
-                    </div>
+                    {equipmentReview.length > 0 ? (
+                          equipmentReview?.map((r) => (
+                                         <div key={r.reviewed_user_id} className="bg-white rounded-xl border p-4 flex flex-col gap-2">
+                                           <div className="flex items-center justify-between">
+                                             <div className="flex items-center gap-3">
+                                               {r.reviewer?.photo && r.reviewer?.photo !=="NULL" ? (  
+                                                <img src={`${baseUrl}/images/users/${r.reviewer?.photo}`} alt={r.reviewer?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
+                                                  ):(
+                                                     <span className="flex items-center justify-center w-12 h-12 text-2xl font-bold text-white bg-accent rounded-full mr-4">{getInitials(r.reviewer)}</span>
+                                                  )
+                                              }
+                                               <div>
+                                                 <p className="font-semibold text-gray-900">
+                                                   {r.reviewer
+                                                     ? `${r.reviewer.first_name} ${r.reviewer.last_name}`
+                                                     : "Utilisateur supprimé"}
+                                                 </p>
+                                                 <p className=" text-gray-600">
+                                                   {new Date(r.createdAt).toLocaleDateString("fr-FR")}
+                                                 </p>
+                                                 <div className=" text-gray-600 flex items-center">
+                                                   <IoLocationOutline className="text-gray-600"/> 
+                                                   <p>{r.reviewer?.city}</p>
+                                                 </div>
+                                               </div>
+                                               <div className="ml-9">
+                                               <p className="text-gray-900 ">{r.comment}</p>
+                                          
+                                           </div>
+                                             </div>
+                                             
+                                             <div className="flex items-center gap-1">
+                                               <StarRating rating={r.rating} />
+                                               <span className="text-sm text-gray-600">({r.rating}/5)</span>
+                                             </div>
+                                           </div>
+                                           
+                                         </div>
+                                        
+                                              ))
+                                            ) : (
+                                             <div className="text-center py-12 text-gray-600">
+                                               <p>Aucun avis reçu pour le moment</p>
+                                             </div>
+                                            )}  
+                                            </div>                          
                  </div>
             </div>
            <Reservations equipment={equipment}/>
         </div>
-    </div>
+    
     )
 }

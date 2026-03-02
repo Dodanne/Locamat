@@ -45,7 +45,8 @@ const Rental = sequelize.define(
         "accepted",
         "refused",
         "completed",
-        "cancelled",
+        "cancelled_by_owner",
+        "cancelled_by_renter",
         "confirmed",
       ),
       allowNull: false,
@@ -54,6 +55,18 @@ const Rental = sequelize.define(
     total_price: {
       type: DataTypes.SMALLINT.UNSIGNED,
       allowNull: false,
+    },
+    payment_intent_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    payment_status: {
+      type: DataTypes.ENUM("unpaid", "paid", "refunded"),
+      defaultValue: "unpaid",
+    },
+    refunded_at: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {

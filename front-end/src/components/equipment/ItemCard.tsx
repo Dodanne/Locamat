@@ -162,8 +162,8 @@ return (
 <div className="flex items-center justify-between">
         <div className="flex items-center gap-1 text-sm">
             <FaStar  className="text-yellow-400"/>
-            <span className="text-gray-900">{equipment.owner?.rating_avg} </span>
-            <span className="text-gray-500">{equipment.owner?.rating_count}</span>
+            <span className="text-gray-900">{equipment.rating_avg} </span>
+            <span className="text-gray-500">({equipment.rating_count} avis)</span>
         </div>
         <div className="text-right">
             <div className="text-2xl text-primary">

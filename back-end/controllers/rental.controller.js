@@ -151,7 +151,6 @@ export const createRental = async (req, res) => {
   try {
     const { start_date, end_date, equipment_id, total_price } = req.body;
     const renter_id = req.user.id;
-    console.log("total price " + req.body.total_price);
     const equipment = await Equipment.findByPk(equipment_id, {
       include: [
         {
@@ -161,6 +160,11 @@ export const createRental = async (req, res) => {
         },
       ],
     });
+    if (equipment.owner_id === renter_id) {
+      return res.json({
+        message: "Impossible de reserver son propre equipement",
+      });
+    }
     const data = await Rental.create({
       start_date,
       end_date,

@@ -1,4 +1,4 @@
-import User from "./../Models/User.js";
+import User from "./../models/User.js";
 import sendEmail from "../services/email.service.js";
 import {
   signEmailVerifyToken,
@@ -70,10 +70,9 @@ export const createUser = async (req, res) => {
     //   <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
     // `,
     //   );
-    res.status(201).json(data);
+    res.json(data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: err.message });
   }
 };
 export const getAllRoleUsers = async (req, res) => {

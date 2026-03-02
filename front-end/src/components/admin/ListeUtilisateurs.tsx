@@ -3,6 +3,7 @@ import { MdDelete } from "react-icons/md";
 import { IoIosWarning } from "react-icons/io";
 import { useUsers } from "../../hook/useUsers";
 import { User } from "../../types/User";
+import FormatDate from "../FormatDate";
 
 export default function ListeUtilisateurs() {
   const { getUsers, deleteUser}=useUsers()
@@ -85,7 +86,7 @@ const filteredUsers = users
             <td className="py-2 px-2 border">{u.compagny_name || "-"}</td>
             <td className="py-2 px-2 border">{u.siret || "-"}</td>
             <td className="py-2 px-2 border">{u.status || "-"}</td>
-            <td className="py-2 px-2 border">{new Date(u.createdAt).toLocaleDateString()}</td>
+            <td className="py-2 px-2 border">{FormatDate(u.createdAt)}</td>
             <td className="justify-center border text-center"> <button ><IoIosWarning /></button></td>  
             <td className="justify-center border text-center ">
                <button  onClick={() => handleBan(u.user_id, u.status === "banned")} className={`flex items-center gap-1 mx-auto 

@@ -1,7 +1,7 @@
 import { FaEuroSign } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Category } from "../../types/Category";
 import {useEquipmentContext} from "../../context/EquipmentContext"
 import { useCategories } from "../../hook/useCategories";
 
@@ -9,7 +9,8 @@ import { useCategories } from "../../hook/useCategories";
 export default function AddEquipment () {
     const {postNewEquipment}=useEquipmentContext()
     const navigate=useNavigate()
-    const { categories } = useCategories()
+    const { getCategories } = useCategories()
+    const [categories, setCategories]=useState <Category[]>([])
     const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -18,6 +19,17 @@ export default function AddEquipment () {
     caution: "",
     photo: null as File | null,
   });
+
+    useEffect (()=>{
+        async function fetchCategories(){
+            try{
+                const data= await getCategories()
+                setCategories(data||[])
+            }catch(err){
+                console.log(err)
+            }
+        } fetchCategories()
+    }, [])
  
 
   async function handleSubmit(e: React.FormEvent) {

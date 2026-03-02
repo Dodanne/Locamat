@@ -28,7 +28,7 @@ export const getAllEquipments = async (req, res) => {
     });
     res.json(data);
   } catch (err) {
-    console.error(err);
+    console.log(err);
   }
 };
 export const get6FirstEquipment = async (req, res) => {
@@ -93,7 +93,7 @@ export const getEquipmentById = async (req, res) => {
     });
     res.json(data);
   } catch (err) {
-    console.error(err);
+    console.log(err);
   }
 };
 
@@ -126,14 +126,12 @@ export const getEquipmentByUser = async (req, res) => {
     });
     res.json(data);
   } catch (err) {
-    console.error(err);
+    console.log(err);
   }
 };
 
 export const createEquipment = async (req, res) => {
   try {
-    console.log("req.body", req.body);
-    console.log("req.file", req.file);
     const { title, description, category_id, price, caution } = req.body;
     const photo = req.file ? req.file.filename : "default.png";
     const owner_id = req.user.id;
@@ -150,17 +148,12 @@ export const createEquipment = async (req, res) => {
     console.log(data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: err.message });
   }
 };
 export const getSearchEquipments = async (req, res) => {
   try {
     const { q, categories, maxPrice } = req.query;
     const where = {};
-    console.log("req.query : ", req.query);
-    console.log("q:", q);
-    console.log("categories:", categories);
-    console.log("maxPrice:", maxPrice);
     if (q && q.length >= 2) {
       where[Op.or] = [{ title: { [Op.like]: `%${q}%` } }];
     }
@@ -192,7 +185,6 @@ export const getSearchEquipments = async (req, res) => {
     res.json(equipments);
   } catch (err) {
     console.log(err);
-    res.json();
   }
 };
 
