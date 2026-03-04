@@ -34,7 +34,6 @@ export default function AddEquipment () {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-     console.log(formData);
     try {
         const form= new FormData()
         form.append("title", formData.title)
@@ -43,7 +42,6 @@ export default function AddEquipment () {
         form.append("price",formData.price)
         form.append("caution", formData.caution)
         if (formData.photo) {
-             console.log(formData.photo)
             form.append("photo", formData.photo);
          }
          await postNewEquipment(form)

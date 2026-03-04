@@ -3,7 +3,12 @@ import { Op } from "sequelize";
 
 export const getAllEquipments = async (req, res) => {
   try {
+    const limit = 10;
+    const offset = 0;
     const data = await Equipment.findAll({
+      limit,
+      offset,
+      order: [["createdAt", "DESC"]],
       include: [
         {
           model: User,
@@ -99,8 +104,12 @@ export const getEquipmentById = async (req, res) => {
 
 export const getEquipmentByUser = async (req, res) => {
   try {
+    const limit = 10;
+    const offset = 0;
     const id = req.params.id;
     const data = await Equipment.findAll({
+      limit,
+      offset,
       where: { owner_id: id },
       include: [
         {
@@ -133,7 +142,8 @@ export const getEquipmentByUser = async (req, res) => {
 export const createEquipment = async (req, res) => {
   try {
     const { title, description, category_id, price, caution } = req.body;
-    const photo = req.file ? req.file.filename : "default.png";
+    const photo = req.file ? req.file.path : "default.png";
+    console.log("Fichier uploadé :", req.file);
     const owner_id = req.user.id;
     const data = await Equipment.create({
       title,
@@ -150,8 +160,11 @@ export const createEquipment = async (req, res) => {
     console.log(err);
   }
 };
+
 export const getSearchEquipments = async (req, res) => {
   try {
+    const limit = 10;
+    const offset = 0;
     const { q, categories, maxPrice } = req.query;
     const where = {};
     if (q && q.length >= 2) {
@@ -170,6 +183,8 @@ export const getSearchEquipments = async (req, res) => {
     }
 
     const equipments = await Equipment.findAll({
+      limit,
+      offset,
       where,
       include: [
         { model: Category, as: "category" },
@@ -190,14 +205,7 @@ export const getSearchEquipments = async (req, res) => {
 
 export const deleteEquipment = async (req, res) => {
   try {
-    console.log("ok");
     const { id } = req.params;
-    const { reason } = req.body;
-    if (!reason) {
-      return res.status(400).json({
-        message: "Motif de suppression obligatoire",
-      });
-    }
     const deletedEquipment = await Equipment.destroy({
       where: { equipment_id: Number(id) },
     });
@@ -215,15 +223,16 @@ export const deleteEquipment = async (req, res) => {
 export const updateEquipment = async (req, res) => {
   try {
     const id = req.params.id;
-    const { title, price, description, category } = req.body;
+    const { title, price, description } = req.body;
+    console.log("req.body →", req.body);
+    console.log("req.file →", req.file);
     const data = await Equipment.findByPk(id);
     data.title = title;
-    data.price = price;
+    data.price = Number(price);
     data.description = description;
-    data.category_id = category;
 
     if (req.file) {
-      data.photo = req.file.filename;
+      data.photo = req.file.path;
     }
     await data.save(); //updatedAt
     res.json(data);

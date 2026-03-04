@@ -14,7 +14,7 @@ type ItemCardProps = {
 };
 
 export default function ItemCard({equipment, editable=false, onUpdate, onDelete}:ItemCardProps) {
-    const baseUrl=import.meta.env.VITE_BASE_URL
+
     const navigate=useNavigate()
     const [isEditing, setIsEditing] = useState(false);
     const [form, setForm] = useState<{
@@ -22,14 +22,12 @@ export default function ItemCard({equipment, editable=false, onUpdate, onDelete}
   price: number;
   description: string;
   photo: string;
-  categorie?: string|undefined;
   file?: File | null;
 }>({
   title: equipment.title,
   price: equipment.price,
   description: equipment.description,
   photo: equipment.photo,
-  categorie: equipment.category?.name,
   file: null, 
 });
     
@@ -58,7 +56,6 @@ export default function ItemCard({equipment, editable=false, onUpdate, onDelete}
     price: equipment.price,
     description: equipment.description,
     photo: equipment.photo,
-    categorie: equipment.category?.name,
     file: null,
   });
   setIsEditing(false);
@@ -69,15 +66,14 @@ export default function ItemCard({equipment, editable=false, onUpdate, onDelete}
     formData.append("title", form.title);
     formData.append("price", form.price.toString());
     formData.append("description",form.description)
-     if (form.categorie) {
-       formData.append("category", form.categorie);
-   }
+
     if (form.file) {
       formData.append("photo", form.file);
-   }
+    }
+
   try {
-     setIsEditing(false);
      onUpdate?.(equipment.equipment_id, formData)
+     setIsEditing(false);
   } catch (err){
     console.log(err)
   }
@@ -88,7 +84,6 @@ export default function ItemCard({equipment, editable=false, onUpdate, onDelete}
     price: equipment.price,
     description: equipment.description,
     photo: equipment.photo,
-    categorie: equipment.category?.name,
     file: null,
   });
   setIsEditing(true);
@@ -96,7 +91,7 @@ export default function ItemCard({equipment, editable=false, onUpdate, onDelete}
  
 const displayPhoto = form.file 
   ? form.photo
-  : `${baseUrl}/images/equipments/${equipment.photo}`;
+  : equipment.photo;
 return (
     <div className="relative flex flex-col border rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition h-full bg-white">
          

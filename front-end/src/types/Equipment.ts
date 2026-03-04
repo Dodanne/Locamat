@@ -16,5 +16,5 @@ export type Equipment = {
   rating_count:number
 
   owner?: Owner;
-  category?: Category;
+  category: Category;
 }

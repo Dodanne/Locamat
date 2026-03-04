@@ -9,7 +9,7 @@ import {
   deleteEquipment,
   updateEquipment,
 } from "../controllers/equipment.controller.js";
-import { uploadEquipment } from "../middleware/multer.js";
+import { uploadEquipment } from "../middleware/upload.middleware.js";
 import { authenticateToken } from "../middleware/authentificateToken.js";
 import { isAdmin } from "./../middleware/isAdmin.js";
 const router = express.Router();

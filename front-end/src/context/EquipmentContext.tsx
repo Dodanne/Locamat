@@ -59,6 +59,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
   async function patchEquipment(id:number, formData: FormData){
         try{
         const res = await apiAuth.patch(`/equipment/${id}`, formData)
+  
         //liste globale
         setEquipments((prev) =>
               prev.map((e) =>

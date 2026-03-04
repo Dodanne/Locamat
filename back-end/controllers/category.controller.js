@@ -4,7 +4,6 @@ export const getAllCategories = async (req, res) => {
   try {
     const data = await Category.findAll();
     res.json(data);
-    // console.log(data);
   } catch (err) {
     console.error(err);
   }

@@ -56,7 +56,7 @@ export default function EquipmentItem() {
            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
                 <div className="relative overflow-hidden py-4">
-                   <img src={`${baseUrl}/images/equipments/${equipment.photo}`} alt={equipment.title} className="img-cover w-full rounded-xl h-96"/>
+                   <img src={equipment.photo} alt={equipment.title} className="img-cover w-full rounded-xl h-96"/>
                    <span className="inline-flex items-center justify-center rounded-md border px-2 py-1 m-2 text-xs font-medium w-fit bg-white text-primary absolute top-4 right-1"> 
                 {equipment.owner?.user_type}</span>
                 </div>
@@ -83,7 +83,7 @@ export default function EquipmentItem() {
                     <div className="flex items-center gap-4 relative ">
                         <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-16 w-16">
                         {equipment.owner?.photo && equipment.owner?.photo!=="NULL" ? (  
-                            <img src={`${baseUrl}/images/users/${equipment.owner?.photo}`} alt={equipment.owner?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
+                            <img src={equipment.owner?.photo} alt={equipment.owner?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
                                  ):(
                                     <span className="flex items-center justify-center w-12 h-12 text-2xl font-bold text-white bg-accent rounded-full mr-4">{getInitials(equipment.owner)}</span>
                                  )
@@ -114,7 +114,7 @@ export default function EquipmentItem() {
                                            <div className="flex items-center justify-between">
                                              <div className="flex items-center gap-3">
                                                {r.reviewer?.photo && r.reviewer?.photo !=="NULL" ? (  
-                                                <img src={`${baseUrl}/images/users/${r.reviewer?.photo}`} alt={r.reviewer?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
+                                                <img src={r.reviewer?.photo} alt={r.reviewer?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
                                                   ):(
                                                      <span className="flex items-center justify-center w-12 h-12 text-2xl font-bold text-white bg-accent rounded-full mr-4">{getInitials(r.reviewer)}</span>
                                                   )
@@ -155,8 +155,11 @@ export default function EquipmentItem() {
                                             )}  
                                             </div>                          
                  </div>
+                 <div className="lg:col-span-1 ">
+                     <Reservations equipment={equipment}/>
+                 </div>
             </div>
-           <Reservations equipment={equipment}/>
+            
         </div>
     
     )

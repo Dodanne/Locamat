@@ -48,7 +48,7 @@ export default function UserProfile (){
             <div className="flex items-start gap-6 p-4">
                 <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-24 w-24">
                     {user.photo && user.photo !=="NULL" ? (  
-                        <img src={`${baseUrl}/images/users/${user.photo}`} alt={user.first_name} className="w-full h-full object-cover"/>
+                        <img src={user.photo} alt={user.first_name} className="w-full h-full object-cover"/>
                  ):(
                     <span className="flex items-center justify-center w-full h-full text-2xl font-bold text-white bg-accent rounded-full">{getInitials(user)}</span>
                  )

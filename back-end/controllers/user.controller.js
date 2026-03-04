@@ -4,13 +4,13 @@ import {
   signEmailVerifyToken,
   verifyEmailVerifyToken,
 } from "../services/emailToken.service.js";
+
 export const getAllUsers = async (req, res) => {
   try {
     const data = await User.findAll();
     res.json(data);
-    // console.log(data);
   } catch (err) {
-    console.error(err);
+    console.log(err);
   }
 };
 
@@ -40,7 +40,7 @@ export const createUser = async (req, res) => {
       compagny_name,
       siret,
     } = req.body;
-    const photo = req.file ? req.file.filename : null;
+    const photo = req.file ? req.file.path : null;
 
     const data = await User.create({
       first_name,

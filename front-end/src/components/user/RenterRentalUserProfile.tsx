@@ -75,7 +75,7 @@ export default function RenterRentalsUserProfile(){
                         <div className="bg-white flex flex-col gap-6 rounded-xl border p-4">
                         <div className="flex  gap-6">
                             <Link to={`/equipment/${r.equipment?.equipment_id}`}>
-                            <img src={`${baseUrl}/images/equipments/${r.equipment?.photo}`} alt={r.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
+                            <img src={r.equipment?.photo} alt={r.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
                             </Link>
                             <div className="flex-1">
                                 <div className="flex items-start justify-between mb-2">
@@ -83,7 +83,7 @@ export default function RenterRentalsUserProfile(){
                                      <h3 className="text-xl text-gray-900 mb-3">{r.equipment?.title}</h3>
                                      <div className="flex items-center">
                                        {r.equipment?.owner?.photo && r.equipment?.owner?.photo !=="NULL" ? (  
-                                                              <img src={`${baseUrl}/images/users/${r.equipment?.owner?.photo}`} alt={r.equipment?.owner?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
+                                                              <img src={r.equipment?.owner?.photo} alt={r.equipment?.owner?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
                                                        ):(
                                                           <span className="flex items-center justify-center w-12 h-12 text-2xl font-bold text-white bg-accent rounded-full mr-4">{getInitials(r.equipment?.owner)}</span>
                                                        )

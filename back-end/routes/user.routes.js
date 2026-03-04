@@ -9,10 +9,10 @@ import {
   patchIsAdmin,
   verifyEmail,
 } from "../controllers/user.controller.js";
-import { uploadUser } from "../middleware/multer.js";
 import { authenticateToken } from "../middleware/authentificateToken.js";
 import { isSuperAdmin } from "./../middleware/isSuperAdmin.js";
 import { isAdmin } from "./../middleware/isAdmin.js";
+import { uploadUser } from "../middleware/upload.middleware.js";
 const router = express.Router();
 
 router.get("/users", authenticateToken, getAllUsers);

@@ -50,7 +50,7 @@ export default function Header() {
            {user&& (
             <NavLink to={`/user-profile`}> <button className="flex flex-col items-center text-sm icon-btn">
              {user.photo && user.photo !=="NULL" ? (  
-                                    <img src={`${baseUrl}/images/users/${user.photo}`} alt={user.first_name} className="w-12 h-12 object-cover rounded-full"/>
+                                    <img src={user.photo} alt={user.first_name} className="w-12 h-12 object-cover rounded-full"/>
                              ):(
                                 <span className="flex items-center justify-center h-full text-2xl p-1  text-white bg-accent rounded-full">{getInitials(user)}</span>
                              )}

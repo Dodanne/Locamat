@@ -46,7 +46,7 @@ export default function ListeEquipments() {
               <td className="px-4 py-2 border">
                 {e.photo ? (
                   <img
-                    src={`${baseUrl}/images/equipments/${e.photo}`}
+                    src={e.photo}
                     alt={e.title}
                     className="w-16 h-16 object-cover rounded"
                   />

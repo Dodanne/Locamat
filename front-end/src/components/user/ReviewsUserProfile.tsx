@@ -89,7 +89,7 @@ export default function ReviewsUserProfile(){
                                     <div className="flex items-center justify-between">
                                       <div className="flex items-center gap-3">
                                         {r.reviewer?.photo && r.reviewer?.photo !=="NULL" ? (  
-                                         <img src={`${baseUrl}/images/users/${r.reviewer?.photo}`} alt={r.reviewer?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
+                                         <img src={r.reviewer?.photo} alt={r.reviewer?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
                                            ):(
                                               <span className="flex items-center justify-center w-12 h-12 text-2xl font-bold text-white bg-accent rounded-full mr-4">{getInitials(r.reviewer)}</span>
                                            )
@@ -122,7 +122,7 @@ export default function ReviewsUserProfile(){
                                         <div>
                                          <div className="flex  gap-6">
                                              <Link to={`/equipment/${r.rental?.equipment?.equipment_id}`}>
-                                                <img src={`${baseUrl}/images/equipments/${r.rental?.equipment?.photo}`} alt={r.rental?.equipment?.title} className="w-24 h-24 object-cover rounded-lg"></img>
+                                                <img src={r.rental?.equipment?.photo} alt={r.rental?.equipment?.title} className="w-24 h-24 object-cover rounded-lg"></img>
                                             </Link>
                                             <div className="flex-1">
                                             <div className="flex items-start justify-between mb-2">

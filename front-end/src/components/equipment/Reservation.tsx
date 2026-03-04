@@ -59,7 +59,6 @@ export default function Reservations({equipment}: ReservationsProps){
          <>
          {equipment.owner_id && equipment.owner_id!==Number(user_id )&& (
 
-            <div className="lg:col-span-1 ">
                 <div  className="bg-white flex flex-col gap-6 rounded-xl border sticky top-24 p-8 ">
                 <div className=" flex-col text-center ">
                     <div className="text-3xl text-primary font-semibold">{equipment.price}€ 
@@ -119,7 +118,6 @@ export default function Reservations({equipment}: ReservationsProps){
                 
                 <span className="flex text-sm text-gray-600"><RiSecurePaymentFill className="text-xl mr-4"/> Paiement sécurisé</span>
                 <span className="flex text-sm text-gray-600"><TbCalendarCancel className="text-xl mr-4"/> Annulation gratuite 24h avant</span>
-            </div>
             </div>
                 )}
                 {equipment.owner_id && equipment.owner_id==Number(user_id )&& (

@@ -14,7 +14,6 @@ import { useEquipmentContext } from "../../context/EquipmentContext";
 export default function EquipmentSearch() {
   const { getCategories } = useCategories()
   const {getSearchEquipment}=useEquipment()
-  const { getEquipments}=useEquipmentContext()
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("q") ?? "")
   const [hasSearched, setHasSearched] = useState(false);
