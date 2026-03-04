@@ -23,6 +23,8 @@ export default function EquipmentSearch() {
   const [maxPrice, setMaxPrice] = useState<number>(300);
   const [maxDistance, setMaxDistance] = useState<number>(1000);
   const [results, setResults] = useState<Equipment[]>([]);
+  const [page, setPage] = useState(1);
+  const limit = 9;
  
    useEffect(()=>{
     async function fetchCategories(){
@@ -50,7 +52,7 @@ export default function EquipmentSearch() {
 useEffect(() => {
   const fetchResults = async () => {
     try {
-      const params: any = {};
+      const params: any = {page, limit};
       if (search) params.q = search;
       if (selectedCategories.length) params.categories = selectedCategories;
       if (maxPrice) params.maxPrice = maxPrice;
@@ -64,7 +66,7 @@ useEffect(() => {
   };
 
   fetchResults();
-}, [search, selectedCategories, maxPrice])
+}, [search, selectedCategories, maxPrice, page])
 
 const resetFilters = () => {
     setSelectedCategories([]);
@@ -78,6 +80,10 @@ const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
       prev.includes(category_id) ? prev.filter((id) => id !== category_id) : [...prev, category_id]
     );
   };
+
+  useEffect(() => {
+  setPage(1);
+}, [search, selectedCategories, maxPrice]);
   
   return (
     <div className="container py-8">
@@ -166,6 +172,19 @@ const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+      <div className="flex justify-center gap-4 mt-8">
+           <button disabled={page === 1}  onClick={() => setPage((prev) => prev - 1)}  className="px-4 py-2 border rounded disabled:opacity-50">
+             Précédent
+           </button>
+
+           <span className="flex items-center px-4 text-primary">
+             Page {page}
+           </span>
+
+           <button disabled={results.length < limit} onClick={() => setPage((prev) => prev + 1)} className="px-4 py-2 border rounded disabled:opacity-50" >
+             Suivant
+           </button>
+          </div>
+              </div>
+            );
+          }

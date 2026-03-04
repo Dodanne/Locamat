@@ -163,8 +163,9 @@ export const createEquipment = async (req, res) => {
 
 export const getSearchEquipments = async (req, res) => {
   try {
-    const limit = 10;
-    const offset = 0;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 9;
+    const offset = (page - 1) * limit;
     const { q, categories, maxPrice } = req.query;
     const where = {};
     if (q && q.length >= 2) {
