@@ -86,7 +86,7 @@ const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
   setPage(1);
 }, [search, selectedCategories, maxPrice]);
 
-if(!results) <Loader/>
+if(!results) return <Loader/>
   
   return (
     <div className="container py-8">
