@@ -30,7 +30,6 @@ export const postPaiementSession = async (req, res) => {
 };
 
 export const postWebHook = async (req, res) => {
-  console.log("coucou");
   const signature = req.headers["stripe-signature"];
   const endpointSecret = process.env.STRIPE_WEBHOOK_KEY;
 
