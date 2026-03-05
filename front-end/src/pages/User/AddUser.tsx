@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUsers } from "../../hook/useUsers";
+import { IoEyeOutline } from "react-icons/io5";
+import { IoEyeOffOutline } from "react-icons/io5";
 
 export default function AddUser () {
     const navigate=useNavigate()
@@ -22,16 +24,13 @@ export default function AddUser () {
                 siret: "",                                                  
             });
   const [noMatchPassword,setNoMatchPassword]=useState("")
+  const [passwordError, setPasswordError] = useState("")
   const {postUser}=useUsers()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-     if (formData.password !== formData.confirm_password) {
-     setNoMatchPassword("Les mots de passe ne correspondent pas !");
-    return;
-  }
     try {
-        const form= new FormData(); // pas de JSON.stringiy car photo est un fichier
+        const form= new FormData(); 
          form.append("first_name", formData.first_name);
          form.append("last_name", formData.last_name);
          form.append("birthday", formData.birthday);
@@ -64,11 +63,29 @@ export default function AddUser () {
         const file = e.target.files?.[0] ?? null; 
         setFormData((prev) => ({...prev, [e.target.name]: file }));
      }
-    
+
+    function checkPassword(value:string){
+         const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?-]).{8,}$/;
+        if (!regex.test(value)) {
+         setPasswordError("Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial");
+        }else {
+            setPasswordError("")
+        }
+        }
+    function matchPassword(value:string){
+         if (formData.password !== value) {
+        setNoMatchPassword("Les mots de passe ne correspondent pas ");
+         }else {
+        setNoMatchPassword("")
+        }
+        }
+
     function handleChange (e: any) {
-        const { name } = e.target;
+        const { name, value } = e.target;
         if (e.target.type==="file" ) {
             return handleChangeFile(e)}
+            if (name === "password") checkPassword(value)
+            if (name === "confirm_password") matchPassword(value)
         setFormData((prevData) => ({
             ...prevData,
             [name]: e.target.value
@@ -83,30 +100,40 @@ export default function AddUser () {
             <p className="text-gray-600">Mettez en location votre matériel ou louez du matériel</p>
         </div>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <p className="text-sm text-gray-700">Les * sont des champs obligatoires</p>
             <div className="flex flex-col gap-6 rounded-xl border bg-white p-6"> 
             <div className="form-div">
-                <label className="form-label" htmlFor="name">Nom </label>
+                <label className="form-label" htmlFor="name">Nom *</label>
                 <input className="form-input" type="text" name="last_name" value={formData.last_name} onChange={handleChange}  required/>
             </div>
             <div className="form-div">
-                <label className="form-label" htmlFor="name">Prénom </label>
+                <label className="form-label" htmlFor="name">Prénom *</label>
                 <input className="form-input" type="text" name="first_name" value={formData.first_name} onChange={handleChange}  required/>
             </div>
             <div className="form-div">
-                <label className="form-label" htmlFor="birthday">Date de naissance </label>
+                <label className="form-label" htmlFor="birthday">Date de naissance *</label>
                 <input className="form-input" type="date" name="birthday" value={formData.birthday} onChange={handleChange}  required/>
             </div>
             <div className='form-div'>
-                    <label className="form-label" htmlFor="email">Adresse mail </label>
+                    <label className="form-label" htmlFor="email">Adresse mail *</label>
                     <input className="form-input"  name="email" value={formData.email} onChange={handleChange} />
             </div>
             <div className='form-div'>
-                    <label className="form-label" htmlFor="password">Mot de passe </label>
+                    <label className="form-label" htmlFor="password">Mot de passe *</label>
+                    <div className="flex items-center">
                     <input className="form-input" type="password"  name="password" value={formData.password} onChange={handleChange} />
+                    <IoEyeOutline className="text-2xl"/>
+                    <IoEyeOffOutline className="text-2xl"/>
+                    </div>
+                    {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
             </div>
             <div className="form-div">
-                    <label className="form-label">Confirmez le mot de passe</label>
+                    <label className="form-label">Confirmez le mot de passe *</label>
+                    <div className="flex items-center">
                     <input className="form-input" type="password" name="confirm_password" value={formData.confirm_password} onChange={handleChange} placeholder="Confirmez le mot de passe" required />
+                    <IoEyeOutline className="text-2xl" />
+                    <IoEyeOffOutline className="text-2xl"/>
+                    </div>
                      {noMatchPassword && <p className="text-red-500 text-sm mt-1">{noMatchPassword}</p>}
             </div>
             <div className='form-div'>
@@ -114,31 +141,31 @@ export default function AddUser () {
                     <input className="form-input"  name="photo" type="file" accept="image/*" onChange={handleChange} />
             </div>
              <div className="form-div">
-                     <label className="form-label">Numéro de rue</label>
+                     <label className="form-label">Numéro de rue *</label>
                      <input className="form-input" type="text" name="number" value={formData.number} onChange={handleChange}/>
             </div>
             <div className="form-div">
-                    <label className="form-label">Rue</label>
+                    <label className="form-label">Rue *</label>
                     <input className="form-input" type="text" name="street" value={formData.street} onChange={handleChange}/>
             </div>
 
             <div className="form-div">
-                    <label className="form-label">Code postal</label>
+                    <label className="form-label">Code postal *</label>
                     <input className="form-input" type="text" name="postal_code" value={formData.postal_code} onChange={handleChange} />
             </div>
 
             <div className="form-div">
-                    <label className="form-label">Ville</label>
+                    <label className="form-label">Ville *</label>
                     <input className="form-input" type="text" name="city" value={formData.city} onChange={handleChange} />
             </div>
 
             <div className="form-div">
-                    <label className="form-label">Téléphone</label>
+                    <label className="form-label">Téléphone *</label>
                     <input className="form-input" type="text" name="phone" value={formData.phone} onChange={handleChange} />
             </div>
 
             <div className="form-div">
-                <label className="form-label" htmlFor="category"> Type d’utilisateur </label>
+                <label className="form-label" htmlFor="category"> Type d’utilisateur *</label>
                 <select name="user_type" value={formData.user_type} onChange={handleChange} id="form-user_type" className="form-input" required>
                     <option value="" className="hidden">Sélectionnez si vous êtes un professionnel ou un particulier</option>
                             <option value="particulier" className="bg-white text-black ">Particulier</option>

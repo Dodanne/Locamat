@@ -74,14 +74,14 @@ export default function AddEquipment () {
             <p className="text-gray-600">Mettez votre matériel en location et gagnez de l'argent</p>
         </div>
         <form onSubmit={handleSubmit}>
+            <p className="text-sm text-gray-700">Les * sont des champs obligatoires</p>
             <div className="flex flex-col gap-6 rounded-xl border bg-white p-6"> 
-                <h4 className="leading-none">Informations de base</h4>
             <div className="form-div">
-                <label className="form-label" htmlFor="name">Nom du matériel </label>
+                <label className="form-label" htmlFor="name">Nom du matériel *</label>
                 <input className="form-input" type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Ex: Perceuse sans fil" required/>
             </div>
             <div className="form-div">
-                <label className="form-label" htmlFor="category">Catégorie </label>
+                <label className="form-label" htmlFor="category">Catégorie *</label>
                 <select name="category_id" value={formData.category_id} onChange={handleChange} id="form-category" className="form-input" required>
                     <option value="" className="hidden">Selectionnez une catégorie</option>
                     {categories.map((cat)=>(
@@ -90,7 +90,7 @@ export default function AddEquipment () {
                 </select>
                 </div>
                 <div className='form-div'>
-                    <label className="form-label" htmlFor="description">Description </label>
+                    <label className="form-label" htmlFor="description">Description *</label>
                     <textarea rows={5} className="form-input resize-none overflow-hidden" name="description"  value={formData.description}
         onChange={handleChange} placeholder="Décrivez votre matériel " required/>
                 </div>
@@ -99,14 +99,20 @@ export default function AddEquipment () {
                     <input className="form-input"  name="photo" type="file"  accept="image/*" onChange={handleChange} />
                 </div>
                 <div className="form-div relative">
-                    <label className="form-label" htmlFor="price">Prix de la location (par jour)</label>
-                    <FaEuroSign className="absolute left-3 top-10 -translate-y-1/2  text-gray-400" />
-                    <input className="form-input pl-10 " inputMode="numeric" type="number" name="price" min="0" max="99999" step="1" value={formData.price} onChange={handleChange} placeholder="20" required/>
+                    <label className="form-label" htmlFor="price">Prix de la location (par jour) *</label>
+                    <p className="text-sm text-gray-500"> Montant en euros, sans centimes</p>
+                    <div className="relative">
+                    <FaEuroSign className="absolute top-1/2 -translate-y-1/2 left-3 text-gray-400" />
+                    <input className="form-input pl-10 " inputMode="numeric" type="number" name="price" min="0" max="99999" step="1" value={formData.price} onKeyDown={(e) => [".", ","].includes(e.key) && e.preventDefault()} onChange={handleChange} placeholder="20" required/>
+                    </div>
                 </div>
                 <div className="form-div relative">
-                    <label className="form-label" htmlFor="price">Caution </label>
-                    <FaEuroSign className="absolute left-3 top-10 -translate-y-1/2  text-gray-400" />
-                    <input className="form-input pl-10 " type="number" name="caution" min="0" max="99999" step="1" value={formData.caution} onChange={handleChange} placeholder="100" required/>
+                    <label className="form-label" htmlFor="price">Caution * </label>
+                     <p className="text-sm text-gray-500"> Montant en euros, sans centimes</p>
+                     <div className="relative">
+                    <FaEuroSign className="absolute top-1/2 -translate-y-1/2 left-3  text-gray-400" />
+                    <input className="form-input pl-10 " type="number" name="caution" min="0" max="99999" step="1" value={formData.caution} onKeyDown={(e) => [".", ","].includes(e.key) && e.preventDefault()} onChange={handleChange} placeholder="100" required/>
+                    </div>
                     <p className="text-sm text-gray-500">Montant qui sera bloqué et restitué après retour du matériel</p>
                 </div>
              </div>
@@ -114,6 +120,7 @@ export default function AddEquipment () {
                 <button className=" flex-1 items-center h-10 rounded-md bg-white border border-gray-300 text-primary text-sm font-medium hover:bg-gray-300 transition cursor-pointer">Annuler</button>
                 <button type="submit" className=" flex-1 items-center h-10 rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Publier l'annonce</button>
              </div>
+             
         </form>
     </div>
     )
