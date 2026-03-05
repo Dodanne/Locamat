@@ -2,6 +2,7 @@ import { stripe } from "../services/stripe.service.js";
 import Rental from "../models/Rental.js";
 
 export const postPaiementSession = async (req, res) => {
+  console.log("creation paiement");
   try {
     const { rental_id } = req.body;
     const data = await stripe.checkout.sessions.create({
@@ -30,6 +31,7 @@ export const postPaiementSession = async (req, res) => {
 };
 
 export const postWebHook = async (req, res) => {
+  console.log("webhook actif");
   const signature = req.headers["stripe-signature"];
   const endpointSecret = process.env.STRIPE_WEBHOOK_KEY;
 
@@ -40,19 +42,17 @@ export const postWebHook = async (req, res) => {
     }
     event = stripe.webhooks.constructEvent(req.body, signature, endpointSecret);
 
-    if (event.type === "checkout.session.completed") {
-      console.log("session completed");
+    if (event.type === "checkout.session.succeeded") {
       const session = event.data.object;
-      if (session.payment_status === "paid") {
-        console.log("Paiement confirme");
-      }
       const rental_id = session.metadata?.rental_id;
       if (rental_id) {
         const rental = await Rental.findByPk(rental_id);
-        rental.status = "confirmed";
-        await rental.save();
+        if (rental) {
+          rental.status = "confirmed";
+          rental.payment_status = "paid";
+          await rental.save();
+        }
       }
-      console.log(rental_id);
     }
     res.json({ received: true });
   } catch (err) {

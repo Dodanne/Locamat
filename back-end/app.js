@@ -6,11 +6,11 @@ import { fileURLToPath } from "url";
 import { postWebHook } from "./controllers/paiement.controller.js";
 
 const app = express();
+app.use(cors());
 app.post("/webhook", express.raw({ type: "application/json" }), postWebHook);
 
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(cors());
 app.use(routes);
 
 const __filename = fileURLToPath(import.meta.url);

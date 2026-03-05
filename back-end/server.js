@@ -8,7 +8,7 @@ const startServer = async () => {
   await initDb();
 
   app.listen(PORT, () => {
-    console.log(`Back-end lancé sur http://localhost:${PORT}`);
+    console.log(`Back-end lancé sur https://locamat.onrender.com`);
   });
 };
 
