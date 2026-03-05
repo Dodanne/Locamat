@@ -81,9 +81,9 @@ export default function EquipmentItem() {
                 </div>
                 <div className="flex flex-col gap-6 rounded-xl border bg-white p-6 mt-8">
                     <div className="flex items-center gap-4 relative ">
-                        <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-16 w-16">
+                        <span className="relative flex size-10 shrink-0 overflow-hidden h-16 w-16">
                         {equipment.owner?.photo && equipment.owner?.photo!=="NULL" ? (  
-                            <img src={equipment.owner?.photo} alt={equipment.owner?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
+                            <img src={equipment.owner?.photo} alt={equipment.owner?.first_name} className="w-12 h-12 object-cover rounded-full "/>
                                  ):(
                                     <span className="flex items-center justify-center w-12 h-12 text-2xl font-bold text-white bg-accent rounded-full mr-4">{getInitials(equipment.owner)}</span>
                                  )

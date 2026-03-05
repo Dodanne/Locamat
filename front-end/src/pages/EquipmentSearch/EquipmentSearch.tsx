@@ -8,7 +8,6 @@ import { useCategories } from "../../hook/useCategories";
 import { Category } from "../../types/Category";
 import { useEquipment } from "../../hook/useEquipments";
 import { Equipment } from "../../types/Equipment";
-import { useEquipmentContext } from "../../context/EquipmentContext";
 import Loader from "../../components/Loader";
 
 

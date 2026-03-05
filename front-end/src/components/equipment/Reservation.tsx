@@ -51,7 +51,7 @@ export default function Reservations({equipment}: ReservationsProps){
             
             return diffDate
         }
-        const days=numberOfDays()/(1000 * 60 * 60 * 24) + 1;
+        const days=Math.round(numberOfDays()/(1000 * 60 * 60 * 24) + 1)
         if (!equipment) return <Loader/>;
          const totalPrice=days*equipment.price
 
