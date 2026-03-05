@@ -101,7 +101,7 @@ export default function AddEquipment () {
                 <div className="form-div relative">
                     <label className="form-label" htmlFor="price">Prix de la location (par jour)</label>
                     <FaEuroSign className="absolute left-3 top-10 -translate-y-1/2  text-gray-400" />
-                    <input className="form-input pl-10 " type="number" name="price" min="0" max="99999" step="1" value={formData.price} onChange={handleChange} placeholder="20" required/>
+                    <input className="form-input pl-10 " inputMode="numeric" type="number" name="price" min="0" max="99999" step="1" value={formData.price} onChange={handleChange} placeholder="20" required/>
                 </div>
                 <div className="form-div relative">
                     <label className="form-label" htmlFor="price">Caution </label>
