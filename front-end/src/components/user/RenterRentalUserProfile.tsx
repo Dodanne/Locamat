@@ -125,6 +125,7 @@ export default function RenterRentalsUserProfile(){
                                 </div>
                                     {r.status === "completed" && (
                                      <>
+                                     {console.log("status:", r.status)}
                                        {!showReview[r.rental_id] ? (
                                          hasReview[r.rental_id]? (
                                            <p className=" text-gray-500">Vous avez déjà laissé un avis.</p>

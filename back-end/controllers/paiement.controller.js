@@ -42,7 +42,7 @@ export const postWebHook = async (req, res) => {
     }
     event = stripe.webhooks.constructEvent(req.body, signature, endpointSecret);
 
-    if (event.type === "checkout.session.succeeded") {
+    if (event.type === "checkout.session.completed") {
       const session = event.data.object;
       const rental_id = session.metadata?.rental_id;
       if (rental_id) {
