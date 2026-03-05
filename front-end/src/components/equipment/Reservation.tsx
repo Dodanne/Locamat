@@ -50,7 +50,7 @@ export default function Reservations({equipment}: ReservationsProps){
             start.setHours(0, 0, 0, 0)
             end.setHours(0, 0, 0, 0)
             
-            const diffDate=end.getTime() - start.getTime()
+            const diffDate = Date.UTC(end.getFullYear(), end.getMonth(), end.getDate())- Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
             
             return diffDate
         }
