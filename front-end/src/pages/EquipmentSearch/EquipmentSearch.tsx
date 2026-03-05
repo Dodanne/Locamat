@@ -9,6 +9,7 @@ import { Category } from "../../types/Category";
 import { useEquipment } from "../../hook/useEquipments";
 import { Equipment } from "../../types/Equipment";
 import { useEquipmentContext } from "../../context/EquipmentContext";
+import Loader from "../../components/Loader";
 
 
 export default function EquipmentSearch() {
@@ -84,6 +85,8 @@ const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
   useEffect(() => {
   setPage(1);
 }, [search, selectedCategories, maxPrice]);
+
+if(!results) <Loader/>
   
   return (
     <div className="container py-8">
