@@ -44,8 +44,11 @@ export default function Reservations({equipment}: ReservationsProps){
 
         const  numberOfDays = ()=>{
             if (!selected?.from || !selected?.to) return 0
-            const start:Date= selected.from
-            const end:Date= selected.to
+            const start= new Date(selected.from)
+            const end= new Date (selected.to)
+
+            start.setHours(0, 0, 0, 0)
+            end.setHours(0, 0, 0, 0)
             
             const diffDate=end.getTime() - start.getTime()
             
