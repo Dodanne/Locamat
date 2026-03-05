@@ -19,7 +19,7 @@ export default function Banner(){
         <div className="relative py-20 overflow-hidden">
             {/* Background */}
         <div className="absolute inset-0">
-            <img src="./src/assets/banner-bg.jpg" alt="background" className="img-cover" ></img>
+            <img src="./banner-bg.jpg" alt="background" className="img-cover" ></img>
             <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-accent/85 to-primary/90"></div>
             </div>
             <div className="container relative z-10">
