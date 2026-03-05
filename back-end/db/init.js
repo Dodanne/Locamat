@@ -9,6 +9,7 @@ export default async function initDb() {
     await sequelize.sync();
     console.log("Tables et Models synchronisés");
   } catch (err) {
-    console.log(err);
+    console.error("Impossible de démarrer le serveur:", err);
+    process.exit(1); // Node quitte si erreur
   }
 }
