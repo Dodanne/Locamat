@@ -7,7 +7,7 @@ const PORT = process.env.PORT;
 const startServer = async () => {
   await initDb();
 
-  app.listen(PORT, () => {
+  app.listen(DB_PORT, () => {
     console.log(`Back-end lancé sur http://localhost:${PORT}`);
   });
 };

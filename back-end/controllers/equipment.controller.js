@@ -192,7 +192,13 @@ export const getSearchEquipments = async (req, res) => {
         {
           model: User,
           as: "owner",
-          attributes: ["user_id", "city", "rating_avg", "rating_count"],
+          attributes: [
+            "user_id",
+            "city",
+            "rating_avg",
+            "rating_count",
+            "user_type",
+          ],
         },
       ],
       order: [["createdAt", "DESC"]],

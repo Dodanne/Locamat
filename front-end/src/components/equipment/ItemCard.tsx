@@ -118,10 +118,7 @@ return (
             </div>
         )}
          {/* Image */}
-        <img
-          src={displayPhoto}
-          className="img-cover z-10 w-full h-full object-cover"
-        />
+        <img src={displayPhoto} className="img-cover z-10 w-full h-full object-cover"/>
 
         {isEditing && (
           <label className="absolute top-2 right-2 z-20 cursor-pointer bg-white rounded-full p-2 shadow">
