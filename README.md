@@ -227,15 +227,15 @@ npm run dev
 
 ### User
 
--GET '/users'
--GET '/role/users'
--PATCH '/:id/ban'
--PATCH '/:id/isAdmin'
--GET '/role/admin'
--GET '/user/:id'
--GET '/verify-email'
--POST '/new-user'
--PATCH '/edit-profile/:id'
+- GET '/users'
+- GET '/role/users'
+- PATCH '/:id/ban'
+- PATCH '/:id/isAdmin'
+- GET '/role/admin'
+- GET '/user/:id'
+- GET '/verify-email'
+- POST '/new-user'
+- PATCH '/edit-profile/:id'
 
 ## Librairies & Dépendances
 
