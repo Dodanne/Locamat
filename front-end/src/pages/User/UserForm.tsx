@@ -60,7 +60,7 @@ export default function UserForm() {
         }
          if ( mode ==='edit'){
         await patchUser(user_id as number,form)
-        navigate('user-profile')
+        navigate('/user-profile')
          } else {
             await postUser(form)
             navigate(`/succesUser`)

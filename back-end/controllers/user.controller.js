@@ -192,7 +192,7 @@ export const patchUser = async (req, res) => {
       data.password = password;
     }
     if (req.file) {
-      data.photo = req.file.filename;
+      data.photo = req.file.path;
     }
     await data.save();
     res.json(data);
