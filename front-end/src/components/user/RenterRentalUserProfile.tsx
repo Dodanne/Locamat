@@ -18,7 +18,7 @@ export default function RenterRentalsUserProfile(){
     const [renterRentals,setRenterRentals]=useState<Rental[]>([])
     const [showReview, setShowReview]=useState<{ [rental_id: number]: boolean }>({});
     const [hasReview, setHasReview] =  useState<{ [rental_id: number]: boolean }>({});
-    const { getEquipmentReviews, getUserReviews}=useReviews()
+    const { getEquipmentIsReview, getUserIsReview}=useReviews()
     const {getRenterRentals}=useRentals()
     const {user_id}=useAuth()
     const {status}=useStatus()
@@ -41,8 +41,8 @@ export default function RenterRentalsUserProfile(){
       async function isReview(){
         for(const rental of renterRentals)
         try{
-        const resUser= await getUserReviews(rental.rental_id)
-        const resEquipment= await getEquipmentReviews(rental.rental_id)
+        const resUser= await getUserIsReview(rental.rental_id)
+        const resEquipment= await getEquipmentIsReview(rental.rental_id)
         setHasReview(prev => ({
           ...prev,
           [rental.rental_id]: resUser.hasReview && resEquipment.hasReview
@@ -125,23 +125,19 @@ export default function RenterRentalsUserProfile(){
                                 </div>
                                     {r.status === "completed" && (
                                      <>
-                                     {console.log("status:", r.status)}
+                                     
                                        {!showReview[r.rental_id] ? (
                                          hasReview[r.rental_id]? (
                                            <p className=" text-gray-500">Vous avez déjà laissé un avis.</p>
                                          ) : (
-                                           <button
-                                             onClick={()=> setShowReview(prev=>({...prev,[r.rental_id]:true}))}
-                                             className="btn hover:bg-gray-300"
-                                           >
+                                           <button onClick={()=> setShowReview(prev=>({...prev,[r.rental_id]:true}))} className="btn hover:bg-gray-300">
                                              Laisser un avis
                                            </button>
                                         )
                                        ) : (
                                         <Reviews rental={r}
-                                                reviewSubmitted={() => {
-                                                     setShowReview(prev => ({...prev, [r.rental_id]: false}))
-                                                     setHasReview(prev => ({...prev, [r.rental_id]: true}))
+                                                reviewSubmitted={() => {setShowReview(prev => ({...prev, [r.rental_id]: false}))
+                                                 setHasReview(prev => ({...prev, [r.rental_id]: true}))
                                                     }}/>
                                        )}
                                      </>

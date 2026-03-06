@@ -1,11 +1,16 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useUsers } from "../../hook/useUsers";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
+import { useAuth } from "../../context/AuthContext";
 
-export default function AddUser () {
+export default function UserForm() {
     const navigate=useNavigate()
+    const location=useLocation()
+    const mode = location.state?.mode ?? 'create'
+    const {user_id}=useAuth()
+    const {postUser,getUserById, patchUser}= useUsers()
     const [formData, setFormData] = useState({                 
                 first_name: "",
                 last_name: "",
@@ -27,10 +32,11 @@ export default function AddUser () {
   const [passwordError, setPasswordError] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const {postUser}=useUsers()
+  
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+   
     try {
         const form= new FormData(); 
          form.append("first_name", formData.first_name);
@@ -52,13 +58,16 @@ export default function AddUser () {
             if (formData.photo) {
             form.append("photo", formData.photo);
         }
+         if ( mode ==='edit'){
+        await patchUser(user_id as number,form)
+        navigate('user-profile')
+         } else {
             await postUser(form)
             navigate(`/succesUser`)
-            
-             }
-                catch (err) {
+            }
+             } catch (err) {
                  console.log(err);
-                }
+             }
          }
 
     function handleChangeFile(e: any){
@@ -94,13 +103,40 @@ export default function AddUser () {
         }));
     }
     
-   
+   useEffect(()=> {
+    if (mode!=="edit"||!user_id)return
+    async function fetchUserById(){
+        try{
+            const data= await getUserById(user_id as number)
+            setFormData({
+                first_name: data.first_name,
+                last_name: data.last_name,
+                birthday: data.birthday,
+                photo: null,
+                email: data.email,
+                password: "",
+                confirm_password: "",
+                number: data.number,
+                street: data.street,
+                postal_code: data.postal_code,
+                city: data.city,
+                phone: data.phone,
+                user_type: data.user_type,
+                compagny_name: data.compagny_name ?? "",
+                siret: data.siret ?? "",
+            })
+        } catch (err){
+            console.log(err)
+        }
+    }
+    fetchUserById()
+   }, [mode, user_id])
 
     return(
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-            <h1 className="text-3xl text-gray-900 mb-2">Inscrivez-vous</h1>
-            <p className="text-gray-600">Mettez en location votre matériel ou louez du matériel</p>
+            <h1 className="text-3xl text-gray-900 mb-2">{mode==="edit"?"Modifier le profil":"Inscrivez-vous"}</h1>
+            <p className="text-gray-600"> {mode==="edit"? "":"Mettez en location votre matériel ou louez du matériel"}</p>
         </div>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
         <p className="text-sm text-gray-700">Les * sont des champs obligatoires</p>
@@ -123,8 +159,11 @@ export default function AddUser () {
             </div>
             <div className='form-div'>
                     <label className="form-label" htmlFor="password">Mot de passe *</label>
+                    {mode === 'edit'&& (
+                        <p className="text-sm text-gray-500"> Laissez vide pour ne pas changer votre mot de passe</p>
+                    )}
                     <div className="flex items-center">
-                    <input className="form-input" type={showPassword ? "text":"password"}  name="password" value={formData.password} onChange={handleChange} />
+                    <input className="form-input" type={showPassword ? "text":"password"}  name="password" value={formData.password} onChange={handleChange} required={mode === "create"}/>
                     <button type="button" onClick={()=>setShowPassword(prev=>!prev)}>
                     {showPassword?
                     <IoEyeOffOutline className="text-2xl"/>:<IoEyeOutline className="text-2xl"/>}
@@ -135,7 +174,7 @@ export default function AddUser () {
             <div className="form-div">
                     <label className="form-label">Confirmez le mot de passe *</label>
                     <div className="flex items-center">
-                    <input className="form-input" type={showConfirmPassword ? "text":"password"} name="confirm_password" value={formData.confirm_password} onChange={handleChange} placeholder="Confirmez le mot de passe" required />
+                    <input className="form-input" type={showConfirmPassword ? "text":"password"} name="confirm_password" value={formData.confirm_password} onChange={handleChange} placeholder="Confirmez le mot de passe" required={mode === "create"} />
                      <button type="button" onClick={()=>setShowConfirmPassword(prev=>!prev)}>
                     {showConfirmPassword?
                     <IoEyeOffOutline className="text-2xl"/>:<IoEyeOutline className="text-2xl"/>}
@@ -194,7 +233,7 @@ export default function AddUser () {
             )}
             <div className="flex gap-4 sm:flex-row mt-4">
                 <button className=" flex-1 items-center h-10 rounded-md bg-white border border-gray-300 text-primary text-sm font-medium hover:bg-gray-300 transition cursor-pointer">Annuler</button>
-                <button type="submit" className=" flex-1 items-center h-10 rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Créer le compte</button>
+                <button type="submit" className=" flex-1 items-center h-10 rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">{mode==="edit"? "Sauvegarder" : "Créer le compte"}</button>
              </div>
             </div>
         </form>

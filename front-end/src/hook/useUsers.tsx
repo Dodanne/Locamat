@@ -32,5 +32,9 @@ export function useUsers(){
       const res= await api.post("/new-user", form);
       return res.data;
     }
-    return { getUsers, deleteUser, getUserById, postUser}
+    async function patchUser(user_id:number, form: FormData){
+      const res= await apiAuth.patch(`/edit-profile/${user_id}`, form)
+      return res.data
+    }
+    return { getUsers, deleteUser, getUserById, postUser, patchUser}
 }

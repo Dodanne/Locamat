@@ -18,7 +18,7 @@ export default function OwnerRentalsUserProfile(){
      const [showReview, setShowReview]=useState<{ [rental_id: number]: boolean }>({});
     const [hasReview, setHasReview] =  useState<{ [rental_id: number]: boolean }>({});
     const [ownerRentals,setOwnerRentals]=useState<Rental[]>([])
-    const { getUserReviews}=useReviews()
+    const { getUserIsReview}=useReviews()
     const baseUrl=import.meta.env.VITE_BASE_URL
     const {user_id} =useAuth()
     
@@ -44,7 +44,7 @@ export default function OwnerRentalsUserProfile(){
       async function isReview(){
         for(const rental of ownerRentals)
         try{
-        const resUser= await getUserReviews(rental.rental_id)
+        const resUser= await getUserIsReview(rental.rental_id)
      
         setHasReview(prev => ({
           ...prev,
@@ -138,6 +138,8 @@ export default function OwnerRentalsUserProfile(){
                                 
                                 {e.status === "completed" && (
                                  <>
+                                 {console.log("showReview:", !showReview[e.rental_id])}
+                                     {console.log("hasReview:", hasReview[e.rental_id])}
                                    {!showReview[e.rental_id] ? (
                                      hasReview[e.rental_id]? (
                                        <p className=" text-gray-500">Vous avez déjà laissé un avis.</p>

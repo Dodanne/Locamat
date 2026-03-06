@@ -44,15 +44,15 @@ export default function Connexion() {
                         </div>
                       )}
                     <button type="submit" className="w-full items-center h-10 rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Continuer</button>
-                    <div className="text-center italic underline text-sm"> <Link to="/new-user"> Pas encore de compte LocaMat ? Inscrivez-vous ici </Link></div>
+                    <div className="text-center italic underline text-sm"> <Link to="/user-form" state={{mode: "create"}}> Pas encore de compte LocaMat ? Inscrivez-vous ici </Link></div>
                 </form>
             </div>
             </div>
         </div>
         <div className="flex flex-col mt-6 p-4 text-center justify-center ">
-        <h3 className="text-primary font-semibold text-2xl mt-7">Besoin d'un matériel momentanément ?</h3>
-          <hr className=" border-primary border-1 mx-8 my-3"/>
-          <h3 className="text-primary font-semibold text-xl ">Louez du matériel facilement près de chez vous </h3>
+            <h3 className="text-primary font-semibold text-2xl mt-7">Besoin d'un matériel momentanément ?</h3>
+                <hr className=" border-primary border-1 mx-8 my-3"/>
+            <h3 className="text-primary font-semibold text-xl ">Louez du matériel facilement près de chez vous </h3>
         </div>
         <div>
         </div>

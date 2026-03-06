@@ -11,7 +11,7 @@ import EquipmentItem from "./pages/EquipmentItem/EquipmentItem";
 import AddEquipment from "./pages/AddEquipment/AddEquipment";
 import EquipmentSuccess from "./pages/AddEquipment/Succes";
 import Connexion from "./pages/User/Connexion";
-import AddUser from "./pages/User/AddUser";
+import UserForm from "./pages/User/UserForm";
 import UserSuccess from "./pages/User/Succes";
 import UserProfile from "./pages/User/UserProfile";
 import Deconnexion from "./pages/User/Deconnexion";
@@ -22,7 +22,7 @@ import Summary from "./pages/EquipmentItem/Summary";
 import StatusProvider from "./context/StatusContext";
 import PaiementSuccess from "./pages/Reservation/SuccesPaiement";
 import PaiementFail from "./pages/Reservation/FailPaiement";
-import Reviews from "./components/reviews/Reviews";
+
 
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
                 <Route path="/connexion" element={<Connexion />} />
                 <Route path="/equipment/:id" element={<EquipmentItem />} />
                 <Route path="/user-profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
-                <Route path="/new-user" element={<AddUser />} />
+                <Route path="/user-form" element={<UserForm />} />
                 <Route path="/admin-dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/logout" element={<Deconnexion />} />
                 <Route path="/succes" element={<ProtectedRoute><EquipmentSuccess /></ProtectedRoute>} />

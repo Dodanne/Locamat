@@ -8,6 +8,7 @@ import {
   patchBannedUser,
   patchIsAdmin,
   verifyEmail,
+  patchUser,
 } from "../controllers/user.controller.js";
 import { authenticateToken } from "../middleware/authentificateToken.js";
 import { isSuperAdmin } from "./../middleware/isSuperAdmin.js";
@@ -23,5 +24,11 @@ router.get("/role/admin", authenticateToken, isAdmin, getAllRoleAdmin);
 router.get("/user/:id", authenticateToken, getUserById);
 router.get("/verify-email", verifyEmail);
 router.post("/new-user", uploadUser.single("photo"), createUser);
+router.patch(
+  "/edit-profile/:id",
+  authenticateToken,
+  uploadUser.single("photo"),
+  patchUser,
+);
 
 export default router;

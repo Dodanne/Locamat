@@ -104,10 +104,10 @@ export const patchBannedUser = async (req, res) => {
         .status(403)
         .json({ message: "Impossible de se bannir soi-même" });
     }
-    console.log(banned);
+
     const data = await User.findByPk(id);
     data.status = banned ? "banned" : "active";
-    console.log(data.status);
+
     await data.save();
     res.json(data);
   } catch (err) {
@@ -152,6 +152,51 @@ export const verifyEmail = async (req, res) => {
     res.status(400).json({
       message: "Lien invalide ou expiré",
     });
+    console.log(err);
+  }
+};
+export const patchUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const {
+      first_name,
+      last_name,
+      birthday,
+      email,
+      password,
+      number,
+      street,
+      postal_code,
+      city,
+      phone,
+      user_type,
+      compagny_name,
+      siret,
+    } = req.body;
+
+    const data = await User.findByPk(id);
+    data.first_name = first_name;
+    data.last_name = last_name;
+    data.birthday = birthday;
+    data.email = email;
+    data.number = number;
+    data.street = street;
+    data.postal_code = postal_code;
+    data.city = city;
+    data.phone = phone;
+    data.user_type = user_type;
+    data.compagny_name = compagny_name ?? null;
+    data.siret = siret ?? null;
+
+    if (password && password.trim() !== "") {
+      data.password = password;
+    }
+    if (req.file) {
+      data.photo = req.file.filename;
+    }
+    await data.save();
+    res.json(data);
+  } catch (err) {
     console.log(err);
   }
 };
