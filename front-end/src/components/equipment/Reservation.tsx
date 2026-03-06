@@ -112,11 +112,7 @@ export default function Reservations({equipment}: ReservationsProps){
                             </div>
                             <span className="flex text-sm text-gray-600 text-center">La caution sera restituée après le retour du matériel en bon état</span>
                         </div>
-                    
-                )
-
-                }
-                
+                                 )  }
                 <button onClick={handleClick} className="btn flex-1 items-center rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Réserver</button> 
                 
                 <span className="flex text-sm text-gray-600"><RiSecurePaymentFill className="text-xl mr-4"/> Paiement sécurisé</span>
