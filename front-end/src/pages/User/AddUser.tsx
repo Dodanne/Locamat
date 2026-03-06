@@ -25,6 +25,8 @@ export default function AddUser () {
             });
   const [noMatchPassword,setNoMatchPassword]=useState("")
   const [passwordError, setPasswordError] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const {postUser}=useUsers()
 
   async function handleSubmit(e: React.FormEvent) {
@@ -92,6 +94,7 @@ export default function AddUser () {
         }));
     }
     
+   
 
     return(
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -121,18 +124,22 @@ export default function AddUser () {
             <div className='form-div'>
                     <label className="form-label" htmlFor="password">Mot de passe *</label>
                     <div className="flex items-center">
-                    <input className="form-input" type="password"  name="password" value={formData.password} onChange={handleChange} />
-                    <IoEyeOutline className="text-2xl"/>
-                    <IoEyeOffOutline className="text-2xl"/>
+                    <input className="form-input" type={showPassword ? "text":"password"}  name="password" value={formData.password} onChange={handleChange} />
+                    <button type="button" onClick={()=>setShowPassword(prev=>!prev)}>
+                    {showPassword?
+                    <IoEyeOffOutline className="text-2xl"/>:<IoEyeOutline className="text-2xl"/>}
+                    </button>
                     </div>
                     {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
             </div>
             <div className="form-div">
                     <label className="form-label">Confirmez le mot de passe *</label>
                     <div className="flex items-center">
-                    <input className="form-input" type="password" name="confirm_password" value={formData.confirm_password} onChange={handleChange} placeholder="Confirmez le mot de passe" required />
-                    <IoEyeOutline className="text-2xl" />
-                    <IoEyeOffOutline className="text-2xl"/>
+                    <input className="form-input" type={showConfirmPassword ? "text":"password"} name="confirm_password" value={formData.confirm_password} onChange={handleChange} placeholder="Confirmez le mot de passe" required />
+                     <button type="button" onClick={()=>setShowConfirmPassword(prev=>!prev)}>
+                    {showConfirmPassword?
+                    <IoEyeOffOutline className="text-2xl"/>:<IoEyeOutline className="text-2xl"/>}
+                    </button>
                     </div>
                      {noMatchPassword && <p className="text-red-500 text-sm mt-1">{noMatchPassword}</p>}
             </div>
