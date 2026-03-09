@@ -50,7 +50,7 @@ export const getRentalsByRenter = async (req, res) => {
 };
 export const getRentalByEquipmentId = async (req, res) => {
   try {
-    const id = req.params.equipment_id;
+    const id = req.params.id;
     const data = await Rental.findAll({
       where: {
         equipment_id: id,
