@@ -1,28 +1,6 @@
 import { Rental, User, Equipment, Category } from "../models/index.js";
 import sendEmail from "../services/email.service.js";
 
-export const getAllRentals = async (req, res) => {
-  try {
-    const data = await Rental.findAll({
-      include: [
-        {
-          model: User,
-          as: "renter",
-          attributes: ["user_id", "first_name", "last_name", "email", "photo"],
-        },
-        {
-          model: Equipment,
-          as: "equipment",
-          attributes: ["equipment_id", "title", "price", "photo"],
-        },
-      ],
-    });
-    res.json(data);
-  } catch (err) {
-    console.error(err);
-  }
-};
-
 export const getRentalsByRenter = async (req, res) => {
   try {
     const renterId = req.params.id;
@@ -70,44 +48,15 @@ export const getRentalsByRenter = async (req, res) => {
     res.json({ error: "Erreur serveur" });
   }
 };
-export const getRentalById = async (req, res) => {
+export const getRentalByEquipmentId = async (req, res) => {
   try {
     const id = req.params.id;
-    const data = await Rental.findByPk(id, {
+    const data = await Rental.findAll(id, {
       include: [
         {
           model: Equipment,
           as: "equipment",
-          attributes: [
-            "equipment_id",
-            "title",
-            "price",
-            "photo",
-            "description",
-            "owner_id",
-            "caution",
-          ],
-          include: [
-            {
-              model: User,
-              as: "owner",
-              attributes: [
-                "user_id",
-                "first_name",
-                "last_name",
-                "photo",
-                "city",
-                "rating_avg",
-                "rating_count",
-                "user_type",
-              ],
-            },
-          ],
-        },
-        {
-          model: User,
-          as: "renter",
-          attributes: ["user_id", "first_name", "last_name", "photo", "email"],
+          attributes: ["equipment_id"],
         },
       ],
     });

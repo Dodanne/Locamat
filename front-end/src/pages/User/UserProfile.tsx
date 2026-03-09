@@ -68,7 +68,7 @@ export default function UserProfile (){
                         <div className="flex items-center gap-1">
                             <FaStar  className="text-yellow-400"/>
                             <span className="text-gray-900">{user.rating_avg}</span>
-                            <span className="text-gray-500">{user.rating_count}</span>
+                            <span className="text-gray-500">({user.rating_count} avis)</span>
                         </div>  
                         <div className="flex items-center gap-1">
                             <IoLocationOutline />

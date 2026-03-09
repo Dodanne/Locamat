@@ -209,7 +209,6 @@ npm run dev
 
 ### Rental
 
-- GET '/rent'
 - GET '/rental/:id'
 - GET '/rental/renter/:id'
 - GET '/rental/owner/:id'

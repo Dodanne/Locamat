@@ -1,3 +1,4 @@
+import api from "../api/axios";
 import apiAuth from "../api/axiosAuth";
 import { RentalStatus } from "../types/Rental";
 
@@ -36,5 +37,12 @@ export function useRentals(){
             console.log (err)
         }
     }
-        return {getRenterRentals, getOwnerRentals, patchStatusRental, postRental}
+    async function getRentalbyId(equipment_id:number){
+        try{
+            await api.get(`/rental/${equipment_id}`)
+        } catch (err){
+            console.log (err)
+        }
+    }
+        return {getRenterRentals, getOwnerRentals, patchStatusRental, postRental,  getRentalbyId}
 }

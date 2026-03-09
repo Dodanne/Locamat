@@ -2,9 +2,10 @@ import { RiSecurePaymentFill } from "react-icons/ri";
 import { TbCalendarCancel } from "react-icons/tb";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { fr } from "react-day-picker/locale";
-import { DayPicker, DateRange } from "react-day-picker";
+import { DayPicker} from "react-day-picker";
+import { setHours, setMinutes } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
 import { Equipment } from "../../types/Equipment";
 import { useAuth } from "../../context/AuthContext";
@@ -16,21 +17,32 @@ type ReservationsProps = {
 
 export default function Reservations({equipment}: ReservationsProps){
     const {user_id}=useAuth()
-    const [selected, setSelected] = useState<DateRange| undefined>()
+    const {getRentalbyId}=useRentals()
+    const [from, setFrom] = useState<Date | undefined>();
+    const [to, setTo] = useState<Date | undefined>();
     const navigate=useNavigate()
     const {postRental}=useRentals()
+    const [fromTime, setFromTime] = useState("09:00");
+    const [toTime, setToTime] = useState("17:00");
+    const [rentedDates,setRentedDates]=useState <[]>([])
+
+    const applyTime = (date: Date | undefined, time: string) => {
+        if (!date) return undefined;
+        const [h=0, m=0] = time.split(":").map((str) => parseInt(str, 10));
+        return setHours(setMinutes(date, m), h);
+        };
     
     const handleClick = async ()=> {
         if (!equipment) return;
        
-        if (!selected?.from || !selected?.to) {
+        if (!from?.toISOString() || !to?.toISOString()) {
             alert("Merci de bien vouloir selectionner des dates");
              return 
         }
             try {
                   const form = {
-                     start_date: selected.from.toISOString().split("T")[0],
-                     end_date: selected.to.toISOString().split("T")[0],
+                     start_date: from?.toISOString(),
+                     end_date: to?.toISOString(),
                      total_price: totalPrice,
                      status: "pending",
                      equipment_id: equipment.equipment_id,
@@ -43,9 +55,9 @@ export default function Reservations({equipment}: ReservationsProps){
     }
 
         const  numberOfDays = ()=>{
-            if (!selected?.from || !selected?.to) return 0
-            const start= new Date(selected.from)
-            const end= new Date (selected.to)
+            if (!from?.toISOString()|| !to?.toISOString()) return 0
+            const start= new Date(from?.toISOString())
+            const end= new Date (to?.toISOString())
 
             start.setHours(0, 0, 0, 0)
             end.setHours(0, 0, 0, 0)
@@ -57,6 +69,17 @@ export default function Reservations({equipment}: ReservationsProps){
         const days=Math.round(numberOfDays()/(1000 * 60 * 60 * 24) + 1)
         if (!equipment) return <Loader/>;
          const totalPrice=days*equipment.price
+
+         useEffect(()=>{
+            if (!equipment) return
+            async function  fetchRentalById (){
+                try {
+                    const data= await getRentalbyId((equipment.equipment_id))
+              }catch (err){
+                console.log(err)
+            }
+        } fetchRentalById()
+         }, [equipment.equipment_id])
 
     return(
          <>
@@ -72,8 +95,11 @@ export default function Reservations({equipment}: ReservationsProps){
                  <DayPicker
                         animate
                         mode="range" required
-                        selected={selected}
-                        onSelect={setSelected}
+                        selected={{ from, to }}
+                        onSelect={(range) => {
+                            setFrom(applyTime(range?.from, fromTime));
+                            setTo(applyTime(range?.to, toTime));
+                            }}
                         disabled={{ before: new Date() }
                     // ajouter les non disponibilites
                     }
@@ -95,7 +121,33 @@ export default function Reservations({equipment}: ReservationsProps){
                         navLayout="around"
                         locale={fr}
                          />
-                    {selected && (
+                         {from && (
+                             <div className="flex justify-between gap-4">
+                               <div className="flex flex-col gap-1">
+                                 <label className="text-sm text-gray-600">Heure de début</label>
+                                 <input type="time" value={fromTime} 
+                                   className="form-input"
+                                   onChange={(e) => {
+                                     setFromTime(e.target.value)
+                                     setFrom(applyTime(from, e.target.value))
+                                   }}
+                                 />
+                               </div>
+                               {to && (
+                                 <div className="flex flex-col gap-1">
+                                   <label className="text-sm text-gray-600">Heure de fin</label>
+                                   <input type="time" value={toTime} 
+                                     className="form-input"
+                                     onChange={(e) => {
+                                       setToTime(e.target.value)
+                                       setTo(applyTime(to, e.target.value))
+                                     }}
+                                   />
+                                 </div>
+                               )}
+                             </div>
+                            )}
+                    {from && to && (
                         <div className="flex flex-col gap-3">
                             <div className="flex justify-between">
                             <span className="font-semibold">{equipment.price} € x {days} {days===1?"jour":"jours"}</span> <br />
