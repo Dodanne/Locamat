@@ -8,6 +8,7 @@ export function useCategories (){
       return res.data
     } catch (err) {
       console.log(err)
+      return []
     }
   };
 

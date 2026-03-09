@@ -20,6 +20,7 @@ export default function EquipmentItem() {
     const {id}=useParams();
     const {getEquipmentById}=useEquipment()
     const {getEquipmentReviews}=useReviews()
+    const [error, setError] = useState("")
    
     useEffect(() => {
         if (!id) return
@@ -29,6 +30,7 @@ export default function EquipmentItem() {
         setEquipmentById (data) 
         }catch(err){
             console.log(err)
+            setError("Equipement introuvable")
         }} fetchEquipmentById()   
         }, [id]);
     
@@ -45,7 +47,8 @@ export default function EquipmentItem() {
         }
     }fetchEquipmentReviews()
     }, [equipment?.equipment_id])
-
+    
+        if (error) return <div className="container py-8 text-center text-red-500">{error}</div>
         if (!equipment) return <Loader/>;
         return (
         <div className="container py-8">

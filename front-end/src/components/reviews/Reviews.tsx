@@ -14,7 +14,7 @@ export default function Reviews ({ rental, reviewSubmitted }: ReviewProps){
     const [ratingUser,setRatingUser] = useState(5);
     const [commentEquipment, setCommentEquipment] = useState("");
     const [commentUser, setCommentUser] = useState("");
-    
+    const [error, setError] = useState("")
     const {postUserReview,postEquipmentReviews,}=useReviews()
     const {user_id}=useAuth()
   
@@ -41,6 +41,7 @@ export default function Reviews ({ rental, reviewSubmitted }: ReviewProps){
           reviewSubmitted()
         } catch (err){
             console.log(err)
+            setError("Impossible d'envoyer votre avis")
         }
     }
 
@@ -53,7 +54,7 @@ export default function Reviews ({ rental, reviewSubmitted }: ReviewProps){
         { rental.renter?.user_id === user_id && (
         <div className="w-full ">
         <h2 className="text-[1.1rem] font-semibold text-center py-4"> Laisser un avis sur le materiel</h2>
-
+          
      
       <div className="flex gap-6 py-4">
         <label className="font-medium"> Notez le materiel </label>
@@ -97,6 +98,7 @@ export default function Reviews ({ rental, reviewSubmitted }: ReviewProps){
 
       </div>
       </div>
+      {error && <p className="text-red-500 text-sm">{error}</p>}
           <div className="flex justify-center">
       <button type="submit" className="btn bg-accent text-white hover:bg-[#0087BB] w-3/4">
         Envoyer l'avis

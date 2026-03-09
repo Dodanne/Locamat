@@ -63,9 +63,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       navigate(`/user-profile`)
     } catch (err:any) {
       console.log(err);
-      setError(err.message);
+      if(err.response?.status===401) {
+        setError("Email ou mot de passe incorrect")
+      }else {
+        setError("Une erreur est survenue, veuillez réessayer ultérieurement")
+      }
+      }
     }
-  }
+
   
   async  function getVerifiedEmail (){
     if(!token) return
@@ -74,6 +79,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       navigate("/connexion")
     } catch (err) {
       console.log(err)
+      setError("Lien de vérification invalide")
     }
   }
   return (

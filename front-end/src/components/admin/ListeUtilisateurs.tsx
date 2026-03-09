@@ -12,6 +12,7 @@ export default function ListeUtilisateurs() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [sortDate, setSortDate] = useState<string>("recent");
   const [users,setUsers]=useState<User []>([])
+  const [error, setError] = useState("")
 
   useEffect(() => {
     async function fetchUsers(){
@@ -20,6 +21,7 @@ export default function ListeUtilisateurs() {
         setUsers(data||[])
         }catch(err){
           console.log (err)
+          
         }
       } fetchUsers()
   }, []);
@@ -31,6 +33,7 @@ export default function ListeUtilisateurs() {
       setUsers(prev =>prev.map(u => u.user_id === userId ? { ...u, status: !isBanned ? "banned" : "active" } : u ))
         }catch(err){
           console.log(err)
+          setError("Impossible de supprimer l'utilisateur")
         }}
 const filteredUsers = users
   .filter(u => (`${u.first_name} ${u.last_name}`).toLowerCase().includes(filterName.toLowerCase()) )
@@ -61,6 +64,7 @@ const filteredUsers = users
           <option value="oldest">Premieres inscriptions</option>
         </select>
       </div>
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     <table className="min-w-full bg-white border rounded shadow">
       <thead className="bg-gray-100">
         <tr>

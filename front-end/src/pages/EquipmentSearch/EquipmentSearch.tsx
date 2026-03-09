@@ -24,6 +24,7 @@ export default function EquipmentSearch() {
   const [maxDistance, setMaxDistance] = useState<number>(1000);
   const [results, setResults] = useState<Equipment[]>([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false)
   const limit = 9;
  
    useEffect(()=>{
@@ -31,7 +32,7 @@ export default function EquipmentSearch() {
     try{
         const data=await getCategories()
         setCategories(data)
-      console.log(data)
+      
     } catch (err){
       console.log (err)
     }} fetchCategories()
@@ -56,12 +57,15 @@ useEffect(() => {
       if (search) params.q = search;
       if (selectedCategories.length) params.categories = selectedCategories;
       if (maxPrice) params.maxPrice = maxPrice;
-
+      setLoading(true)
       const data = await getSearchEquipment(params);
       setResults(Array.isArray(data) ? data : []);
+      setLoading(false)
       setHasSearched(true);
     } catch (err) {
       console.log(err);
+      setResults([])
+      setLoading(false)
     }
   };
 
@@ -75,7 +79,7 @@ const resetFilters = () => {
 
 const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
     const category_id = Number(e.target.value);
-    console.log(category_id)
+    
     setSelectedCategories((prev) =>
       prev.includes(category_id) ? prev.filter((id) => id !== category_id) : [...prev, category_id]
     );
@@ -85,7 +89,7 @@ const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
   setPage(1);
 }, [search, selectedCategories, maxPrice]);
 
-if(!results) return <Loader/>
+if(loading) return <Loader/>
   
   return (
     <div className="container py-8">

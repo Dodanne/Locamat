@@ -15,6 +15,7 @@ export function useEquipment(){
       return res.data
     } catch (err) {
       console.log(err)
+      return null
   };
     }
 
@@ -24,6 +25,7 @@ export function useEquipment(){
       return res.data
     } catch (err) {
       console.log(err)
+      return []
     } 
     }
 
@@ -38,10 +40,11 @@ export function useEquipment(){
     }
 
     const res = await api.get(`/equipments/search?${query.toString()}`);
-    console.log(res.data)
+   
     return res.data
     } catch (err){
         console.log(err)
+        return []
     }
     }
 

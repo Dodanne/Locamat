@@ -17,8 +17,8 @@ export default function ReviewsUserProfile(){
     const {getUserById}=useUsers()
     const {getUserReviews}=useReviews()
     const [user, setUser] = useState<User|null>(null);
-    const [userReviews, setUserReviews] = useState<ReviewUser[]>([]);
-     const baseUrl=import.meta.env.VITE_BASE_URL
+    const [userReviews, setUserReviews] = useState<ReviewUser[]>([])
+    const [error, setError] = useState("")
 
      useEffect(() => {
         if(!user_id) return
@@ -29,6 +29,7 @@ export default function ReviewsUserProfile(){
          setUser(data)
      }catch(err){
             console.log(err)
+            setError("Impossible de charger le profil")
         }
     }fetchUserById()
     }, [user_id])
@@ -81,6 +82,7 @@ export default function ReviewsUserProfile(){
                             </div>
                         </div>
                     </div>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
                     {userReviews.length > 0 ? (
                         
                          <div className="flex flex-col gap-4">

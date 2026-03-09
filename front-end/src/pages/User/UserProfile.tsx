@@ -16,7 +16,6 @@ import { useAuth } from "../../context/AuthContext";
 import { useUsers } from "../../hook/useUsers";
 import { User } from "../../types/User";
 import Loader from "../../components/Loader";
-import UserForm from "./UserForm";
 
 
 export default function UserProfile (){

@@ -31,6 +31,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
       return res.data
     } catch (err){
       console.log(err)
+      return []
     }
   };
 
@@ -42,6 +43,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
     }
     catch (err) {
         console.log(err);
+        throw err
     }
     }
 
@@ -75,6 +77,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
         return res.data
         } catch (err){
         console.log (err)
+        throw err
         }
     }
   async function getUserEquipments(id:number) {
@@ -83,7 +86,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
                     setUserEquipments(Array.isArray(res.data) ? res.data : []);
                 } catch (err) {
                     console.log(err);
-                }
+                               }
     }
 
     

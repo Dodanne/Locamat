@@ -9,6 +9,7 @@ import FormatDate from "../FormatDate";
 export default function ListeAdministrateurs() {
   const [admin, setAdmin] = useState<User[]>([]);
   const { deleteAdmin, getAdmins}=useAdmins()
+  const [error, setError] = useState("")
 
   useEffect(() => {
     async function fetchAdmins(){
@@ -28,6 +29,7 @@ export default function ListeAdministrateurs() {
     setAdmin(prev => prev.filter(a => a.user_id !== userId))
      }catch(err){
       console.log(err)
+      setError("Impossible de supprimer l'administrateur")
      }
 };
 
@@ -37,6 +39,7 @@ export default function ListeAdministrateurs() {
     <h2 className="text-2xl font-semibold mb-4">Liste des administrateurs </h2>
      <button className="btn bg-accent text-white p-2 relative"> <TiPlus/> Ajouter un admin </button>
     </div>
+     {error && <p className="text-red-500 text-sm">{error}</p>}
     <table className="min-w-full bg-white border rounded shadow">
       <thead className="bg-gray-100">
         <tr>

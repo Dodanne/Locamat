@@ -25,7 +25,8 @@ export default function Reservations({equipment}: ReservationsProps){
     const {postRental}=useRentals()
     const [fromTime, setFromTime] = useState("09:00");
     const [toTime, setToTime] = useState("17:00");
-    const [rentedDates,setRentedDates]=useState <[]>([])
+    const [rentedDates,setRentedDates]=useState <{from:Date; to:Date}[]>([])
+      const [error, setError] = useState("")
 
     const applyTime = (date: Date | undefined, time: string) => {
         if (!date) return undefined;
@@ -52,6 +53,7 @@ export default function Reservations({equipment}: ReservationsProps){
             navigate(`/summary-rental`)
         }catch (err){
             console.log(err)
+            setError("Impossible créer la réservation")
         }
     }
 
@@ -84,10 +86,11 @@ export default function Reservations({equipment}: ReservationsProps){
                     setRentedDates(dataRanges)
               }catch (err){
                 console.log(err)
+                setError("Chargement des disponibilités de l'équipement impossible")
             }
         } fetchRentalById()
          }, [equipment.equipment_id])
-            console.log (rentedDates)
+            
     return(
          <>
          {equipment.owner_id && equipment.owner_id!==Number(user_id )&& (
@@ -180,7 +183,7 @@ export default function Reservations({equipment}: ReservationsProps){
                             <span className="flex text-sm text-gray-600 text-center">La caution sera restituée après le retour du matériel en bon état</span>
                         </div>
                                  )  }
-                                 
+                {error && <p className="text-red-500 text-sm">{error}</p>}
                 <button onClick={handleClick} className="btn flex-1 items-center rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Réserver</button> 
                
                 <span className="flex text-sm text-gray-600"><RiSecurePaymentFill className="text-xl mr-4"/> Paiement sécurisé</span>

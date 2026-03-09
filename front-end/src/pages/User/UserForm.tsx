@@ -32,6 +32,7 @@ export default function UserForm() {
   const [passwordError, setPasswordError] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+   const [error, setError] = useState("")
   
 
   async function handleSubmit(e: React.FormEvent) {
@@ -67,6 +68,7 @@ export default function UserForm() {
             }
              } catch (err) {
                  console.log(err);
+                 setError(mode === "edit" ? "Impossible de modifier le profil, veuillez réessayer" : "Impossible de créer le compte, veuillez réessayer" )
              }
          }
 
@@ -127,6 +129,7 @@ export default function UserForm() {
             })
         } catch (err){
             console.log(err)
+            setError("Impossible de charger les informations")
         }
     }
     fetchUserById()
@@ -231,6 +234,7 @@ export default function UserForm() {
             </div>
             </>
             )}
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             <div className="flex gap-4 sm:flex-row mt-4">
                 <button className=" flex-1 items-center h-10 rounded-md bg-white border border-gray-300 text-primary text-sm font-medium hover:bg-gray-300 transition cursor-pointer">Annuler</button>
                 <button type="submit" className=" flex-1 items-center h-10 rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">{mode==="edit"? "Sauvegarder" : "Créer le compte"}</button>

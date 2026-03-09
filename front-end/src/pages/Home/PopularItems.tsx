@@ -12,7 +12,7 @@ export default function PopularItems() {
       async function fetchPopularEquipment(){
         try{
         const data = await getEquipment6First()
-        setEquipment6First(data)
+        setEquipment6First(data || [])
         } catch (err){
           console.log(err)
         }

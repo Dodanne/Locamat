@@ -19,7 +19,6 @@ export default function OwnerRentalsUserProfile(){
     const [hasReview, setHasReview] =  useState<{ [rental_id: number]: boolean }>({});
     const [ownerRentals,setOwnerRentals]=useState<Rental[]>([])
     const { getUserIsReview}=useReviews()
-    const baseUrl=import.meta.env.VITE_BASE_URL
     const {user_id} =useAuth()
     
         useEffect(() => {
@@ -53,6 +52,7 @@ export default function OwnerRentalsUserProfile(){
         
         } catch(err){
           console.log(err)
+          
         }
       }isReview()
     },[ ownerRentals])

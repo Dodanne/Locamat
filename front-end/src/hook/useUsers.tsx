@@ -10,6 +10,7 @@ export function useUsers(){
         return Array.isArray(res.data) ? res.data : []
       } catch (err) {
         console.log(err);
+        return []
       }
     }
     async function deleteUser (userId:number, isBanned: boolean){
@@ -17,7 +18,7 @@ export function useUsers(){
      await apiAuth.patch(`/${userId}/ban`, { banned: !isBanned })
     } catch (err) {
     console.log(err);
-    alert("Impossible de modifier le statut");
+     throw err
   }
     }
     async function getUserById(user_id:number){
@@ -26,15 +27,26 @@ export function useUsers(){
                return res.data
             } catch (err) {
                 console.log(err);
+                throw err
             }
     }
     async function postUser(form:FormData){
+      try{
       const res= await api.post("/new-user", form);
       return res.data;
+      }catch(err){
+        console.log(err)
+        throw err
+      }
     }
     async function patchUser(user_id:number, form: FormData){
-      const res= await apiAuth.patch(`/edit-profile/${user_id}`, form)
+      try{
+        const res= await apiAuth.patch(`/edit-profile/${user_id}`, form)
       return res.data
+       }catch(err){
+        console.log(err)
+        throw err
+      }
     }
     return { getUsers, deleteUser, getUserById, postUser, patchUser}
 }

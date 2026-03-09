@@ -12,6 +12,7 @@ export function useRentals(){
                
             } catch (err) {
                 console.log(err);
+                return []
             }
         }
     async function getOwnerRentals(user_id:number) {
@@ -20,6 +21,7 @@ export function useRentals(){
                 return Array.isArray(res.data) ? res.data : [] // pour ne pas avoir null=>tableau vide  
             } catch (err) {
                 console.log(err);
+                return []
             }
         }
     async function patchStatusRental ( id:number, newStatus:RentalStatus,){
@@ -28,6 +30,7 @@ export function useRentals(){
               
         } catch (err){
             console.log (err)
+            throw err
         }
     }
     async function postRental(form:any){
@@ -35,15 +38,17 @@ export function useRentals(){
              await apiAuth.post("/rental/new-rental", form)
         }catch (err){
             console.log (err)
+            throw err
         }
     }
     async function getRentalbyId(equipment_id:number){
         try{
            const res = await api.get(`/rental/${equipment_id}`)
-           console.log (res.data)
+   
            return res.data
         } catch (err){
             console.log (err)
+            return []
         }
     }
         return {getRenterRentals, getOwnerRentals, patchStatusRental, postRental,  getRentalbyId}

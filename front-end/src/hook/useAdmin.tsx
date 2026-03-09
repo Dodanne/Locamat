@@ -8,13 +8,15 @@ export function useAdmins(){
         return Array.isArray(res.data) ? res.data : [] 
       } catch (err) {
         console.log(err);
+        return []
       }
     }
     async function deleteAdmin (userId: number){
         try {
-           await apiAuth.patch(`/${userId}/isAdmin`, {role:"user "}) 
+           await apiAuth.patch(`/${userId}/isAdmin`, {role:"user"}) 
          } catch (err) {
            console.log(err)
+           throw err
        }
     }
     return{getAdmins, deleteAdmin}
