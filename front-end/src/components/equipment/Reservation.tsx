@@ -10,6 +10,7 @@ import Loader from "../../components/Loader";
 import { Equipment } from "../../types/Equipment";
 import { useAuth } from "../../context/AuthContext";
 import { useRentals } from "../../hook/useRentals";
+import { Rental } from "../../types/Rental";
 
 type ReservationsProps = {
   equipment: Equipment;
@@ -75,12 +76,14 @@ export default function Reservations({equipment}: ReservationsProps){
             async function  fetchRentalById (){
                 try {
                     const data= await getRentalbyId((equipment.equipment_id))
+                    console.log(data)
+                    setRentedDates(data)
               }catch (err){
                 console.log(err)
             }
         } fetchRentalById()
          }, [equipment.equipment_id])
-
+            console.log (rentedDates)
     return(
          <>
          {equipment.owner_id && equipment.owner_id!==Number(user_id )&& (
@@ -100,9 +103,7 @@ export default function Reservations({equipment}: ReservationsProps){
                             setFrom(applyTime(range?.from, fromTime));
                             setTo(applyTime(range?.to, toTime));
                             }}
-                        disabled={{ before: new Date() }
-                    // ajouter les non disponibilites
-                    }
+                        disabled={[{ before: new Date() }, ...rentedDates] }
                         weekStartsOn={1} 
                         modifiersClassNames={{
                             selected: "bg-accent text-black rounded",  

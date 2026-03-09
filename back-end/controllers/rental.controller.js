@@ -1,4 +1,4 @@
-import { Rental, User, Equipment, Category } from "../models/index.js";
+import { Rental, User, Equipment } from "../models/index.js";
 import sendEmail from "../services/email.service.js";
 
 export const getRentalsByRenter = async (req, res) => {
@@ -50,15 +50,13 @@ export const getRentalsByRenter = async (req, res) => {
 };
 export const getRentalByEquipmentId = async (req, res) => {
   try {
-    const id = req.params.id;
-    const data = await Rental.findAll(id, {
-      include: [
-        {
-          model: Equipment,
-          as: "equipment",
-          attributes: ["equipment_id"],
-        },
-      ],
+    const id = req.params.equipment_id;
+    const data = await Rental.findAll({
+      where: {
+        equipment_id: id,
+        status: ["pending", "accepted", "completed"],
+      },
+      attributes: ["rental_id", "start_date", "end_date", "status"],
     });
     res.json(data);
   } catch (err) {

@@ -20,7 +20,6 @@ export default function EquipmentItem() {
     const {id}=useParams();
     const {getEquipmentById}=useEquipment()
     const {getEquipmentReviews}=useReviews()
-    const baseUrl=import.meta.env.VITE_BASE_URL
    
     useEffect(() => {
         if (!id) return
@@ -40,7 +39,7 @@ export default function EquipmentItem() {
     try{
         const data= await getEquipmentReviews(id)
          setEquipmentReview(data)
-         console.log(data)
+         
      }catch(err){
             console.log(err)
         }

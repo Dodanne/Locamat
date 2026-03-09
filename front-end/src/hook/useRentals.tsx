@@ -39,7 +39,9 @@ export function useRentals(){
     }
     async function getRentalbyId(equipment_id:number){
         try{
-            await api.get(`/rental/${equipment_id}`)
+           const res = await api.get(`/rental/${equipment_id}`)
+           console.log (res.data)
+           return res.data
         } catch (err){
             console.log (err)
         }

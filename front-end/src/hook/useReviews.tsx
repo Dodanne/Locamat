@@ -43,7 +43,6 @@ async function getEquipmentReviews(equipment_id:number){
         return res.data
     }catch (err){
         console.log(err)
-        return []
     }
 }
 async function getUserReviews(user_id:number){
