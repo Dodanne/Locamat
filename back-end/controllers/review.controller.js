@@ -3,7 +3,6 @@ import Equipment from "./../models/Equipment.js";
 import User from "./../models/User.js";
 import Review_equipment from "../models/Review_equipment.js";
 import Review_user from "../models/Review_user.js";
-import { Op } from "sequelize";
 
 export const createUserReview = async (req, res) => {
   try {
@@ -32,10 +31,11 @@ export const createUserReview = async (req, res) => {
       reviewer_id,
       reviewed_user_id,
     });
+
     res.json(data);
-    console.log(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const createEquipmentReview = async (req, res) => {
@@ -62,9 +62,9 @@ export const createEquipmentReview = async (req, res) => {
       reviewed_user_id,
     });
     res.json(data);
-    console.log(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const getEquipmentIsReview = async (req, res) => {
@@ -75,6 +75,7 @@ export const getEquipmentIsReview = async (req, res) => {
     res.json({ hasReview });
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const getUserIsReview = async (req, res) => {
@@ -85,6 +86,7 @@ export const getUserIsReview = async (req, res) => {
     res.json({ hasReview });
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const getUserReviews = async (req, res) => {
@@ -111,10 +113,16 @@ export const getUserReviews = async (req, res) => {
         },
       ],
     });
-    console.log(data);
+    if (data.length === 0) {
+      return res.status(404).json({
+        message: "Aucun avis sur cet utilisateur",
+      });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
+
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const getEquipmentReviews = async (req, res) => {
@@ -135,8 +143,14 @@ export const getEquipmentReviews = async (req, res) => {
         },
       ],
     });
+    if (data.length === 0) {
+      return res.status(404).json({
+        message: "Aucun avis sur cet équipement",
+      });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };

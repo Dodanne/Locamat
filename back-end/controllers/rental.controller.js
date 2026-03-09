@@ -41,11 +41,15 @@ export const getRentalsByRenter = async (req, res) => {
       ],
       order: [["createdAt", "DESC"]],
     });
-
+    if (data.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Aucune location trouvée pour ce loueur" });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
-    res.json({ error: "Erreur serveur" });
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const getRentalByEquipmentId = async (req, res) => {
@@ -54,13 +58,19 @@ export const getRentalByEquipmentId = async (req, res) => {
     const data = await Rental.findAll({
       where: {
         equipment_id: id,
-        status: ["pending", "accepted", "completed"],
+        status: ["pending", "accepted", "confirmed"],
       },
       attributes: ["rental_id", "start_date", "end_date", "status"],
     });
+    if (data.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Aucune location sur cet équipement" });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const getRentalsByOwner = async (req, res) => {
@@ -88,10 +98,17 @@ export const getRentalsByOwner = async (req, res) => {
         },
       ],
     });
+    if (data.length === 0) {
+      return res
+        .status(404)
+        .json({
+          message: "Aucune location trouvée pour ce propriétaire de matériel",
+        });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
-    res.json({ error: "Erreur serveur" });
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const createRental = async (req, res) => {
@@ -130,9 +147,11 @@ export const createRental = async (req, res) => {
       <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
     `,
     );
+
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const patchRentalStatus = async (req, res) => {
@@ -151,6 +170,9 @@ export const patchRentalStatus = async (req, res) => {
     const data = await Rental.findByPk(id);
     data.status = status;
     await data.save();
+    if (!data) {
+      return res.status(404).json({ message: "Location non trouvée" });
+    }
     const renterEmail = equipment.renter.email;
     if (status === "accepted") {
       await sendEmail(
@@ -179,5 +201,6 @@ export const patchRentalStatus = async (req, res) => {
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };

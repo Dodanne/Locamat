@@ -72,12 +72,16 @@ export default function Reservations({equipment}: ReservationsProps){
          const totalPrice=days*equipment.price
 
          useEffect(()=>{
-            if (!equipment) return
+            if (!equipment?.equipment_id) return
             async function  fetchRentalById (){
                 try {
                     const data= await getRentalbyId((equipment.equipment_id))
-                    console.log(data)
-                    setRentedDates(data)
+                    const dataRanges= data.map((r : Rental)=>({
+                        from: new Date (r.start_date),
+                        to: new Date (r.end_date)
+                    }))
+                
+                    setRentedDates(dataRanges)
               }catch (err){
                 console.log(err)
             }
@@ -106,6 +110,7 @@ export default function Reservations({equipment}: ReservationsProps){
                         disabled={[{ before: new Date() }, ...rentedDates] }
                         weekStartsOn={1} 
                         modifiersClassNames={{
+                            rented: "bg-red-400 text-white line-through rounded-full ",
                             selected: "bg-accent text-black rounded",  
                             range_start: "bg-accent text-black rounded-l-full",
                             range_end: "bg-accent text-black rounded-r-full",   
@@ -119,9 +124,18 @@ export default function Reservations({equipment}: ReservationsProps){
                                 : <IoChevronForward  className="text-accent w-6 h-6" onClick={onClick}/>;
                                  }
                                     }}
+                        modifiers={{rented: rentedDates}}
                         navLayout="around"
                         locale={fr}
-                         />
+                    /> 
+                         <div className="flex gap-4 text-sm">
+                            <span className="flex items-center gap-2">
+                                <div className="w-4 h-4 bg-red-400 rounded"></div> En cours de réservation <br /> ou déjà réservé 
+                            </span>
+                            <span className="flex items-center gap-2">
+                                <div className="w-4 h-4 bg-accent rounded"></div> Votre sélection
+                            </span>
+                        </div>
                          {from && (
                              <div className="flex justify-between gap-4">
                                <div className="flex flex-col gap-1">
@@ -166,8 +180,9 @@ export default function Reservations({equipment}: ReservationsProps){
                             <span className="flex text-sm text-gray-600 text-center">La caution sera restituée après le retour du matériel en bon état</span>
                         </div>
                                  )  }
+                                 
                 <button onClick={handleClick} className="btn flex-1 items-center rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Réserver</button> 
-                
+               
                 <span className="flex text-sm text-gray-600"><RiSecurePaymentFill className="text-xl mr-4"/> Paiement sécurisé</span>
                 <span className="flex text-sm text-gray-600"><TbCalendarCancel className="text-xl mr-4"/> Annulation gratuite 24h avant</span>
             </div>

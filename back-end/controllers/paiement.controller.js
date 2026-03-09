@@ -2,7 +2,6 @@ import { stripe } from "../services/stripe.service.js";
 import Rental from "../models/Rental.js";
 
 export const postPaiementSession = async (req, res) => {
-  console.log("creation paiement");
   try {
     const { rental_id } = req.body;
     const data = await stripe.checkout.sessions.create({
@@ -27,11 +26,11 @@ export const postPaiementSession = async (req, res) => {
     res.json({ url: data.url });
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };
 
 export const postWebHook = async (req, res) => {
-  console.log("webhook actif");
   const signature = req.headers["stripe-signature"];
   const endpointSecret = process.env.STRIPE_WEBHOOK_KEY;
 
@@ -57,5 +56,6 @@ export const postWebHook = async (req, res) => {
     res.json({ received: true });
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };

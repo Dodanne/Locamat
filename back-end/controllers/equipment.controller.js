@@ -31,9 +31,13 @@ export const getAllEquipments = async (req, res) => {
         },
       ],
     });
+    if (data.length === 0) {
+      return res.status(404).json({ message: "Aucun matériel trouvé" });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };
 export const get6FirstEquipment = async (req, res) => {
@@ -63,9 +67,13 @@ export const get6FirstEquipment = async (req, res) => {
       limit: 6,
       order: [["createdAt", "DESC"]],
     });
+    if (data.length === 0) {
+      return res.status(404).json({ message: "Aucun matériel trouvé" });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };
 
@@ -92,13 +100,16 @@ export const getEquipmentById = async (req, res) => {
         {
           model: Category,
           as: "category",
-          //attribute
         },
       ],
     });
+    if (!data) {
+      return res.status(404).json({ message: "Matériel non trouvé" });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };
 
@@ -133,9 +144,15 @@ export const getEquipmentByUser = async (req, res) => {
         },
       ],
     });
+    if (data.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Aucun équipement n'appartient à cet utilisateur" });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };
 
@@ -143,7 +160,6 @@ export const createEquipment = async (req, res) => {
   try {
     const { title, description, category_id, price, caution } = req.body;
     const photo = req.file ? req.file.path : "default.png";
-    console.log("Fichier uploadé :", req.file);
     const owner_id = req.user.id;
     const data = await Equipment.create({
       title,
@@ -155,9 +171,9 @@ export const createEquipment = async (req, res) => {
       owner_id: owner_id,
     });
     res.json(data);
-    console.log(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };
 
@@ -183,7 +199,7 @@ export const getSearchEquipments = async (req, res) => {
       where.price = { [Op.lte]: Number(maxPrice) };
     }
 
-    const equipments = await Equipment.findAll({
+    const data = await Equipment.findAll({
       limit,
       offset,
       where,
@@ -203,10 +219,15 @@ export const getSearchEquipments = async (req, res) => {
       ],
       order: [["createdAt", "DESC"]],
     });
-
-    res.json(equipments);
+    if (data.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Aucun équipement ne correspond à la recherche" });
+    }
+    res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };
 
@@ -216,23 +237,22 @@ export const deleteEquipment = async (req, res) => {
     const deletedEquipment = await Equipment.destroy({
       where: { equipment_id: Number(id) },
     });
-    return res.status(200).json({
+    if (!deletedEquipment) {
+      return res.status(404).json({ message: "Equipement non trouvé" });
+    }
+    return res.json({
       message: "Équipement supprimé avec succès",
       equipment: deletedEquipment,
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({
-      message: "Erreur lors de la suppression de l'équipement",
-    });
+    return res.status(500).json({ message: "Erreur serveur" });
   }
 };
 export const updateEquipment = async (req, res) => {
   try {
     const id = req.params.id;
     const { title, price, description } = req.body;
-    console.log("req.body →", req.body);
-    console.log("req.file →", req.file);
     const data = await Equipment.findByPk(id);
     data.title = title;
     data.price = Number(price);
@@ -242,8 +262,12 @@ export const updateEquipment = async (req, res) => {
       data.photo = req.file.path;
     }
     await data.save(); //updatedAt
+    if (!data) {
+      return res.status(404).json({ message: "Equipement non trouvé" });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };

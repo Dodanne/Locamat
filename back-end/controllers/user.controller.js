@@ -8,9 +8,15 @@ import {
 export const getAllUsers = async (req, res) => {
   try {
     const data = await User.findAll();
+    if (data.length === 0) {
+      return res.status(404).json({
+        message: "Aucun utilisateur trouvé",
+      });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 
@@ -18,9 +24,15 @@ export const getUserById = async (req, res) => {
   try {
     const id = req.params.id;
     const data = await User.findByPk(id);
+    if (!data) {
+      return res.status(404).json({
+        message: "Utilisateur introuvable",
+      });
+    }
     res.json(data.toJSON());
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const createUser = async (req, res) => {
@@ -73,15 +85,21 @@ export const createUser = async (req, res) => {
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const getAllRoleUsers = async (req, res) => {
   try {
     const data = await User.findAll({ where: { role: "user" } });
+    if (data.length === 0) {
+      return res.status(404).json({
+        message: "Aucune rôle 'user' trouvé",
+      });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ err: "Erreur serveur" });
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const getAllRoleAdmin = async (req, res) => {
@@ -89,6 +107,11 @@ export const getAllRoleAdmin = async (req, res) => {
     const data = await User.findAll({
       where: { role: "ADMIN" },
     });
+    if (data.length === 0) {
+      return res.status(404).json({
+        message: "Aucun rôle 'ADMIN' trouvé ",
+      });
+    }
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -112,7 +135,7 @@ export const patchBannedUser = async (req, res) => {
     res.json(data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ err: "Erreur serveur" });
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const patchIsAdmin = async (req, res) => {
@@ -124,7 +147,7 @@ export const patchIsAdmin = async (req, res) => {
     res.json(data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ err: "Erreur serveur" });
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const verifyEmail = async (req, res) => {
@@ -153,6 +176,7 @@ export const verifyEmail = async (req, res) => {
       message: "Lien invalide ou expiré",
     });
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 export const patchUser = async (req, res) => {
@@ -198,5 +222,6 @@ export const patchUser = async (req, res) => {
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };

@@ -22,6 +22,8 @@ import Summary from "./pages/EquipmentItem/Summary";
 import StatusProvider from "./context/StatusContext";
 import PaiementSuccess from "./pages/Reservation/SuccesPaiement";
 import PaiementFail from "./pages/Reservation/FailPaiement";
+import NotFound from "./pages/Errors/404";
+import ServerError from "./pages/Errors/500";
 
 
 
@@ -51,7 +53,9 @@ function App() {
                 <Route path="/summary-rental" element={<ProtectedRoute><Summary /></ProtectedRoute>} />
                 <Route path="/paiement-success" element={<ProtectedRoute><PaiementSuccess /></ProtectedRoute>} />
                 <Route path="/paiement-cancel" element={<ProtectedRoute><PaiementFail /></ProtectedRoute>} />
-                
+                <Route path="/404" element={<NotFound />} />
+                <Route path="/500" element={<ServerError />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
             <Footer />
