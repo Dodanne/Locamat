@@ -95,6 +95,8 @@ Cette application a été réalisée dans le cadre d’un projet de fin de forma
         |    │      |    └───Succes.tsx
         |    │      ├───Chat
         |    │      |    └───ChatPage.tsx
+        |    │      ├───Errors
+        |    │      |    └───404.tsx
         |    │      └───Reservation
         |    │           ├───FailPaiement.tsx
         |    │           └───SuccesPaiement.tsx
