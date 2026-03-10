@@ -10,6 +10,8 @@ export type User = {
   street: string;
   city: string;
   postal_code: string;
+  latitude:string;
+  longitude:string;
   phone: string;
   user_type: string;
   compagny_name?: string;

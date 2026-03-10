@@ -146,6 +146,14 @@ const User = sequelize.define(
         },
       },
     },
+    latitude: {
+      type: DataTypes.DECIMAL(10, 8),
+      allowNull: true,
+    },
+    longitude: {
+      type: DataTypes.DECIMAL(11, 8),
+      allowNull: true,
+    },
     phone: {
       type: DataTypes.STRING,
       allowNull: false,

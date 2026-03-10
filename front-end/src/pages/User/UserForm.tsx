@@ -11,6 +11,8 @@ export default function UserForm() {
     const mode = location.state?.mode ?? 'create'
     const {user_id}=useAuth()
     const {postUser,getUserById, patchUser}= useUsers()
+    const [address, setAddress]=useState("")
+    const [suggestions, setSuggestions]=useState<[]>([])
     const [formData, setFormData] = useState({                 
                 first_name: "",
                 last_name: "",
@@ -23,6 +25,8 @@ export default function UserForm() {
                 street: "",
                 postal_code: "",
                 city: "",
+                latitude:null,
+                longitude:null,
                 phone: "",
                 user_type: "",
                 compagny_name: "",          
@@ -49,6 +53,8 @@ export default function UserForm() {
          form.append("street", formData.street);
          form.append("postal_code", formData.postal_code);
          form.append("city", formData.city);
+         form.append("latitude", formData.latitude ?? "")
+         form.append("longitude", formData.longitude ?? "")
          form.append("phone", formData.phone);
          form.append("user_type", formData.user_type);
          if (formData.user_type === "professionnel") {
@@ -126,7 +132,10 @@ export default function UserForm() {
                 user_type: data.user_type,
                 compagny_name: data.compagny_name ?? "",
                 siret: data.siret ?? "",
+                latitude: data.latitude ?? null,
+                longitude: data.longitude ?? null,
             })
+            setAddress(`${data.number} ${data.street} ${data.postal_code} ${data.city}`)
         } catch (err){
             console.log(err)
             setError("Impossible de charger les informations")
@@ -134,6 +143,36 @@ export default function UserForm() {
     }
     fetchUserById()
    }, [mode, user_id])
+
+   async function fetchSuggestions(query:string){
+    if (query.length<5){
+        setSuggestions([])
+        return
+    }
+    try{
+    const res= await fetch(`https://data.geopf.fr/geocodage/search/?q=${encodeURIComponent(query)}&limit=5`)
+    const data= await res.json()
+    setSuggestions(data.features?? [])
+   } catch (err){
+    console.log (err)
+   }
+}
+   function handleSelectAddress(feature:any){
+    const {housenumber, street, postcode, city}=feature.properties
+    const [longitude,latitude]=feature.geometry.coordinates
+    setFormData(prev=>({
+        ...prev,
+        number:housenumber ?? "",
+        street: street ?? "",
+        postal_code: postcode ?? "",
+        city : city ?? "",
+        latitude,
+        longitude,
+    }))
+    setSuggestions([])
+    setAddress(feature.properties.label)
+
+   }
 
     return(
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -189,24 +228,26 @@ export default function UserForm() {
                     <label className="form-label" htmlFor="photo">Photo </label>
                     <input className="form-input"  name="photo" type="file" accept="image/*" onChange={handleChange} />
             </div>
-             <div className="form-div">
-                     <label className="form-label">Numéro de rue *</label>
-                     <input className="form-input" type="text" name="number" value={formData.number} onChange={handleChange}/>
+             <div className="form-div relative">
+                     <label className="form-label">Adresse *</label>
+                     <input className="form-input" value={address} 
+                     onChange={(e)=>{setAddress(e.target.value) 
+                                    fetchSuggestions(e.target.value)}}
+                                    placeholder="Saisissez votre adresse"
+                                    required/>
+                    <div>
+            {suggestions.length>0 && (
+                        <ul  className="absolute z-10 w-full bg-white border rounded-lg shadow-lg mt-1">
+                             {suggestions.map((s:any) => (
+                                 <li key={s.properties.id} onClick={() => handleSelectAddress(s)}  className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm" >
+                                     {s.properties.label}
+                                 </li>
+                            ))}
+                        </ul>
+                    )}
+            </div> 
             </div>
-            <div className="form-div">
-                    <label className="form-label">Rue *</label>
-                    <input className="form-input" type="text" name="street" value={formData.street} onChange={handleChange}/>
-            </div>
-
-            <div className="form-div">
-                    <label className="form-label">Code postal *</label>
-                    <input className="form-input" type="text" name="postal_code" value={formData.postal_code} onChange={handleChange} />
-            </div>
-
-            <div className="form-div">
-                    <label className="form-label">Ville *</label>
-                    <input className="form-input" type="text" name="city" value={formData.city} onChange={handleChange} />
-            </div>
+           
 
             <div className="form-div">
                     <label className="form-label">Téléphone *</label>
