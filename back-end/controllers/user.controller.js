@@ -88,7 +88,7 @@ export const createUser = async (req, res) => {
     }
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
-      const messages = err.errors.map((e) => e.messages);
+      const messages = err.errors.map((e) => e.message);
       return res.status(400).json({ errors: messages });
     }
     console.log(err);
