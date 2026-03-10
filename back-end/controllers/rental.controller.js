@@ -41,11 +41,7 @@ export const getRentalsByRenter = async (req, res) => {
       ],
       order: [["createdAt", "DESC"]],
     });
-    if (data.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "Aucune location trouvée pour ce loueur" });
-    }
+
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -62,11 +58,7 @@ export const getRentalByEquipmentId = async (req, res) => {
       },
       attributes: ["rental_id", "start_date", "end_date", "status"],
     });
-    if (data.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "Aucune location sur cet équipement" });
-    }
+
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -99,11 +91,9 @@ export const getRentalsByOwner = async (req, res) => {
       ],
     });
     if (data.length === 0) {
-      return res
-        .status(404)
-        .json({
-          message: "Aucune location trouvée pour ce propriétaire de matériel",
-        });
+      return res.status(404).json({
+        message: "Aucune location trouvée pour ce propriétaire de matériel",
+      });
     }
     res.json(data);
   } catch (err) {

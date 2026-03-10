@@ -20,13 +20,14 @@ export default function EquipmentSearch() {
   const navigate = useNavigate();
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [maxPrice, setMaxPrice] = useState<number>(300);
+  const [price, setPrice] = useState<number>(300);
   const [debouncedPrice, setDebouncedPrice] = useState<number>(300)
+  const [distance, setDistance] = useState<number>(30)
+  const [debouncedDistance, setDebouncedDistance] = useState<number>(30)
   const [results, setResults] = useState<Equipment[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false)
   const [userLocation, setUserLocation]=useState<{latitude:number, longitude:number}|null>(null)
-  const [distance, setDistance] = useState<number>(30)
   const [locationError, setLocationError] = useState("")
   const limit = 9;
  
@@ -62,7 +63,7 @@ useEffect(() => {
       if(userLocation) {
         params.latitude=userLocation.latitude
         params.longitude=userLocation.longitude
-        params.distance=distance
+        if (debouncedDistance) params.distance = debouncedDistance
       }
       if (debouncedPrice) params.maxPrice = debouncedPrice
       setLoading(true)
@@ -78,12 +79,13 @@ useEffect(() => {
   };
 
   fetchResults();
-}, [search, selectedCategories,debouncedPrice , page, userLocation, distance])
+}, [search, selectedCategories,debouncedPrice , page, userLocation, debouncedDistance])
 
 const resetFilters = () => {
     setSelectedCategories([]);
     setUserLocation(null)
-    setMaxPrice(300);
+    setPrice(300);
+    setDistance(30)
   };
 
 const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,15 +97,16 @@ const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
   };
   useEffect (()=>{
     const timer=setTimeout(()=>{
-      setDebouncedPrice(maxPrice)
+      setDebouncedPrice(price)
+      setDebouncedDistance(distance)
     },500)
     return ()=> clearTimeout(timer)
-    },[maxPrice])
+    },[price, distance])
 
   useEffect(() => {
     
   setPage(1);
-}, [search, selectedCategories, debouncedPrice, userLocation, distance]);
+}, [search, selectedCategories, debouncedPrice, userLocation, debouncedDistance]);
 
 function handleLocation(){
   if(!navigator.geolocation){
@@ -180,7 +183,7 @@ if(loading) return <Loader/>
 
               <div>
                 <h3 className="text-lg mt-6 text-gray-900">Prix par jour</h3>
-               <Slider max={300} value={maxPrice} onChange={(value: number | string) => setMaxPrice(Number(value))} />
+               <Slider max={300} value={price} onChange={(value: number | string) => setPrice(Number(value))} />
 
                 
               </div>

@@ -31,9 +31,7 @@ export const getAllEquipments = async (req, res) => {
         },
       ],
     });
-    if (data.length === 0) {
-      return res.status(404).json({ message: "Aucun matériel trouvé" });
-    }
+
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -67,9 +65,7 @@ export const get6FirstEquipment = async (req, res) => {
       limit: 6,
       order: [["createdAt", "DESC"]],
     });
-    if (data.length === 0) {
-      return res.status(404).json({ message: "Aucun matériel trouvé" });
-    }
+
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -144,11 +140,7 @@ export const getEquipmentByUser = async (req, res) => {
         },
       ],
     });
-    if (data.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "Aucun équipement n'appartient à cet utilisateur" });
-    }
+
     res.json(data);
   } catch (err) {
     console.log(err);

@@ -3,9 +3,7 @@ import { Category } from "../models/index.js";
 export const getAllCategories = async (req, res) => {
   try {
     const data = await Category.findAll();
-    if (data.length === 0) {
-      return res.status(404).json({ message: "Aucune catégorie trouvée" });
-    }
+
     res.json(data);
   } catch (err) {
     console.log(err);

@@ -113,11 +113,7 @@ export const getUserReviews = async (req, res) => {
         },
       ],
     });
-    if (data.length === 0) {
-      return res.status(404).json({
-        message: "Aucun avis sur cet utilisateur",
-      });
-    }
+
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -143,11 +139,7 @@ export const getEquipmentReviews = async (req, res) => {
         },
       ],
     });
-    if (data.length === 0) {
-      return res.status(404).json({
-        message: "Aucun avis sur cet équipement",
-      });
-    }
+
     res.json(data);
   } catch (err) {
     console.log(err);

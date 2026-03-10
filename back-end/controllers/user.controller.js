@@ -8,11 +8,6 @@ import {
 export const getAllUsers = async (req, res) => {
   try {
     const data = await User.findAll();
-    if (data.length === 0) {
-      return res.status(404).json({
-        message: "Aucun utilisateur trouvé",
-      });
-    }
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -92,6 +87,10 @@ export const createUser = async (req, res) => {
       console.log("Erreur envoi email:", emailErr);
     }
   } catch (err) {
+    if (err.name === "SequelizeValidationError") {
+      const messages = err.errors.map((e) => e.messages);
+      return res.status(400).json({ errors: messages });
+    }
     console.log(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
@@ -99,11 +98,7 @@ export const createUser = async (req, res) => {
 export const getAllRoleUsers = async (req, res) => {
   try {
     const data = await User.findAll({ where: { role: "user" } });
-    if (data.length === 0) {
-      return res.status(404).json({
-        message: "Aucune rôle 'user' trouvé",
-      });
-    }
+
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -115,11 +110,7 @@ export const getAllRoleAdmin = async (req, res) => {
     const data = await User.findAll({
       where: { role: "ADMIN" },
     });
-    if (data.length === 0) {
-      return res.status(404).json({
-        message: "Aucun rôle 'ADMIN' trouvé ",
-      });
-    }
+
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -233,6 +224,10 @@ export const patchUser = async (req, res) => {
     await data.save();
     res.json(data);
   } catch (err) {
+    if (err.name === "SequelizeValidationError") {
+      const messages = err.errors.map((e) => e.messages);
+      return res.status(400).json({ errors: messages });
+    }
     console.log(err);
     res.status(500).json({ error: "Erreur serveur" });
   }

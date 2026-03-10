@@ -20,7 +20,7 @@ export default function ListeAdministrateurs() {
         console.log(err)
       }
     }fetchAdmins()
-  }, [getAdmins]);
+  }, []);
 
    const handleDeleteAdmin = async (userId: number) => {
     if (!confirm(`Êtes-vous sûr de vouloir remettre le rôle de "user" à cet administrateur ? Celui-ci perdra tous ses droits`)) return;
