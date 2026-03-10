@@ -204,6 +204,8 @@ export const patchUser = async (req, res) => {
       user_type,
       compagny_name,
       siret,
+      latitude,
+      longitude,
     } = req.body;
 
     const data = await User.findByPk(id);
@@ -219,6 +221,8 @@ export const patchUser = async (req, res) => {
     data.user_type = user_type;
     data.compagny_name = compagny_name ?? null;
     data.siret = siret ?? null;
+    data.longitude = longitude ?? null;
+    data.latitude = latitude ?? null;
 
     if (password && password.trim() !== "") {
       data.password = password;

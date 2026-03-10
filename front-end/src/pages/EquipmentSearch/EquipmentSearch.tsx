@@ -21,10 +21,13 @@ export default function EquipmentSearch() {
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [maxPrice, setMaxPrice] = useState<number>(300);
-  const [maxDistance, setMaxDistance] = useState<number>(1000);
+  const [debouncedPrice, setDebouncedPrice] = useState<number>(300)
   const [results, setResults] = useState<Equipment[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false)
+  const [userLocation, setUserLocation]=useState<{latitude:number, longitude:number}|null>(null)
+  const [distance, setDistance] = useState<number>(30)
+  const [locationError, setLocationError] = useState("")
   const limit = 9;
  
    useEffect(()=>{
@@ -56,7 +59,12 @@ useEffect(() => {
       const params: any = {page, limit};
       if (search) params.q = search;
       if (selectedCategories.length) params.categories = selectedCategories;
-      if (maxPrice) params.maxPrice = maxPrice;
+      if(userLocation) {
+        params.latitude=userLocation.latitude
+        params.longitude=userLocation.longitude
+        params.distance=distance
+      }
+      if (debouncedPrice) params.maxPrice = debouncedPrice
       setLoading(true)
       const data = await getSearchEquipment(params);
       setResults(Array.isArray(data) ? data : []);
@@ -70,10 +78,11 @@ useEffect(() => {
   };
 
   fetchResults();
-}, [search, selectedCategories, maxPrice, page])
+}, [search, selectedCategories,debouncedPrice , page, userLocation, distance])
 
 const resetFilters = () => {
     setSelectedCategories([]);
+    setUserLocation(null)
     setMaxPrice(300);
   };
 
@@ -84,11 +93,34 @@ const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
       prev.includes(category_id) ? prev.filter((id) => id !== category_id) : [...prev, category_id]
     );
   };
+  useEffect (()=>{
+    const timer=setTimeout(()=>{
+      setDebouncedPrice(maxPrice)
+    },500)
+    return ()=> clearTimeout(timer)
+    },[maxPrice])
 
   useEffect(() => {
+    
   setPage(1);
-}, [search, selectedCategories, maxPrice]);
+}, [search, selectedCategories, debouncedPrice, userLocation, distance]);
 
+function handleLocation(){
+  if(!navigator.geolocation){
+    setLocationError("Géolocalisation impossible sur ce navigateur")
+    return
+  }
+  navigator.geolocation.getCurrentPosition(
+    (pos)=>{
+      setUserLocation({latitude:pos.coords.latitude, longitude:pos.coords.longitude})
+      setLocationError("")
+    },
+    ()=>setLocationError("Impossible de récupérer votre position")
+  )
+}
+function handleResetLocation(){
+  setUserLocation(null)
+}
 if(loading) return <Loader/>
   
   return (
@@ -152,12 +184,22 @@ if(loading) return <Loader/>
 
                 
               </div>
-
-              <div>
-                <h3 className="text-lg mt-6 text-gray-900">Distance maximale</h3>
-                <Slider max={1000} unit="km"  value={maxDistance} onChange={(value: number | string) => setMaxDistance(Number(value))} />
+                <div>
+  <h3 className="text-lg mt-6 text-gray-900">Autour de moi</h3>
+  <label className="flex items-center gap-2 mt-2 cursor-pointer">
+    <input
+      type="checkbox"
+      checked={!!userLocation}
+      onChange={(e) => e.target.checked ? handleLocation() : handleResetLocation()}  />
+                  <span className="text-sm font-semibold">Utiliser ma position</span>
+                </label>
+                {locationError && <p className="text-red-500 text-sm mt-1">{locationError}</p>}
+                {userLocation && (
+                  <div className="mt-2">
+                    <Slider max={200} unit="km" value={distance} onChange={(value) => setDistance(Number(value))} />
+                  </div>
+               )}
               </div>
-
               <button
                 onClick={resetFilters}
                 className="w-full mt-6 h-9 rounded-md border text-sm font-medium hover:bg-gray-100"

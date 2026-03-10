@@ -227,9 +227,9 @@ export const getSearchEquipments = async (req, res) => {
             ? {
                 where: literal(`(
               6371 * acos(
-              cos(radians(${lat})) * cos(radians(\`owner\`.\`latitude\`)) *
-              cos(radians(\`owner\`.\`longitude\`) - radians(${long})) +
-              sin(radians(${lat})) * sin(radians(\`owner\`.\`latitude\`))
+              cos(radians(${latitude})) * cos(radians(\`owner\`.\`latitude\`)) *
+              cos(radians(\`owner\`.\`longitude\`) - radians(${longitude})) +
+              sin(radians(${latitude})) * sin(radians(\`owner\`.\`latitude\`))
                )
                ) <= ${distance}`),
               }
