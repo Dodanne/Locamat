@@ -164,6 +164,10 @@ export const createEquipment = async (req, res) => {
     });
     res.json(data);
   } catch (err) {
+    if (err.name === "SequelizeValidationError") {
+      const messages = err.errors.map((e) => e.message);
+      return res.status(400).json({ errors: messages });
+    }
     console.log(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
@@ -273,6 +277,10 @@ export const updateEquipment = async (req, res) => {
     }
     res.json(data);
   } catch (err) {
+    if (err.name === "SequelizeValidationError") {
+      const messages = err.errors.map((e) => e.message);
+      return res.status(400).json({ errors: messages });
+    }
     console.log(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
