@@ -23,7 +23,11 @@ import StatusProvider from "./context/StatusContext";
 import PaiementSuccess from "./pages/Reservation/SuccesPaiement";
 import PaiementFail from "./pages/Reservation/FailPaiement";
 import NotFound from "./pages/Errors/404";
-
+import MentionsLegales from "./pages/Legal/MentionsLegales";
+import Confidentialite from "./pages/Legal/Confidentialite";
+import RGPD from "./pages/Legal/RGPD";
+import CGU from "./pages/Legal/CGU";
+import Cookies from "./pages/Legal/Cookies";
 
 
 function App() {
@@ -52,6 +56,11 @@ function App() {
                 <Route path="/summary-rental" element={<ProtectedRoute><Summary /></ProtectedRoute>} />
                 <Route path="/paiement-success" element={<ProtectedRoute><PaiementSuccess /></ProtectedRoute>} />
                 <Route path="/paiement-cancel" element={<ProtectedRoute><PaiementFail /></ProtectedRoute>} />
+                <Route path="/mentions-legales" element={<MentionsLegales/>} />
+                <Route path="/confidentialite" element={<Confidentialite />} />
+                <Route path="/RGPD" element={<RGPD />} />
+                <Route path="/CGU" element={< CGU/>} />
+                <Route path="/cookies" element={<Cookies />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>

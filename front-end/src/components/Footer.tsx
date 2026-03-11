@@ -2,8 +2,10 @@ import { FiFacebook } from "react-icons/fi";
 import { FaInstagram } from "react-icons/fa";
 import { FiLinkedin } from "react-icons/fi";
 import {Link} from "react-router-dom"
+import { useAuth } from "../context/AuthContext";
 
 export default function Footer (){
+    const {isLogged}=useAuth()
 return (
 <>
 <footer className="bg-white border-t border-gray-200">
@@ -25,36 +27,40 @@ return (
                      <Link to="/" className="footer-link">Accueil</Link>
                 </li>
                 <li>
-                     <Link to="/" className="footer-link">Rechercher du matériel</Link>
+                     <Link to="/rechercher" className="footer-link">Rechercher du matériel</Link>
                 </li>
                 <li>
-                     <Link to="/" className="footer-link">Louer mon matériel</Link>
+                     <Link to="/new-equipment" className="footer-link">Louer mon matériel</Link>
                 </li>
-                <li>
-                     <Link to="/" className="footer-link">Comment ça marche</Link>
-                </li>
-                <li>
-                   <Link to="/" className="footer-link">FAQ</Link> 
-                </li>
+                    {!isLogged && (
+                        <>
+                        <li>
+                             <Link to="/connexion" className="footer-link">Se connecter</Link>
+                        </li>
+                        <li>
+                           <Link to="/user-form" className="footer-link">S'inscrire</Link> 
+                        </li>
+                        </>
+                    )}
             </ul>
         </div>
         <div>
             <h3 className="footer-title">Informations légales</h3>
                 <ul className="space-y-2 text-sm">
                     <li>
-                        <Link to="/" className="footer-link">Mentions légales</Link>
+                        <Link to="/mentions-legales" className="footer-link">Mentions légales</Link>
                     </li>
                     <li>
-                        <Link to="/" className="footer-link">Politique de confidentialité</Link>
+                        <Link to="/confidentialite" className="footer-link">Politique de confidentialité</Link>
                     </li>
                     <li>
-                        <Link to="/" className="footer-link">RGPD</Link>
+                        <Link to="/RGPD" className="footer-link">RGPD</Link>
                     </li>
                     <li>
-                        <Link to="/" className="footer-link">CGU/CGV</Link>
+                        <Link to="/CGU" className="footer-link">CGU</Link>
                     </li>
                     <li>
-                        <Link to="/" className="text-gray-600 hover:text-accent transition-colors">Cookies</Link>
+                        <Link to="/cookies" className="footer-link">Cookies</Link>
                     </li>
                 </ul>
         </div>
@@ -74,7 +80,7 @@ return (
 <div className="border-t border-gray-200">
     <div className="container py-6">
         <div className="text-center text-sm text-gray-500">
-            © 2025 LocaMat. Tous droits réservés.
+            © 2026 LocaMat. Tous droits réservés.
         </div>
     </div>
 </div>
