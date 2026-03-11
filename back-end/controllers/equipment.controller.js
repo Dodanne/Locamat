@@ -1,6 +1,6 @@
 import { Equipment, User, Category } from "../models/index.js";
 import { Op } from "sequelize";
-import deletePhoto from "../services/cloudinary.service";
+import deletePhoto from "../services/cloudinary.service.js";
 
 export const getAllEquipments = async (req, res) => {
   try {

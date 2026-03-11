@@ -4,7 +4,7 @@ import {
   signEmailVerifyToken,
   verifyEmailVerifyToken,
 } from "../services/emailToken.service.js";
-import deletePhoto from "../services/cloudinary.service";
+import deletePhoto from "../services/cloudinary.service.js";
 
 export const getAllUsers = async (req, res) => {
   try {
