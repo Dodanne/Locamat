@@ -48,7 +48,8 @@ const Equipment = sequelize.define(
     },
     photo: {
       type: DataTypes.STRING,
-      defaultValue: "images/default.png",
+      defaultValue:
+        "https://res.cloudinary.com/dxqyqpshr/image/upload/v1772622339/default_ivnc80.png",
     },
     price: {
       type: DataTypes.SMALLINT.UNSIGNED,

@@ -51,6 +51,8 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
       try {
        await apiAuth.delete(`/equipment/${id}`)
         setEquipments((prev) => prev.filter((e) => e.equipment_id !== id));
+         //liste userProfile
+        setUserEquipments((prev) =>prev.filter((e) => e.equipment_id !== id));
         alert("Équipement supprimé avec succès !");
        } catch (err) {
          console.log(err);

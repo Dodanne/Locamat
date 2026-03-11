@@ -151,7 +151,9 @@ export const getEquipmentByUser = async (req, res) => {
 export const createEquipment = async (req, res) => {
   try {
     const { title, description, category_id, price, caution } = req.body;
-    const photo = req.file ? req.file.path : "default.png";
+    const photo = req.file
+      ? req.file.path
+      : "https://res.cloudinary.com/dxqyqpshr/image/upload/v1772622339/default_ivnc80.png";
     const owner_id = req.user.id;
     const data = await Equipment.create({
       title,
