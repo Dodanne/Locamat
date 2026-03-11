@@ -8,16 +8,20 @@ export const postLogin = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ where: { email: email.trim() } });
     if (!user) {
-      return res.json({ message: "Email ou mot de passe invalide" });
+      return res
+        .status(401)
+        .json({ message: "Email ou mot de passe invalide" });
     }
     if (user.status === "banned") {
-      return res.json({
+      return res.status(403).json({
         message: "Votre compte est suspendu. Contactez un administrateur.",
       });
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.json({ message: "Email ou mot de passe invalide" });
+      return res
+        .status(401)
+        .json({ message: "Email ou mot de passe invalide" });
     }
     const token = jwt.sign(
       {
@@ -38,6 +42,6 @@ export const postLogin = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.json({ message: "Erreur serveur" });
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };

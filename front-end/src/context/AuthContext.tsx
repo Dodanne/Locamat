@@ -59,18 +59,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   async function postLogin(email: string, password: string){
     try {
       const res = await api.post("/login", { email, password})
+      console.log( res.data)
        login(res.data.token, res.data.user.id);
       navigate(`/user-profile`)
     } catch (err:any) {
       console.log(err);
-      if(err.response?.status===401) {
-        setError("Email ou mot de passe incorrect")
-      }else {
-        setError("Une erreur est survenue, veuillez réessayer ultérieurement")
-      }
-      }
+        setError(err.response?.data?.message)
     }
-
+  }
   
   async  function getVerifiedEmail (){
     if(!token) return
