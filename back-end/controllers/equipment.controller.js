@@ -1,5 +1,6 @@
 import { Equipment, User, Category } from "../models/index.js";
 import { Op } from "sequelize";
+import deletePhoto from "../services/cloudinary.service";
 
 export const getAllEquipments = async (req, res) => {
   try {
@@ -246,16 +247,13 @@ export const getSearchEquipments = async (req, res) => {
 export const deleteEquipment = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedEquipment = await Equipment.destroy({
-      where: { equipment_id: Number(id) },
-    });
-    if (!deletedEquipment) {
+    const data = await Equipment.findByPk(id);
+    if (!data) {
       return res.status(404).json({ message: "Equipement non trouvé" });
     }
-    return res.json({
-      message: "Équipement supprimé avec succès",
-      equipment: deletedEquipment,
-    });
+    await deletePhoto(data.photo);
+    await data.destroy();
+    return res.json({ message: "Équipement supprimé avec succès" });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Erreur serveur" });
@@ -266,17 +264,19 @@ export const updateEquipment = async (req, res) => {
     const id = req.params.id;
     const { title, price, description } = req.body;
     const data = await Equipment.findByPk(id);
+    if (!data) {
+      return res.status(404).json({ message: "Equipement non trouvé" });
+    }
     data.title = title;
     data.price = Number(price);
     data.description = description;
 
     if (req.file) {
+      await deletePhoto(data.photo);
       data.photo = req.file.path;
     }
     await data.save(); //updatedAt
-    if (!data) {
-      return res.status(404).json({ message: "Equipement non trouvé" });
-    }
+
     res.json(data);
   } catch (err) {
     if (err.name === "SequelizeValidationError") {

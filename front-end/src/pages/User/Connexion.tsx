@@ -7,8 +7,7 @@ export default function Connexion() {
  
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [error, setError] = useState<string | null>(null)
-  const {postLogin }=useAuth()
+  const {postLogin, error, setError }=useAuth()
   const handleSubmit =  (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError(null)

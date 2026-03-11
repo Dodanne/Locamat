@@ -4,6 +4,7 @@ import {
   signEmailVerifyToken,
   verifyEmailVerifyToken,
 } from "../services/emailToken.service.js";
+import deletePhoto from "../services/cloudinary.service";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -219,6 +220,7 @@ export const patchUser = async (req, res) => {
       data.password = password;
     }
     if (req.file) {
+      await deletePhoto(data.photo);
       data.photo = req.file.path;
     }
     await data.save();
