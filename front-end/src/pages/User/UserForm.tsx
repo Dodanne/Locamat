@@ -9,7 +9,7 @@ export default function UserForm() {
     const navigate=useNavigate()
     const location=useLocation()
     const mode = location.state?.mode ?? 'create'
-    const {user_id}=useAuth()
+    const {user_id, setUser}=useAuth()
     const {postUser,getUserById, patchUser}= useUsers()
     const [address, setAddress]=useState("")
     const [suggestions, setSuggestions]=useState<[]>([])
@@ -67,7 +67,8 @@ export default function UserForm() {
             form.append("photo", formData.photo);
         }
          if ( mode ==='edit'){
-        await patchUser(user_id as number,form)
+        const updateUser=await patchUser(user_id as number,form)
+        setUser(updateUser) //header à j
         navigate('/user-profile')
          } else {
             await postUser(form)

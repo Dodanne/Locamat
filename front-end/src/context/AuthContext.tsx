@@ -14,6 +14,7 @@ type AuthContextType = {
   postLogin: (email: string, password: string)=> void
   getVerifiedEmail:()=> void
   setError: (error: string | null)=> void
+  setUser: (user:User | null)=> void
 };
 
 
@@ -59,7 +60,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   async function postLogin(email: string, password: string){
     try {
       const res = await api.post("/login", { email, password})
-      console.log( res.data)
        login(res.data.token, res.data.user.id);
       navigate(`/user-profile`)
     } catch (err:any) {
@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
   return (
-    <AuthContext.Provider value={{error, isLogged, user_id, user, setError: (err) => setError(err), login, logout, postLogin, getVerifiedEmail }}>
+    <AuthContext.Provider value={{error, isLogged, user_id, user, setUser, setError, login, logout, postLogin, getVerifiedEmail }}>
       {children}
     </AuthContext.Provider>
   );

@@ -15,7 +15,6 @@ export default function Header() {
   const { isLogged,  user } = useAuth();
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>` transition-colors ${isActive ? "text-primary" : "text-secondary"}`;
   const [isMenuOpen, setIsMenuOpen] =  useState(false);
-  const baseUrl=import.meta.env.VITE_BASE_URL
 
 
   return (
