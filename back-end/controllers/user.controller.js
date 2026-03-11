@@ -71,21 +71,21 @@ export const createUser = async (req, res) => {
       email_verified: false,
     });
     res.json(data);
-    try {
-      const emailToken = signEmailVerifyToken(email);
-      const verifyUrl = `${process.env.FRONT_URL}/verify-email?token=${emailToken}`;
-      await sendEmail(
-        email,
-        "Locamat - Veuillez confirmer votre adresse mail",
-        `<h1> Bienvenue chez LocaMat</h1>
-         <p>Merci d'avoir créé un compte ! Pour profiter de celui-ci, veuillez confirmer votre adresse mail en cliquant ci-dessous :</p>
-      <a href="${verifyUrl}">Confirmer mon adresse email (ce lien est valide pendant 24h).</a>
-      <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
-    `,
-      );
-    } catch (emailErr) {
-      console.log("Erreur envoi email:", emailErr);
-    }
+    // try {
+    //   const emailToken = signEmailVerifyToken(email);
+    //   const verifyUrl = `${process.env.FRONT_URL}/verify-email?token=${emailToken}`;
+    //   await sendEmail(
+    //     email,
+    //     "Locamat - Veuillez confirmer votre adresse mail",
+    //     `<h1> Bienvenue chez LocaMat</h1>
+    //      <p>Merci d'avoir créé un compte ! Pour profiter de celui-ci, veuillez confirmer votre adresse mail en cliquant ci-dessous :</p>
+    //   <a href="${verifyUrl}">Confirmer mon adresse email (ce lien est valide pendant 24h).</a>
+    //   <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
+    // `,
+    // //   );
+    // } catch (emailErr) {
+    //   console.log("Erreur envoi email:", emailErr);
+    // }
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
       const messages = err.errors.map((e) => e.message);
