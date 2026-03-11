@@ -87,77 +87,66 @@ export default function ReviewsUserProfile(){
                         
                          <div className="flex flex-col gap-4">
                            {userReviews.map((r) => (
-                                  <div key={r.reviews_user_id} className="bg-white rounded-xl border p-4 flex flex-col gap-2">
-                                    <div className="flex items-center justify-between">
-                                      <div className="flex items-center gap-3">
-                                        {r.reviewer?.photo && r.reviewer?.photo !=="NULL" ? (  
-                                         <img src={r.reviewer?.photo} alt={r.reviewer?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
-                                           ):(
-                                              <span className="flex items-center justify-center w-12 h-12 text-2xl font-bold text-white bg-accent rounded-full mr-4">{getInitials(r.reviewer)}</span>
-                                           )
-                                       }
-                                        <div>
-                                          <p className="font-semibold text-gray-900">
-                                            {r.reviewer
-                                              ? `${r.reviewer.first_name} ${r.reviewer.last_name}`
-                                              : "Utilisateur supprimé"}
-                                          </p>
-                                          <p className=" text-gray-600">
-                                            {FormatDate(r.createdAt)}
-                                          </p>
-                                          <div className=" text-gray-600 flex items-center">
-                                            <IoLocationOutline className="text-gray-600"/> 
-                                            <p>{r.reviewer?.city}</p>
-                                          </div>
-                                        </div>
-                                        <div className="ml-9">
-                                        <p className="text-gray-900 ">{r.comment}</p>
-                                    <span className="text-sm text-gray-600 italic">
-                                      {r.status === "renter" ? "En tant que locataire" : "En tant que propriétaire"}
-                                    </span>
-                                    </div>
-                                      </div>
-                                      
-
-                                      
-                                      <div className="flex items-center gap-1">
-                                        <div>
-                                         <div className="flex  gap-6">
-                                             <Link to={`/equipment/${r.rental?.equipment?.equipment_id}`}>
-                                                <img src={r.rental?.equipment?.photo} alt={r.rental?.equipment?.title} className="w-24 h-24 object-cover rounded-lg"></img>
-                                            </Link>
-                                            <div className="flex-1">
-                                            <div className="flex items-start justify-between mb-2">
+                            <div key={r.reviews_user_id} className="bg-white rounded-xl border p-4 space-y-4">
+                                <div className="flex items-start justify-between gap-4">
+                                  <div className="flex items-center gap-3">
+                                    {r.reviewer?.photo && r.reviewer?.photo !== "NULL" ? (
+                                      <img src={r.reviewer?.photo} className="w-10 h-10 object-cover rounded-full shrink-0"/>
+                                    ) : (
+                                      <span className="flex items-center justify-center w-10 h-10 text-lg font-bold text-white bg-accent rounded-full shrink-0">
+                                        {getInitials(r.reviewer)}
+                                      </span>
+                                    )}
                                     <div>
-                                     <h3 className="text-xl text-gray-900 mb-3">{r.rental?.equipment?.title}</h3>
-                                    <div className="flex items-center justify-between">
-                                    <div className="text-gray-600">
-                                        <p>Du {FormatDate(r.rental?.start_date)} <br />
-                                        au {FormatDate(r.rental?.end_date)}</p>
-                                    </div>
-                                    </div>
-                                                  
-                                    </div>
-                                     <div className="m-5">
-                                         <p className="text-2xl text-primary">{r.rental?.total_price} €</p>
-                                         <p className="text-sm text-gray-500">Total</p>
-                                        </div>  
-                                    </div>
-                                    </div>
-                                    </div>
-                                    </div>
-                                        <StarRating rating={r.rating} />
-                                        <span className="text-sm text-gray-600">({r.rating}/5)</span>
+                                      <p className="font-semibold text-gray-900">
+                                        {r.reviewer ? `${r.reviewer.first_name} ${r.reviewer.last_name}` : "Utilisateur supprimé"}
+                                      </p>
+                                      <p className="text-gray-500 text-sm">{FormatDate(r.createdAt)}</p>
+                                      <div className="flex items-center text-gray-500 text-sm">
+                                        <IoLocationOutline/><span>{r.reviewer?.city}</span>
                                       </div>
                                     </div>
                                   </div>
-                                       ))}
-                                     </div>
-                                     ) : (
-                                      <div className="text-center py-12 text-gray-600">
-                                        <p>Aucun avis reçu pour le moment</p>
+                                  <div className="flex items-center gap-1 shrink-0">
+                                    <StarRating rating={r.rating}/>
+                                    <span className="text-sm text-gray-600">({r.rating}/5)</span>
+                                  </div>
+                                </div>
+
+                                   <div className="flex justify-center">
+                                   <div className="bg-gray-100 rounded-lg p-4 border-l-4 border-accent text-center md:w-2/3">
+                                 <p className="text-gray-900 italic text-lg">"{r.comment}"</p>
+                                 <span className="text-sm text-gray-500 mt-2 block">
+                                   {r.status === "renter" ? "En tant que locataire" : "En tant que propriétaire"}
+                                 </span>
+                                </div>
+                                </div>
+
+                                <hr/>
+                                    <div className="flex gap-4 items-start">
+                                      <Link to={`/equipment/${r.rental?.equipment?.equipment_id}`}>
+                                        <img src={r.rental?.equipment?.photo} alt={r.rental?.equipment?.title} className="w-16 h-16 object-cover rounded-lg shrink-0"/>
+                                      </Link>
+                                      <div className="flex-1">
+                                        <h3 className="text-gray-900 font-medium">{r.rental?.equipment?.title}</h3>
+                                        <p className="text-gray-500 text-sm">Du {FormatDate(r.rental?.start_date)}</p>
+                                        <p className="text-gray-500 text-sm">Au {FormatDate(r.rental?.end_date)}</p>
                                       </div>
-                                     )}
+                                      <div className="text-right shrink-0">
+                                        <p className="text-xl text-primary">{r.rental?.total_price} €</p>
+                                        <p className="text-sm text-gray-500">Total</p>
+                                      </div>
+                                    </div>
+
+                                </div>
+                                ))}
+                                       
+                         </div>
+                            ) : (
+                          <div className="text-center py-12 text-gray-600">
+                            <p>Aucun avis reçu pour le moment</p>
+                          </div>
+                         )}
                 </div>
                 </>
     )

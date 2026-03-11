@@ -48,9 +48,9 @@ export default function UserProfile (){
  
     return(
     <div className="container py-8">
-        <div className=" grid grid-cols-[1fr_auto]  gap-6 rounded-xl border bg-white">
+        <div className=" grid grid-cols-1 lg:grid-cols-[1fr_auto]  md:gap-6 rounded-xl border bg-white">
             <div className="flex items-start gap-6 p-4">
-                <span className="relative flex size-10 shrink-0 overflow-hidden rounded-full h-24 w-24">
+                <span className="relative flex shrink-0 overflow-hidden rounded-full h-16 w-16 md:h-24 md:w-24">
                     {user.photo && user.photo !=="NULL" ? (  
                         <img src={user.photo} alt={user.first_name} className="w-full h-full object-cover"/>
                  ):(
@@ -60,7 +60,7 @@ export default function UserProfile (){
                 </span>
                 <div className="flex-1">
                     <div className="flex items-center gap-3 my-2">
-                        <h1 className="text-3xl text-gray-00">{user.first_name} {user.last_name}</h1>
+                        <h1 className="text-xl md:text-3xl text-gray-900">{user.first_name} {user.last_name}</h1>
                         <span className="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit gap-1 overflow-hidden border-transparent bg-gray-200">{user.user_type}</span>
                     </div>
                     <div className="flex items-center gap-6 text-gray-600 mb-4">
@@ -77,15 +77,13 @@ export default function UserProfile (){
                    
                 </div>   
             </div>
-            <div className="flex flex-col bottom-4 left-4 right-4  lg:flex lg:flex-col justify-center lg:bg-white lg:p-4 m-4 gap-4">
+            <div className="flex flex-col justify-center p-4 gap-4">
                         <button className="btn border-gray-200 bg-background hover:bg-gray-200 h-9 px-4 py-2 " onClick={()=>handleClick()}>
-                        <FaRegEdit /> Modifier les informations du profil </button>
+                        <FaRegEdit /> <span className=" md:block">Modifier les informations du profil </span> </button>
 
             {(user.role === "SUPER-ADMIN" || user.role==="ADMIN")  &&  (
                 <>
-                   {/* mobile */}
-                   <button className="btn bg-accent text-white w-full shadow-lg lg:hidden"> Accès admin </button>
-                  {/* ordi */}
+                  
                   <div className=" lg:flex flex-col gap-4">    
                     <Link to="/admin-dashboard"><button className="btn bg-accent text-white w-full p-2">Accès admin</button></Link>
                      </div>
@@ -96,17 +94,14 @@ export default function UserProfile (){
         <div className="flex flex-col gap-2 my-6">
             <div className="bg-gray-200 h-9 items-center justify-center rounded-xl p-[3px] grid w-full grid-cols-4">
                 <button onClick={()=>setActiveDiv("equipment")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="equipment" ? 'bg-gray-300' : ''} `}>
-                    <BsBoxSeam /> Mon matériel  </button>
+                    <BsBoxSeam /> <span className="hidden md:block">Mon matériel</span>  </button>
                 
                 <button onClick={()=>setActiveDiv("locations")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="locations" ? 'bg-gray-300' : ''} `}>
-                    <PiClockCounterClockwise /> Mes réservations 
-                </button>
+                    <PiClockCounterClockwise /> <span className="hidden md:block"> Mes réservations</span> </button>
                 <button onClick={()=>setActiveDiv("prêts")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="prêts" ? 'bg-gray-300' : ''} `}>
-                    <FaHandHolding className="flex items-center gap-2 relative -top-0.5"/> Mes mises en location
-                </button>
+                    <FaHandHolding className="flex items-center gap-2 relative -top-0.5"/><span className="hidden md:block"> Mes mises en location </span></button>
                  <button onClick={()=>setActiveDiv("reviews")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="reviews" ? 'bg-gray-300' : ''} `}>
-                    <FaRegStar /> Avis reçus
-                </button>
+                    <FaRegStar /><span className="hidden md:block"> Avis reçus </span> </button>
             </div> 
        
              {activeDiv==="equipment"&&(

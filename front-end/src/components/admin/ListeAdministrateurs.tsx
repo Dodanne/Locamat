@@ -37,34 +37,34 @@ export default function ListeAdministrateurs() {
   <div className="overflow-x-auto">
     <div className="flex items-center justify-between mb-2">
     <h2 className="text-2xl font-semibold mb-4">Liste des administrateurs </h2>
-     <button className="btn bg-accent text-white p-2 relative"> <TiPlus/> Ajouter un admin </button>
+     <button className="btn bg-accent text-white p-2 "> <TiPlus/> Ajouter un admin </button>
     </div>
      {error && <p className="text-red-500 text-sm">{error}</p>}
     <table className="min-w-full bg-white border rounded shadow">
       <thead className="bg-gray-100">
         <tr>
-          <th className="py-2 px-2 border">Nom</th>
-          <th className="py-2 px-2 border">Prénom</th>
-          <th className="py-2 px-2 border">Email</th>  
-          <th className="py-2 px-2 border">Type utilisateur</th>
-          <th className="py-2 px-2 border">Société</th>
-          <th className="py-2 px-2 border">SIRET</th>
-          <th className="py-2 px-2 border">Statut</th>
-          <th className="py-2 px-2 border">Créé le</th>
-          <th className="py-2 px-2 border">Supprimer</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Nom</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Prénom</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Email</th>  
+          <th className="py-2 px-2 border whitespace-nowrap">Type utilisateur</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Société</th>
+          <th className="py-2 px-2 border whitespace-nowrap">SIRET</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Statut</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Créé le</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Supprimer</th>
         </tr>
       </thead>
       <tbody>
         {admin.map(a => (
           <tr key={a.user_id} className="hover:bg-gray-50">
-            <td className="py-2 px-2 border">{a.last_name}</td>
-            <td className="py-2 px-2 border">{a.first_name}</td>
-            <td className="py-2 px-2 border">{a.email}</td>
-            <td className="py-2 px-2 border">{a.user_type}</td>
-            <td className="py-2 px-2 border">{a.compagny_name || "-"}</td>
-            <td className="py-2 px-2 border">{a.siret || "-"}</td>
-            <td className="py-2 px-2 border">{a.status}</td>
-            <td className="py-2 px-2 border">{FormatDate(a.createdAt)}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{a.last_name}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{a.first_name}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{a.email}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{a.user_type}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{a.compagny_name || "-"}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{a.siret || "-"}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{a.status}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{FormatDate(a.createdAt)}</td>
             <td className="py-2 px-2 border text-center">
              <button  onClick={() => handleDeleteAdmin(a.user_id,)} className="flex items-center gap-1 mx-auto text-red-600 hover:text-red-800" >
               <MdDelete /></button></td>  

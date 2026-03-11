@@ -68,29 +68,29 @@ const filteredUsers = users
     <table className="min-w-full bg-white border rounded shadow">
       <thead className="bg-gray-100">
         <tr>
-          <th className="py-2 px-2 border">Nom</th>
-          <th className="py-2 px-2 border">Prénom</th>
-          <th className="py-2 px-2 border">Email</th>
-          <th className="py-2 px-2 border">Type utilisateur</th>
-          <th className="py-2 px-2 border">Société</th>
-          <th className="py-2 px-2 border">SIRET</th>
-          <th className="py-2 px-2 border">Statut</th>
-          <th className="py-2 px-2 border">Créé le</th>
-          <th className="py-2 px-2 border">Message d'avertissement</th>
-          <th className="py-2 px-2 border">Bannir</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Nom</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Prénom</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Email</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Type utilisateur</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Société</th>
+          <th className="py-2 px-2 border whitespace-nowrap">SIRET</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Statut</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Créé le</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Message d'avertissement</th>
+          <th className="py-2 px-2 border whitespace-nowrap">Bannir</th>
         </tr>
       </thead>
       <tbody>
         {filteredUsers.map(u => (
           <tr key={u.user_id} className="hover:bg-gray-50">
-            <td className="py-2 px-2 border cursor-pointer"  onClick={() => setFilterName(`${u.first_name} ${u.last_name}`)}>{u.last_name}</td>
-            <td className="py-2 px-2 border cursor-pointer"  onClick={() => setFilterName(`${u.first_name} ${u.last_name}`)}>{u.first_name}</td>
-            <td className="py-2 px-2 border">{u.email}</td>
-            <td className="py-2 px-2 border">{u.user_type}</td>
-            <td className="py-2 px-2 border">{u.compagny_name || "-"}</td>
-            <td className="py-2 px-2 border">{u.siret || "-"}</td>
-            <td className="py-2 px-2 border">{u.status || "-"}</td>
-            <td className="py-2 px-2 border">{FormatDate(u.createdAt)}</td>
+            <td className="py-2 px-2 border cursor-pointer whitespace-nowrap "  onClick={() => setFilterName(`${u.first_name} ${u.last_name}`)}>{u.last_name}</td>
+            <td className="py-2 px-2 border cursor-pointer whitespace-nowrap"  onClick={() => setFilterName(`${u.first_name} ${u.last_name}`)}>{u.first_name}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{u.email}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{u.user_type}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{u.compagny_name || "-"}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{u.siret || "-"}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{u.status || "-"}</td>
+            <td className="py-2 px-2 border whitespace-nowrap">{FormatDate(u.createdAt)}</td>
             <td className="justify-center border text-center"> <button ><IoIosWarning /></button></td>  
             <td className="justify-center border text-center ">
                <button  onClick={() => handleBan(u.user_id, u.status === "banned")} className={`flex items-center gap-1 mx-auto 

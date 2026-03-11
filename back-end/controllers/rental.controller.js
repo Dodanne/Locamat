@@ -1,9 +1,14 @@
+import { Op } from "sequelize";
 import { Rental, User, Equipment } from "../models/index.js";
 import sendEmail from "../services/email.service.js";
 
 export const getRentalsByRenter = async (req, res) => {
   try {
     const renterId = req.params.id;
+    await Rental.update(
+      { status: "completed" },
+      { where: { status: "confirmed", end_date: { [Op.lt]: new Date() } } },
+    );
     const data = await Rental.findAll({
       where: { renter_id: renterId },
       include: [
@@ -68,6 +73,10 @@ export const getRentalByEquipmentId = async (req, res) => {
 export const getRentalsByOwner = async (req, res) => {
   try {
     const ownerId = req.params.id;
+    await Rental.update(
+      { status: "completed" },
+      { where: { status: "confirmed", end_date: { [Op.lt]: new Date() } } },
+    );
     const data = await Rental.findAll({
       include: [
         {
@@ -90,11 +99,7 @@ export const getRentalsByOwner = async (req, res) => {
         },
       ],
     });
-    if (data.length === 0) {
-      return res.status(404).json({
-        message: "Aucune location trouvée pour ce propriétaire de matériel",
-      });
-    }
+
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -158,11 +163,12 @@ export const patchRentalStatus = async (req, res) => {
       ],
     });
     const data = await Rental.findByPk(id);
-    data.status = status;
-    await data.save();
     if (!data) {
       return res.status(404).json({ message: "Location non trouvée" });
     }
+    data.status = status;
+    await data.save();
+
     // const renterEmail = equipment.renter.email;
     //     if (status === "accepted") {
     //       await sendEmail(

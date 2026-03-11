@@ -95,7 +95,7 @@ export default function Reservations({equipment}: ReservationsProps){
          <>
          {equipment.owner_id && equipment.owner_id!==Number(user_id )&& (
 
-                <div  className="bg-white flex flex-col gap-6 rounded-xl border sticky top-24 p-8 ">
+                <div  className="bg-white flex flex-col gap-6 rounded-xl border sticky top-24 p-2 md:p-8 ">
                 <div className=" flex-col text-center ">
                     <div className="text-3xl text-primary font-semibold">{equipment.price}€ 
                     </div>
@@ -131,7 +131,7 @@ export default function Reservations({equipment}: ReservationsProps){
                         navLayout="around"
                         locale={fr}
                     /> 
-                         <div className="flex gap-4 text-sm">
+                         <div className="flex justify-center gap-4 text-sm">
                             <span className="flex items-center gap-2">
                                 <div className="w-4 h-4 bg-red-400 rounded"></div> En cours de réservation <br /> ou déjà réservé 
                             </span>

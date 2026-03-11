@@ -37,8 +37,7 @@ export default function UserForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
    const [error, setError] = useState("")
-   const [validationError, setValidationError] = useState<string[]>([])
-  
+   const [validationError, setValidationError] = useState<string[]>([]) 
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -290,7 +289,7 @@ export default function UserForm() {
                 )}
             {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
             <div className="flex gap-4 sm:flex-row mt-4">
-                <button className=" flex-1 items-center h-10 rounded-md bg-white border border-gray-300 text-primary text-sm font-medium hover:bg-gray-300 transition cursor-pointer">Annuler</button>
+                <button onClick={()=>navigate("/connexion")} className=" flex-1 items-center h-10 rounded-md bg-white border border-gray-300 text-primary text-sm font-medium hover:bg-gray-300 transition cursor-pointer">Annuler</button>
                 <button type="submit" className=" flex-1 items-center h-10 rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">{mode==="edit"? "Sauvegarder" : "Créer le compte"}</button>
              </div>
             </div>

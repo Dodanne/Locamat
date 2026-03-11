@@ -16,7 +16,7 @@ export default function Connexion() {
     return (
        
         <div className=" grid min-h-screen grid-cols-1 lg:grid-cols-[1fr_420px_1fr] gap-6 rounded-xl border bg-accent/25">
-        <div className="flex flex-col mt-6 p-4 text-center justify-center ">
+        <div className="hidden md:flex flex-col mt-6 p-4 text-center justify-center ">
             <h3 className="text-primary font-semibold text-2xl mt-7 ">Vous avez du matériel inutilisé chez vous ?</h3>
             <hr className=" border-primary border-1 mx-8 my-3"/>
           <h3 className="text-primary font-semibold text-xl">Partagez votre matériel en un clic </h3>
@@ -48,7 +48,7 @@ export default function Connexion() {
             </div>
             </div>
         </div>
-        <div className="flex flex-col mt-6 p-4 text-center justify-center ">
+        <div className="hidden md:flex flex-col mt-6 p-4 text-center justify-center ">
             <h3 className="text-primary font-semibold text-2xl mt-7">Besoin d'un matériel momentanément ?</h3>
                 <hr className=" border-primary border-1 mx-8 my-3"/>
             <h3 className="text-primary font-semibold text-xl ">Louez du matériel facilement près de chez vous </h3>

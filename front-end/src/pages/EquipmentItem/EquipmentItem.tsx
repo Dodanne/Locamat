@@ -101,7 +101,7 @@ export default function EquipmentItem() {
                                 </div>
                             </div>
                         </div>
-                    <button className="btn p-3 bg-white hover:bg-gray-200 absolute right-1"> <CiChat1 className="text-xl"/> Contacter </button>
+                    <button className="btn p-3 bg-gray-100 hover:bg-gray-200 md:absolute right-1"> <CiChat1 className="text-xl"/> Contacter </button>
                     </div>
                 </div>
                 <div className="flex flex-col gap-6 rounded-xl border bg-white p-6 mt-8">

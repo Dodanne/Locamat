@@ -132,7 +132,7 @@ export default function AddEquipment () {
                 )}
              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
              <div className="flex gap-4 sm:flex-row mt-4">
-                <button className=" flex-1 items-center h-10 rounded-md bg-white border border-gray-300 text-primary text-sm font-medium hover:bg-gray-300 transition cursor-pointer">Annuler</button>
+                <button onClick={()=>navigate("/user-profile")}className=" flex-1 items-center h-10 rounded-md bg-white border border-gray-300 text-primary text-sm font-medium hover:bg-gray-300 transition cursor-pointer">Annuler</button>
                 <button type="submit" className=" flex-1 items-center h-10 rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Publier l'annonce</button>
              </div>
              

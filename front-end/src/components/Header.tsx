@@ -3,7 +3,7 @@ import { FaMessage } from "react-icons/fa6";
 import { FaBell, FaUser  } from "react-icons/fa";
 import { NavLink, Link } from "react-router-dom";
 import AddEquipmentBtn from "./AddEquipmentBtn";
-import { useState, useEffect} from "react";
+import { useState} from "react";
 import { IoMdMenu, IoMdClose } from "react-icons/io";
 import { useAuth } from "../context/AuthContext";
 import { IoLogOutSharp } from "react-icons/io5";
@@ -66,15 +66,22 @@ export default function Header() {
             )}
             </div>
               {/*  Mobile menu button */}
-             <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+             <button className="md:hidden p-4" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           {isMenuOpen ? <IoMdClose size={28} /> : <IoMdMenu size={28} />}
              </button>
              {isMenuOpen && (
                  <div className="md:hidden bg-white flex flex-col gap-4 absolute top-20 left-0 w-full px-4 py-4 border-t border-gray-200 shadow-md">
-                 <NavLink to="/" end onClick={() => setIsMenuOpen(false)} className={navLinkClass}> Accueil </NavLink>
-                 <NavLink to="/rechercher" onClick={() => setIsMenuOpen(false)} className={navLinkClass}> Rechercher </NavLink>
-                 <NavLink to="/chat" onClick={() => setIsMenuOpen(false)} className={navLinkClass}>  Messagerie </NavLink>
-                 <NavLink to="/connexion" onClick={() => setIsMenuOpen(false)} className={navLinkClass}>  Se connecter/S'enregistrer </NavLink>
+                    <NavLink to="/" end onClick={() => setIsMenuOpen(false)} className={navLinkClass}> Accueil </NavLink>
+                    <NavLink to="/rechercher" onClick={() => setIsMenuOpen(false)} className={navLinkClass}> Rechercher </NavLink>
+                 {isLogged? (
+                 <>
+                    <NavLink to="/chat" onClick={() => setIsMenuOpen(false)} className={navLinkClass}>  Messagerie </NavLink>
+                    <NavLink to="/user-profile" onClick={() => setIsMenuOpen(false)} className={navLinkClass}>  Mon Compte </NavLink>
+                    <NavLink to="/logout" onClick={() => setIsMenuOpen(false)} className={navLinkClass}>  Déconnexion </NavLink>
+                 </>
+                  ):(
+                     <NavLink to="/connexion" onClick={() => setIsMenuOpen(false)} className={navLinkClass}> Connexion </NavLink>
+                  )}
         </div>
       )}
             </div>

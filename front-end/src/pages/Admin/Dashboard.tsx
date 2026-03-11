@@ -1,4 +1,5 @@
 import { FaUsers, FaTools, FaChartLine, FaCogs, FaSignOutAlt } from "react-icons/fa";
+import { RiAdminFill } from "react-icons/ri";
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -18,9 +19,9 @@ const AdminDashboard = () => {
       case "equipments":
         return <div><ListeEquipments/></div>;
       case "stats":
-        return <div>Statistiques de la plateforme...</div>;
+        return <div> A venir ... </div>;
       case "settings":
-        return <div>Paramètres de la plateforme...</div>;
+        return <div> A venir ...</div>;
       default:
         return (
         <div className="flex justify-center items-center h-full w-full">
@@ -40,8 +41,11 @@ const AdminDashboard = () => {
         <div className="flex items-center gap-4">
           <Link to="/user-profile">
             <button className="flex items-center gap-2 bg-white text-primary font-medium px-3 py-1 rounded hover:bg-gray-200 transition">
-              <FaSignOutAlt /> Retour au profil
-            </button>
+              <FaSignOutAlt/>
+              <span className="hidden md:block "> Retour au profil </span>
+              <span className=" md:hidden "> Retour </span>
+               </button>
+
           </Link>
         </div>
       </header>
@@ -53,7 +57,7 @@ const AdminDashboard = () => {
                   className={`flex items-center gap-3 p-3 w-full text-left rounded hover:bg-gray-100 transition ${
                     activeTab === "users" ? "bg-gray-200 font-semibold" : ""
                   }`}>
-            <FaUsers /> Utilisateurs
+            <FaUsers />  <span className="hidden md:block ">Utilisateurs</span>
           </button>
 
           {user?.role === "SUPER-ADMIN" && (
@@ -61,7 +65,7 @@ const AdminDashboard = () => {
                     className={`flex items-center gap-3 p-3 w-full text-left rounded hover:bg-gray-100 transition ${
                       activeTab === "admins" ? "bg-gray-200 font-semibold" : ""
                     }`}>
-              <FaUsers /> Administrateurs
+             <RiAdminFill /> <span className="hidden md:block ">Administrateurs</span>
             </button>
           )}
 
@@ -69,21 +73,21 @@ const AdminDashboard = () => {
                   className={`flex items-center gap-3 p-3 w-full text-left rounded hover:bg-gray-100 transition ${
                     activeTab === "equipments" ? "bg-gray-200 font-semibold" : ""
                   }`}>
-            <FaTools /> Équipements
+            <FaTools /> <span className="hidden md:block ">Équipements</span>
           </button>
 
           <button onClick={() => setActiveTab("stats")}
                   className={`flex items-center gap-3 p-3 w-full text-left rounded hover:bg-gray-100 transition ${
                     activeTab === "stats" ? "bg-gray-200 font-semibold" : ""
                   }`}>
-            <FaChartLine /> Statistiques
+            <FaChartLine /> <span className="hidden md:block ">Statistiques</span>
           </button>
 
           <button onClick={() => setActiveTab("settings")}
                   className={`flex items-center gap-3 p-3 w-full text-left rounded hover:bg-gray-100 transition ${
                     activeTab === "settings" ? "bg-gray-200 font-semibold" : ""
                   }`}>
-            <FaCogs /> Paramètres
+            <FaCogs /> <span className="hidden md:block ">Paramètres</span> 
           </button>
         </aside>
 

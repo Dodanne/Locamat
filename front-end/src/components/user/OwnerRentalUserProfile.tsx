@@ -80,88 +80,79 @@ export default function OwnerRentalsUserProfile(){
                 <div className="space-y-4">
                     {ownerRentals && ownerRentals.map ((e)=>(
                         
-                    <div className="bg-white flex flex-col gap-6 rounded-xl border p-4">
-                        <div className="flex gap-6">
-                            <Link to={`/equipment/${e.equipment?.equipment_id}`}> 
-                                <img src={e.equipment?.photo} alt={e.equipment?.title} className="w-32 h-32 object-cover rounded-lg"></img>
-                            </Link>
-                            <div className="flex-1">
-                                <div className="flex items-start justify-between mb-2">
-                                    <div>
-                                         <h3 className="text-xl text-gray-900 mb-1">{e.equipment?.title}</h3>
-                                       
-                                    </div>
-                                    <span className={`inline-flex items-center justify-center rounded-md border px-2 py-1 font-medium w-fit ${status[e.status].className}`}>{status[e.status].label}</span>
-                                    {e.status==="confirmed"&& (
-                                    <div className="">
-                                        <button onClick={handleClick} className="btn border-red-400 bg-red-200 ">Annuler la location</button>
-                                    </div>
-                                )}
-                                </div>
-                                
-                                <hr className="my-4"/>
-                                <div className="flex items-center justify-between">
-                                    <div className="text-gray-600">
-                                        <p>Du {FormatDate(e.start_date)}</p>
-                                        <p>Au {FormatDate(e.end_date)}</p>
-                                    </div>
-                                     <div className="flex items-center">
-                                    
-                                         {e.renter?.photo && e.renter?.photo !=="NULL" ? (  
-                                                 <img src={e.renter?.photo} alt={e.renter?.first_name} className="w-12 h-12 object-cover rounded-full mr-4"/>
-                                                         ):(
-                                                            <span className="flex items-center justify-center w-12 h-12 text-2xl font-bold text-white bg-accent rounded-full mr-4">{getInitials(e.renter)}</span>
-                                                         )
-                                                           } 
-                                                           <div className="flex flex-col ">
-                                                                <p className="text-gray-600 "> {e.renter?.first_name} {e.renter?.last_name}</p> 
-                                                                <div  className="flex items-center">
-                                                                    <IoLocationOutline /> <span className="text-gray-600">{e.renter?.city} </span>  
-                                                                </div>
-                                        </div>
-                                        </div>
-                                    {e.status==="pending"&& (
-                                    <div>
-                                       <p className="pt-4">Veuillez confirmer ou refuser la demande: </p> 
-                                       <div className="p-6 flex gap-5">
-                                            <button className="px-4 py-2 rounded-lg font-semibold bg-green-500 text-white hover:bg-green-600  transition shadow-md cursor-pointer " onClick={()=>handleChangeStatus(e.rental_id, "accepted")}> ✓ Confirmer </button>
-                                            <button className="px-4 py-2 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700  transition shadow-md cursor-pointer " onClick={()=>handleChangeStatus(e.rental_id, "refused")}> ✕ Refuser  </button>
-                                       </div>
-                                    </div>
-                                      )
-                                    }
-                                    <div className="text-right">
-                                        <p className="text-2xl text-primary">{e.total_price} €</p>
-                                        <p className="text-sm text-gray-500">Total</p>
-                                    </div>
-                                </div>
-                                
-                                {e.status === "completed" && (
-                                 <>
-                                 {console.log("showReview:", !showReview[e.rental_id])}
-                                     {console.log("hasReview:", hasReview[e.rental_id])}
-                                   {!showReview[e.rental_id] ? (
-                                     hasReview[e.rental_id]? (
-                                       <p className=" text-gray-500">Vous avez déjà laissé un avis.</p>
-                                     ) : (
-                                       <button
-                                         onClick={()=> setShowReview(prev=>({...prev,[e.rental_id]:true}))}
-                                         className="btn hover:bg-gray-300"
-                                       >
-                                         Laisser un avis
-                                       </button>
-                                    )
-                                   ) : (
-                                     <Reviews rental={e}
-                                      reviewSubmitted={() => {
-                                         setShowReview(prev => ({...prev, [e.rental_id]: false}))
-                                         setHasReview(prev => ({...prev, [e.rental_id]: true}))
-                                        }}/>
-                                   )}
-                                 </>
-                                )}
-                            </div>
+                  <div key={e.rental_id} className="bg-white rounded-xl border p-4 space-y-4">
+                    <div className="flex gap-4 items-start">
+                      <Link to={`/equipment/${e.equipment?.equipment_id}`}>
+                        <img src={e.equipment?.photo} alt={e.equipment?.title} className="w-20 h-20 object-cover rounded-lg shrink-0"/>
+                      </Link>
+                      <div className="flex flex-col gap-1">
+                        <h3 className="text-lg font-semibold text-gray-900">{e.equipment?.title}</h3>
+                        <span className={`inline-flex items-center justify-center rounded-md border px-2 py-1 text-sm font-medium w-fit ${status[e.status].className}`}>
+                          {status[e.status].label}
+                        </span>
+                      </div>
+                    </div>
+
+                        <hr/>
+                     <div className="text-gray-600 text-sm">
+                       <p>Du {FormatDate(e.start_date)}</p>
+                       <p>Au {FormatDate(e.end_date)}</p>
+                     </div>
+
+                     <div className="flex items-center justify-between">
+                       <div className="flex items-center gap-3">
+                         {e.renter?.photo && e.renter?.photo !== "NULL" ? (
+                           <img src={e.renter?.photo} className="w-10 h-10 object-cover rounded-full"/>
+                         ) : (
+                           <span className="flex items-center justify-center w-10 h-10 text-lg font-bold text-white bg-accent rounded-full">
+                             {getInitials(e.renter)}
+                           </span>
+                         )}
+                         <div>
+                           <p className="text-gray-700 text-sm">{e.renter?.first_name} {e.renter?.last_name}</p>
+                           <div className="flex items-center text-gray-500 text-sm">
+                             <IoLocationOutline/><span>{e.renter?.city}</span>
+                           </div>
+                         </div>
+                       </div>
+                       <div className="text-right">
+                         <p className="text-2xl text-primary">{e.total_price} €</p>
+                         <p className="text-sm text-gray-500">Total</p>
+                       </div>
+                     </div>
+
+                    {e.status === "pending" && (
+                      <div className="flex flex-col gap-2">
+                        <p className="text-sm text-gray-600">Veuillez confirmer ou refuser la demande :</p>
+                        <div className="flex gap-3">
+                          <button className="flex-1 py-2 rounded-lg font-semibold bg-green-500 text-white hover:bg-green-600 transition" onClick={() => handleChangeStatus(e.rental_id, "accepted")}>✓ Confirmer</button>
+                          <button className="flex-1 py-2 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700 transition" onClick={() => handleChangeStatus(e.rental_id, "refused")}>✕ Refuser</button>
                         </div>
+                      </div>
+                    )}
+
+                 {e.status === "confirmed" && (
+                     <div className="flex justify-end">
+                   <button onClick={handleClick} className="btn font-normal border-red-400 bg-red-200">Annuler la location</button>
+                   </div>
+                 )}
+
+                     {e.status === "completed" && (
+                       <>
+                         {!showReview[e.rental_id] ? (              
+                                hasReview[e.rental_id] ? (
+                                  <p className="text-gray-500 text-sm">Vous avez déjà laissé un avis.</p>
+                                ) : (
+                                  <button onClick={() => setShowReview(prev => ({...prev, [e.rental_id]: true}))} className="btn hover:bg-gray-300 w-full">Laisser un avis</button>
+                                )
+                         ) : (
+                           <Reviews rental={e} reviewSubmitted={() => {
+                             setShowReview(prev => ({...prev, [e.rental_id]: false}))
+                             setHasReview(prev => ({...prev, [e.rental_id]: true}))
+                           }}/>
+                         )}
+                       </>
+                     )}
                     </div>
                     
                     ))}

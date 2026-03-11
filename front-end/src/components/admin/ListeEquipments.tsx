@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import { Equipment } from "../../types/Equipment";
 import { MdDelete } from "react-icons/md";
-import apiAuth from "../../api/axiosAuth";
 import { useEquipmentContext } from "../../context/EquipmentContext";
 import FormatDate from "../FormatDate";
 
 export default function ListeEquipments() {
   const {equipments, getEquipments, deleteEquipment}=useEquipmentContext()
-  const baseUrl=import.meta.env.VITE_BASE_URL
+
   useEffect(() => {
    getEquipments()
   }, []);
@@ -21,29 +19,29 @@ export default function ListeEquipments() {
 
   return (
     <div className="overflow-x-auto">
-    <h2 className="text-2xl font-semibold mb-4">Liste des equipments </h2>
+    <h2 className="text-2xl font-semibold mb-4">Liste des équipements </h2>
     <table className="min-w-full bg-white border rounded shadow">
       <thead className="bg-gray-100">
         <tr>
-            <th className="px-4 py-2 border">Titre</th>
-            <th className="px-4 py-2 border">Description</th>
-            <th className="px-4 py-2 border">Prix (€)</th>
-            <th className="px-4 py-2 border">Propriétaire</th>
-            <th className="px-4 py-2 border">Photo</th>
-            <th className="px-4 py-2 border">Créé le</th>
-             <th className="py-2 px-2 border">Supprimer</th>
+            <th className="px-4 py-2 border whitespace-nowrap">Titre</th>
+            <th className="px-4 py-2 border whitespace-nowrap">Description</th>
+            <th className="px-4 py-2 border whitespace-nowrap">Prix (€)</th>
+            <th className="px-4 py-2 border whitespace-nowrap">Propriétaire</th>
+            <th className="px-4 py-2 border whitespace-nowrap">Photo</th>
+            <th className="px-4 py-2 border whitespace-nowrap">Créé le</th>
+             <th className="py-2 px-2 border whitespace-nowrap">Supprimer</th>
           </tr>
         </thead>
         <tbody>
           {equipments.map((e) => (
             <tr key={e.equipment_id} className="hover:bg-gray-50">
-              <td className="px-4 py-2 border">{e.title}</td>
-              <td className="px-4 py-2 border">{e.description }</td>
-              <td className="px-4 py-2 border">{e.price}</td>
+              <td className="px-4 py-2 border whitespace-nowrap">{e.title}</td>
+              <td className="px-4 py-2 border whitespace-nowrap">{e.description }</td>
+              <td className="px-4 py-2 border whitespace-nowrap">{e.price}</td>
               {/* <Link to=<ListeUtilisateur/> > */}
-              <td className="px-4 py-2 border">{e.owner?.first_name} {e.owner?.last_name}</td>
+              <td className="px-4 py-2 border whitespace-nowrap">{e.owner?.first_name} {e.owner?.last_name}</td>
               {/* </Link> */}
-              <td className="px-4 py-2 border">
+              <td className="px-4 py-2 border whitespace-nowrap">
                 {e.photo ? (
                   <img
                     src={e.photo}
