@@ -12,6 +12,7 @@ export default function AddEquipment () {
     const { getCategories } = useCategories()
     const [categories, setCategories]=useState <Category[]>([])
     const [error, setError] = useState("")
+    const [validationError, setValidationError] = useState<string[]>([])
     const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -47,9 +48,13 @@ export default function AddEquipment () {
          }
          await postNewEquipment(form)
          navigate('/succes')
-        }catch (err){
-            console.log(err)
-            setError("Impossible de mettre en ligne l'annonce")
+             } catch (err:any) {
+                 console.log(err);
+                 if (err.response?.status === 400 && err.response?.data?.errors) {
+                    setValidationError(err.response.data.errors)
+                     } else {
+                    setError("Impossible de mettre en ligne l'annonce")
+                     }
         }
     }
 
@@ -118,6 +123,13 @@ export default function AddEquipment () {
                     <p className="text-sm text-gray-500">Montant qui sera bloqué et restitué après retour du matériel</p>
                 </div>
              </div>
+              {validationError.length > 0 && (
+                     <ul className="text-red-500 text-sm mt-2">
+                         {validationError.map((msg, i) => (
+                            <li key={i}>{msg}</li>
+                        ))}
+                     </ul>
+                )}
              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
              <div className="flex gap-4 sm:flex-row mt-4">
                 <button className=" flex-1 items-center h-10 rounded-md bg-white border border-gray-300 text-primary text-sm font-medium hover:bg-gray-300 transition cursor-pointer">Annuler</button>

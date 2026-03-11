@@ -127,16 +127,16 @@ export const createRental = async (req, res) => {
       equipment_id,
       renter_id: renter_id,
     });
-    const ownerEmail = equipment.owner.email;
-    await sendEmail(
-      ownerEmail,
-      "Vous avez une nouvelle demande de réservation",
-      `<h1> Félicitations </h1>
-         <p>Vous avez une nouvelle demande de réservation sur le site LocaMat. Répondez rapidement pour ne pas rater la location!</p>
-      <a href="${process.env.FRONT_URL}/connexion"> Connectez-vous ici.</a>
-      <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
-    `,
-    );
+    // const ownerEmail = equipment.owner.email;
+    // await sendEmail(
+    //   ownerEmail,
+    //   "Vous avez une nouvelle demande de réservation",
+    //   `<h1> Félicitations </h1>
+    //      <p>Vous avez une nouvelle demande de réservation sur le site LocaMat. Répondez rapidement pour ne pas rater la location!</p>
+    //   <a href="${process.env.FRONT_URL}/connexion"> Connectez-vous ici.</a>
+    //   <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
+    // `,
+    // );
 
     res.json(data);
   } catch (err) {
@@ -163,31 +163,31 @@ export const patchRentalStatus = async (req, res) => {
     if (!data) {
       return res.status(404).json({ message: "Location non trouvée" });
     }
-    const renterEmail = equipment.renter.email;
-    if (status === "accepted") {
-      await sendEmail(
-        renterEmail,
-        "Votre demande de réservation a été accepté ",
-        `<h1> Félicitations </h1>
-      <p>Votre demande de réservation a été accepté sur le site LocaMat. Vous pouvez dès à présent procéder au paiement afin de valider la réservation.</p>
-      <p>Veuillez noter que vous pouvez annuler gratuitement 24h avant le début de la réservation.</p>
-      <a href="${process.env.FRONT_URL}/connexion"> Connectez-vous ici.</a>
-      <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
-    `,
-      );
-    }
-    if (status === "refused") {
-      await sendEmail(
-        renterEmail,
-        "Votre demande de réservation a été refusé ",
-        `<h1>Demande de réservation refusée</h1>
-<p>Votre demande de réservation sur LocaMat a été refusée par le propriétaire du matériel.</p>
-<p>Vous pouvez consulter vos autres réservations ou tenter une nouvelle réservation.</p>
-<a href="${process.env.FRONT_URL}/connexion">Connectez-vous ici pour voir vos réservations.</a>
-<p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
-    `,
-      );
-    }
+    // const renterEmail = equipment.renter.email;
+    //     if (status === "accepted") {
+    //       await sendEmail(
+    //         renterEmail,
+    //         "Votre demande de réservation a été accepté ",
+    //         `<h1> Félicitations </h1>
+    //       <p>Votre demande de réservation a été accepté sur le site LocaMat. Vous pouvez dès à présent procéder au paiement afin de valider la réservation.</p>
+    //       <p>Veuillez noter que vous pouvez annuler gratuitement 24h avant le début de la réservation.</p>
+    //       <a href="${process.env.FRONT_URL}/connexion"> Connectez-vous ici.</a>
+    //       <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
+    //     `,
+    //       );
+    //     }
+    //     if (status === "refused") {
+    //       await sendEmail(
+    //         renterEmail,
+    //         "Votre demande de réservation a été refusé ",
+    //         `<h1>Demande de réservation refusée</h1>
+    // <p>Votre demande de réservation sur LocaMat a été refusée par le propriétaire du matériel.</p>
+    // <p>Vous pouvez consulter vos autres réservations ou tenter une nouvelle réservation.</p>
+    // <a href="${process.env.FRONT_URL}/connexion">Connectez-vous ici pour voir vos réservations.</a>
+    // <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
+    //     `,
+    //       );
+    //     }
     res.json(data);
   } catch (err) {
     console.log(err);
