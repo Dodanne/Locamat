@@ -19,7 +19,7 @@ router.get("/equipment6first", get6FirstEquipment);
 router.get("/equipment/:id", getEquipmentById);
 router.get("/user/:id/equipment", getEquipmentByUser);
 router.get("/equipments/search", getSearchEquipments);
-router.delete("/equipment/:id", authenticateToken, isAdmin, deleteEquipment);
+router.delete("/equipment/:id", authenticateToken, deleteEquipment);
 router.patch(
   "/equipment/:id",
   authenticateToken,
