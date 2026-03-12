@@ -79,14 +79,9 @@ const Equipment = sequelize.define(
         isInt: true,
       },
     },
+
     owner_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: "user",
-        key: "user_id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
     },
     rating_avg: {
       type: DataTypes.DECIMAL(2, 1),

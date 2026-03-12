@@ -13,34 +13,14 @@ const Review_equipment = sequelize.define(
     },
     rental_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: "rental",
-        key: "rental_id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
     },
     reviewer_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      references: {
-        model: "user",
-        key: "user_id",
-      },
-      allowNull: true,
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
     },
     reviewed_user_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      references: {
-        model: "user",
-        key: "user_id",
-      },
-      allowNull: true,
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
     },
     rating: {
       type: DataTypes.INTEGER,
@@ -90,8 +70,7 @@ Review_equipment.afterCreate(async (review) => {
   const rating_count = reviews.length;
   const rating_avg =
     reviews.reduce((sum, r) => sum + r.rating, 0) / rating_count;
-  console.log("count", rating_count);
-  console.log("avg", rating_avg);
+
   await Equipment.update(
     { rating_count, rating_avg },
     { where: { equipment_id: rental.equipment_id } },

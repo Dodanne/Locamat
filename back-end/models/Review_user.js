@@ -12,33 +12,16 @@ const Review_user = sequelize.define(
     },
     rental_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: "rental",
-        key: "rental_id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "CASCADE",
     },
     reviewer_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      references: {
-        model: "user",
-        key: "user_id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
     },
     reviewed_user_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      references: {
-        model: "user",
-        key: "user_id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
     },
+
     rating: {
       type: DataTypes.INTEGER,
       allowNull: false,

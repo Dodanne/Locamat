@@ -9,15 +9,17 @@ const Rental = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+
     equipment_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: "equipment",
-        key: "equipment_id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
+      allowNull: false,
     },
+
+    renter_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+
     start_date: {
       type: DataTypes.DATE,
       allowNull: false,
