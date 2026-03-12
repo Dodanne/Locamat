@@ -19,5 +19,6 @@ export function useAdmins(){
            throw err
        }
     }
+     
     return{getAdmins, deleteAdmin}
 }

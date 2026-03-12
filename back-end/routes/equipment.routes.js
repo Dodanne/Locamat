@@ -20,6 +20,12 @@ router.get("/equipment/:id", getEquipmentById);
 router.get("/user/:id/equipment", getEquipmentByUser);
 router.get("/equipments/search", getSearchEquipments);
 router.delete("/equipment/:id", authenticateToken, deleteEquipment);
+router.delete(
+  "/equipment/admin/:id",
+  authenticateToken,
+  isAdmin,
+  deleteEquipment,
+);
 router.patch(
   "/equipment/:id",
   authenticateToken,

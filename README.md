@@ -97,6 +97,12 @@ Cette application a été réalisée dans le cadre d’un projet de fin de forma
         |    │      |    └───ChatPage.tsx
         |    │      ├───Errors
         |    │      |    └───404.tsx
+        |    │      ├───Legal
+        |    │      |    ├───MentionsLegales.tsx
+        |    │      |    ├───Confidentialite.tsx
+        |    │      |    ├───CGU.tsx
+        |    │      |    ├───Cookies.tsx
+        |    │      |    └───RGPD.tsx
         |    │      └───Reservation
         |    │           ├───FailPaiement.tsx
         |    │           └───SuccesPaiement.tsx
@@ -201,9 +207,10 @@ npm run dev
 - GET '/equipment/:id'
 - GET '/user/:id/equipment'
 - GET '/equipments/search'
-- DELETE '/equipment/:id'
-- PATCH '/equipment/:id'
-- POST '/new-equipment'
+- DELETE '/equipment/:id' //token
+- DELETE '/equipment/admin/:id' //token //isAdmin
+- PATCH '/equipment/:id' //token
+- POST '/new-equipment' //token
 
 ### Paiement
 
@@ -214,29 +221,29 @@ npm run dev
 - GET '/rental/:id'
 - GET '/rental/renter/:id'
 - GET '/rental/owner/:id'
-- POST '/rental/new-rental'
-- PATCH '/rental/status/:id'
+- POST '/rental/new-rental' //token
+- PATCH '/rental/status/:id' //token
 
 ### Review
 
-- POST '/review-user'
-- GET '/review-user/:rental_id'
-- POST '/review-equipment'
-- GET '/review-equipment/:rental_id'
+- POST '/review-user' //token
+- GET '/review-user/:rental_id' //token
+- POST '/review-equipment' //token
+- GET '/review-equipment/:rental_id' //token
 - GET '/review-user/user/:user_id'
 - GET '/review-equipment/equipment/:equipment_id'
 
 ### User
 
-- GET '/users'
-- GET '/role/users'
-- PATCH '/:id/ban'
-- PATCH '/:id/isAdmin'
-- GET '/role/admin'
-- GET '/user/:id'
+- GET '/users' //token
+- GET '/role/users' //token //isAdmin
+- PATCH '/:id/ban' //token //isAdmin
+- PATCH '/:id/isAdmin' //token //isSuperAdmin
+- GET '/role/admin' //token //isAdmin
+- GET '/user/:id' //token
 - GET '/verify-email'
 - POST '/new-user'
-- PATCH '/edit-profile/:id'
+- PATCH '/edit-profile/:id' //token
 
 ## Librairies & Dépendances
 

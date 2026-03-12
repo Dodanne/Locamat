@@ -10,6 +10,7 @@ type EquipmentContextType = {
   getEquipments: () => Promise<void> 
   postNewEquipment: (form:FormData)=>Promise <Equipment| undefined>
   deleteEquipment:(id:number)=>Promise <void>
+  deleteEquipmentByAdmin:(id:number)=>Promise <void>
   patchEquipment: (id: number, formData: FormData)=>Promise <Equipment >
   getUserEquipments: (id: number)=>Promise <void>
 };
@@ -59,6 +60,19 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
         alert("Erreur lors de la suppression.");
        }
      }
+     
+     async function deleteEquipmentByAdmin (id:number){
+      try {
+       await apiAuth.delete(`/equipment/admin/${id}`)
+         setEquipments((prev) => prev.filter((e) => e.equipment_id !== id));
+         //liste userProfile
+        setUserEquipments((prev) =>prev.filter((e) => e.equipment_id !== id));
+       } catch (err) {
+         console.log(err);
+         throw err
+       
+       }
+     }
     
   async function patchEquipment(id:number, formData: FormData){
         try{
@@ -103,7 +117,8 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
         postNewEquipment,
         deleteEquipment, 
         patchEquipment,
-        getUserEquipments
+        getUserEquipments,
+        deleteEquipmentByAdmin,
       }}>
       {children}
     </EquipmentContext.Provider>

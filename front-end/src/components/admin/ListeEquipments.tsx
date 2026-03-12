@@ -4,7 +4,8 @@ import { useEquipmentContext } from "../../context/EquipmentContext";
 import FormatDate from "../FormatDate";
 
 export default function ListeEquipments() {
-  const {equipments, getEquipments, deleteEquipment}=useEquipmentContext()
+  const {equipments, getEquipments, deleteEquipmentByAdmin}=useEquipmentContext()
+ 
 
   useEffect(() => {
    getEquipments()
@@ -13,7 +14,14 @@ export default function ListeEquipments() {
   const handleDeleteEquipment = async (equipmentId: number) => {
     const confirmChoise =  confirm( "Etes-vous sûr de vouloir supprimer cet équipment ?");
     if(!confirmChoise)return
-    deleteEquipment(equipmentId)
+    try{
+      await deleteEquipmentByAdmin(equipmentId)
+     
+        alert("Équipement supprimé avec succès !");
+    }catch(err){
+      console.log(err)
+       alert("Erreur lors de la suppression.");
+    }
   };
 
 
@@ -36,7 +44,7 @@ export default function ListeEquipments() {
           {equipments.map((e) => (
             <tr key={e.equipment_id} className="hover:bg-gray-50">
               <td className="px-4 py-2 border whitespace-nowrap">{e.title}</td>
-              <td className="px-4 py-2 border whitespace-nowrap">{e.description }</td>
+              <td className="px-4 py-2 border ">{e.description }</td>
               <td className="px-4 py-2 border whitespace-nowrap">{e.price}</td>
               {/* <Link to=<ListeUtilisateur/> > */}
               <td className="px-4 py-2 border whitespace-nowrap">{e.owner?.first_name} {e.owner?.last_name}</td>
