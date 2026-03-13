@@ -63,18 +63,29 @@ const Review_equipment = sequelize.define(
   },
 );
 
-Review_equipment.afterCreate(async (review) => {
-  const reviews = await Review_equipment.findAll({
-    where: { reviewed_user_id: review.reviewed_user_id },
+async function equipmentRating(equipment_id) {
+  const rating_count = await Review_equipment.count({
+    where: { reviewed_equipment_id: equipment_id },
   });
-  const rental = await Rental.findByPk(review.rental_id);
-  const rating_count = reviews.length;
-  const rating_avg =
-    reviews.reduce((sum, r) => sum + r.rating, 0) / rating_count;
+
+  const rating_sum = await Review_equipment.sum("rating", {
+    where: { reviewed_equipment_id: equipment_id },
+  });
+
+  const rating_avg = rating_count === 0 ? 0 : rating_sum / rating_count;
 
   await Equipment.update(
     { rating_count, rating_avg },
-    { where: { equipment_id: rental.equipment_id } },
+    { where: { equipment_id: equipment_id } },
   );
+}
+Review_equipment.afterCreate(async (review) => {
+  await equipmentRating(review.reviewed_equipment_id);
+});
+Review_equipment.afterUpdate(async (review) => {
+  await equipmentRating(review.reviewedequipmentr_id);
+});
+Review_equipment.afterDestroy(async (review) => {
+  await equipmentRating(review.reviewed_equipment_id);
 });
 export default Review_equipment;

@@ -66,19 +66,30 @@ const Review_user = sequelize.define(
   },
 );
 
-Review_user.afterCreate(async (review) => {
-  const reviews = await Review_user.findAll({
-    where: { reviewed_user_id: review.reviewed_user_id },
+async function userRating(user_id) {
+  const rating_count = await Review_user.count({
+    where: { reviewed_user_id: user_id },
   });
-  const rating_count = reviews.length;
-  const rating_avg =
-    reviews.reduce((sum, r) => sum + r.rating, 0) / rating_count;
-  console.log("count", rating_count);
-  console.log("avg", rating_avg);
+
+  const rating_sum = await Review_user.sum("rating", {
+    where: { reviewed_user_id: user_id },
+  });
+
+  const rating_avg = rating_count === 0 ? 0 : rating_sum / rating_count;
+
   await User.update(
     { rating_count, rating_avg },
-    { where: { user_id: review.reviewed_user_id } },
+    { where: { user_id: user_id } },
   );
+}
+Review_user.afterCreate(async (review) => {
+  await userRating(review.reviewed_user_id);
+});
+Review_user.afterUpdate(async (review) => {
+  await userRating(review.reviewed_user_id);
+});
+Review_user.afterDestroy(async (review) => {
+  await userRating(review.reviewed_user_id);
 });
 
 export default Review_user;
