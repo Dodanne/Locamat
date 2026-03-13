@@ -64,7 +64,6 @@ async function getUserReviews(user_id:number){
 async function getUserGivenReviews(user_id:number){
     try{
         const res = await apiAuth.get(`/reviews-given/${user_id}`)
-        console.log(res.data)
         return res.data
     }catch (err){
         console.log(err)

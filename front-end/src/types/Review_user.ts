@@ -14,4 +14,5 @@ export type ReviewUser = {
   reviewer?: User
   reviewedUser?:User
   rental?:Rental
+  reviewedEquipmentUser?:User
 };

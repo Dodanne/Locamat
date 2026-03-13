@@ -8,11 +8,13 @@ import FormatDate from "../FormatDate"
 import { IoLocationOutline } from "react-icons/io5";
 import StarRating from "../StarRating"
 import { Link } from "react-router-dom"
+import { ReviewEquipment } from "../../types/Review_equipment"
 
 export default function ReviewsGivenUserProfile(){
      const {user_id}=useAuth()
      const {getUserGivenReviews}=useReviews()
      const [userReviews, setUserReviews] = useState<ReviewUser[]>([])
+     const [equipmentReviews, setEquipmentReviews] = useState<ReviewEquipment[]>([])
 
  useEffect(() => {
         if(!user_id) return
@@ -20,7 +22,8 @@ export default function ReviewsGivenUserProfile(){
     try{
         const data= await getUserGivenReviews(Number(user_id))
         console.log(data)
-         setUserReviews(data)
+         setEquipmentReviews(data.equipmentReviews)
+         setUserReviews(data.userReviews)
          
      }catch(err){
             console.log(err)
@@ -32,27 +35,28 @@ export default function ReviewsGivenUserProfile(){
 
     return (
         <>
+         <div className="space-y-6 mt-3">
                     {userReviews.length > 0 ? (
                         
-                         <div className="flex flex-col gap-4">
+                         <div className="flex flex-col gap-4 ">
                            {userReviews.map((r) => (
-                            <div key={r.reviews_user_id} className="bg-white rounded-xl border p-4 space-y-4">
+                            <div key={r.reviewed_user_id} className="bg-white rounded-xl border p-4 space-y-4">
                                 <div className="flex items-start justify-between gap-4">
                                   <div className="flex items-center gap-3">
-                                    {r.reviewer?.photo && r.reviewer?.photo !== "NULL" ? (
-                                      <img src={r.reviewer?.photo} className="w-10 h-10 object-cover rounded-full shrink-0"/>
+                                    {r.reviewedUser?.photo && r.reviewedUser?.photo !== "NULL" ? (
+                                      <img src={r.reviewedUser?.photo} className="w-10 h-10 object-cover rounded-full shrink-0"/>
                                     ) : (
                                       <span className="flex items-center justify-center w-10 h-10 text-lg font-bold text-white bg-accent rounded-full shrink-0">
-                                        {getInitials(r.reviewer)}
+                                        {getInitials(r.reviewedUser)}
                                       </span>
                                     )}
                                     <div>
                                       <p className="font-semibold text-gray-900">
-                                        {r.reviewer ? `${r.reviewer.first_name} ${r.reviewer.last_name}` : "Utilisateur supprimé"}
+                                        {r.reviewedUser ? `${r.reviewedUser.first_name} ${r.reviewedUser.last_name}` : "Utilisateur supprimé"}
                                       </p>
                                       <p className="text-gray-500 text-sm">{FormatDate(r.createdAt)}</p>
                                       <div className="flex items-center text-gray-500 text-sm">
-                                        <IoLocationOutline/><span>{r.reviewer?.city}</span>
+                                        <IoLocationOutline/><span>{r.reviewedUser?.city}</span>
                                       </div>
                                     </div>
                                   </div>
@@ -96,6 +100,7 @@ export default function ReviewsGivenUserProfile(){
                             <p>Aucun avis donné pour le moment</p>
                           </div>
                          )}
+              </div>
         </>
     )
 }
