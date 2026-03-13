@@ -13,6 +13,7 @@ import { useReviews } from "../../hook/useReviews";
 import { ReviewEquipment } from "../../types/Review_equipment";
 import { IoLocationOutline } from "react-icons/io5";
 import StarRating from "../../components/StarRating";
+import { CgProfile } from "react-icons/cg";
 
 export default function EquipmentItem() {
     const [equipment, setEquipmentById] = useState<Equipment | null>(null)
@@ -81,8 +82,10 @@ export default function EquipmentItem() {
                 <div className="flex gap-2">
                     <span> {equipment.category?.name} </span>
                 </div>
-                <div className="flex flex-col gap-6 rounded-xl border bg-white p-6 mt-8">
-                    <div className="flex items-center gap-4 relative ">
+                <div className="flex flex-col  gap-6 rounded-xl border bg-white p-6 mt-8">
+                    <div className="flex items-center gap-4 relative justify-between ">
+                        <div className="flex">
+                    <Link to={`/user-profile/${equipment.owner_id}`}>
                         <span className="relative flex size-10 shrink-0 overflow-hidden h-16 w-16">
                         {equipment.owner?.photo && equipment.owner?.photo!=="NULL" ? (  
                             <img src={equipment.owner?.photo} alt={equipment.owner?.first_name} className="w-12 h-12 object-cover rounded-full "/>
@@ -91,17 +94,25 @@ export default function EquipmentItem() {
                                  )
                                    } 
                         </span>
-                        <div>
+                        </Link>
+                        <div >
                             <div className="text-lg text-gray-900">{equipment.owner?.first_name} {equipment.owner?.last_name}</div>
                             <div className="text-sm text-gray-600">
                                 <div className="flex items-center gap-1">
                                     <FaStar  className="text-yellow-400"/>
                                     <span className="text-gray-900">{equipment.owner?.rating_avg} </span>
                                     <span className="text-gray-500">({equipment.owner?.rating_count} avis)</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    <button className="btn p-3 bg-gray-100 hover:bg-gray-200 md:absolute right-1"> <CiChat1 className="text-xl"/> Contacter </button>
+                        
+                        <div className="flex  gap-3 ">
+                            <Link to={`/user-profile/${equipment.owner_id}`}>
+                            <button className="btn p-3 bg-gray-100 hover:bg-gray-200 ">  <CgProfile className="text-xl"/> Voir profil </button>
+                            </Link>
+                            <button className="btn p-3 bg-gray-100 hover:bg-gray-200 "> <CiChat1 className="text-xl " strokeWidth={1}/> Contacter </button>
+                        </div>
                     </div>
                 </div>
                 <div className="flex flex-col gap-6 rounded-xl border bg-white p-6 mt-8">

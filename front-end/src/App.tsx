@@ -47,6 +47,7 @@ function App() {
                 <Route path="/connexion" element={<Connexion />} />
                 <Route path="/equipment/:id" element={<EquipmentItem />} />
                 <Route path="/user-profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+                <Route path="/user-profile/:id" element={<UserProfile />} />
                 <Route path="/user-form" element={<UserForm />} />
                 <Route path="/admin-dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/logout" element={<Deconnexion />} />

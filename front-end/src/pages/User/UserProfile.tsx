@@ -5,7 +5,7 @@ import { BsBoxSeam } from "react-icons/bs";
 import { PiClockCounterClockwise } from "react-icons/pi";
 import { FaRegStar } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate} from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import { FaHandHolding } from "react-icons/fa";
 import getInitials from "../../components/GetInitials";
 import EquipmentUserProfile from "../../components/user/EquipmentUserProfile";
@@ -21,24 +21,28 @@ import Loader from "../../components/Loader";
 export default function UserProfile (){
     const location = useLocation()
     const navigate= useNavigate()
+    const {id}=useParams()
     const state = location.state?.activeDiv;
     const [activeDiv,setActiveDiv]=useState(state||"equipment")
-    const {user_id}=useAuth()
+    const {user_id, isLogged}=useAuth()
     const {getUserById}=useUsers()
     const [user, setUser] = useState<User|null>(null);
 
+    const idProfile= id? Number(id):Number(user_id)
+    const isOwnerProfile= isLogged && idProfile ===user_id
+
      useEffect(() => {
-        if(!user_id) return
-        const id= user_id
+        if(!idProfile) return
+   
         async function fetchUserById(){
         try{
-        const data= await getUserById(id)
+        const data= await getUserById(idProfile)
          setUser(data)
         }catch(err){
             console.log(err)
         }
     }fetchUserById()
-    }, [user_id])
+    }, [idProfile])
 
     function handleClick(){
         return navigate ('/user-form', {state:{mode:"edit"}})
@@ -77,6 +81,7 @@ export default function UserProfile (){
                    
                 </div>   
             </div>
+            {isOwnerProfile && (
             <div className="flex flex-col justify-center p-4 gap-4">
                         <button className="btn border-gray-200 bg-background hover:bg-gray-200 h-9 px-4 py-2 " onClick={()=>handleClick()}>
                         <FaRegEdit /> <span className=" md:block">Modifier les informations du profil </span> </button>
@@ -89,21 +94,29 @@ export default function UserProfile (){
                      </div>
                   </>
                 )}
-                    </div>           
+                    </div> 
+            )}          
         </div>
         <div className="flex flex-col gap-2 my-6">
+                {isOwnerProfile&&(
+                    <>
             <div className="bg-gray-200 h-9 items-center justify-center rounded-xl p-[3px] grid w-full grid-cols-4">
                 <button onClick={()=>setActiveDiv("equipment")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="equipment" ? 'bg-gray-300' : ''} `}>
                     <BsBoxSeam /> <span className="hidden md:block">Mon matériel</span>  </button>
                 
                 <button onClick={()=>setActiveDiv("locations")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="locations" ? 'bg-gray-300' : ''} `}>
                     <PiClockCounterClockwise /> <span className="hidden md:block"> Mes réservations</span> </button>
+                    
                 <button onClick={()=>setActiveDiv("prêts")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="prêts" ? 'bg-gray-300' : ''} `}>
                     <FaHandHolding className="flex items-center gap-2 relative -top-0.5"/><span className="hidden md:block"> Mes mises en location </span></button>
+                    
                  <button onClick={()=>setActiveDiv("reviews")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="reviews" ? 'bg-gray-300' : ''} `}>
                     <FaRegStar /><span className="hidden md:block"> Avis reçus </span> </button>
             </div> 
-       
+                    </>
+                    )}
+              {isOwnerProfile ? (
+                    <> 
              {activeDiv==="equipment"&&(
                 <EquipmentUserProfile/>
              )}
@@ -113,9 +126,14 @@ export default function UserProfile (){
              {activeDiv==="prêts"&&(
                 <RenterREntalsUserProfile/>
             )}
+            
             {activeDiv==="reviews"&&(
                 <ReviewsUserProfile/>
             )}
+            </> 
+              ):(
+                <ReviewsUserProfile />
+              )}
             </div>
     </div>
 

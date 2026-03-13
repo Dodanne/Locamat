@@ -20,8 +20,6 @@ export default function Reviews ({ rental, reviewSubmitted }: ReviewProps){
   
     async function  handleSubmit(e:React.FormEvent){
       e.preventDefault()
-      console.log(rental.renter?.user_id )
-      console.log(user_id )
       
       try{
         const formUser={

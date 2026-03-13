@@ -8,45 +8,47 @@ import { useReviews } from "../../hook/useReviews";
 import { ReviewUser } from "../../types/Review_user";
 import getInitials from "../GetInitials";
 import { IoLocationOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import FormatDate from "../FormatDate";
 
 
 export default function ReviewsUserProfile(){
     const {user_id}=useAuth()
+    const {id}= useParams()
     const {getUserById}=useUsers()
     const {getUserReviews}=useReviews()
     const [user, setUser] = useState<User|null>(null);
     const [userReviews, setUserReviews] = useState<ReviewUser[]>([])
     const [error, setError] = useState("")
 
+    const idProfile= id? Number(id):Number(user_id)
+
      useEffect(() => {
-        if(!user_id) return
-        const id= user_id
+        if(!idProfile) return
         async function fetchUserById(){
      try{
-        const data= await getUserById(id)
+        const data= await getUserById(idProfile)
          setUser(data)
      }catch(err){
             console.log(err)
             setError("Impossible de charger le profil")
         }
     }fetchUserById()
-    }, [user_id])
+    }, [idProfile])
 
     useEffect(() => {
-        if(!user_id) return
+        if(!idProfile) return
         const id= user_id
         async function fetchUserReviews(){
     try{
-        const data= await getUserReviews(id)
+        const data= await getUserReviews(idProfile)
          setUserReviews(data)
          
      }catch(err){
             console.log(err)
         }
     }fetchUserReviews()
-    }, [user_id])
+    }, [idProfile])
     
     if(!user) return <Loader/>
     
