@@ -102,7 +102,7 @@ User.hasMany(Reviews_user, {
     name: "reviewed_user_id",
     allowNull: true,
   },
-  as: "recieveUserReview",
+  as: "receiveUserReview",
 });
 
 Reviews_user.belongsTo(User, {

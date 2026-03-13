@@ -190,7 +190,7 @@ export const getUserGivesReviews = async (req, res) => {
         },
         {
           model: User,
-          as: "reviewed",
+          as: "reviewedUser",
           attributes: ["user_id", "first_name", "last_name", "photo", "city"],
         },
       ],
