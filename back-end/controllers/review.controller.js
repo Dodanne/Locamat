@@ -70,8 +70,11 @@ export const createEquipmentReview = async (req, res) => {
 export const getEquipmentIsReview = async (req, res) => {
   try {
     const rental_id = req.params.rental_id;
-    const data = await Review_equipment.findAll({ where: { rental_id } });
-    const hasReview = data.length > 0;
+    const reviewer_id = req.user.id;
+    const data = await Review_equipment.findOne({
+      where: { rental_id, reviewer_id },
+    });
+    const hasReview = data ? true : false;
     res.json({ hasReview });
   } catch (err) {
     console.log(err);
@@ -81,8 +84,11 @@ export const getEquipmentIsReview = async (req, res) => {
 export const getUserIsReview = async (req, res) => {
   try {
     const rental_id = req.params.rental_id;
-    const data = await Review_user.findAll({ where: { rental_id } });
-    const hasReview = data.length > 0;
+    const reviewer_id = req.user.id;
+    const data = await Review_user.findOne({
+      where: { rental_id, reviewer_id },
+    });
+    const hasReview = data ? true : false;
     res.json({ hasReview });
   } catch (err) {
     console.log(err);

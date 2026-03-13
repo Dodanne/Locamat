@@ -39,6 +39,7 @@ export default function OwnerRentalsUserProfile(){
         patchStatusRental(id, newStatus)
           setOwnerRentals(prev =>prev.map(r =>r.rental_id === id ? { ...r, status: newStatus } : r))
     }
+    
      useEffect(()=>{
       async function isReview(){
         for(const rental of ownerRentals)
