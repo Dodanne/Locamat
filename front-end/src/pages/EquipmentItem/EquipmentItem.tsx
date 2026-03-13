@@ -54,6 +54,7 @@ export default function EquipmentItem() {
     
         if (error) return <div className="container py-8 text-center text-red-500">{error}</div>
         if (!equipment) return <Loader/>;
+        console.log(equipment)
         return (
         <div className="container py-8">
             <Link to="/rechercher" >
@@ -76,8 +77,8 @@ export default function EquipmentItem() {
                             </div>
                             <div className="flex items-center gap-1">
                                 <FaStar  className="text-yellow-400"/>
-                                <span className="text-gray-900">{equipment.owner?.rating_avg} </span>
-                                <span className="text-gray-500">({equipment.owner?.rating_count})</span>
+                                <span className="text-gray-900">{equipment.rating_avg} </span>
+                                <span className="text-gray-500">({equipment.rating_count})</span>
                             </div>      
                         </div>
                     </div>

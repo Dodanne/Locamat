@@ -79,6 +79,7 @@ async function equipmentRating(equipment_id) {
       {
         model: Rental,
         as: "rental",
+        attributes: [],
         where: { equipment_id },
       },
     ],

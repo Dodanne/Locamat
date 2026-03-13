@@ -21,7 +21,6 @@ export default function ReviewsGivenUserProfile(){
         async function fetchUserGivenReviews(){
     try{
         const data= await getUserGivenReviews(Number(user_id))
-        console.log(data)
          setEquipmentReviews(data.equipmentReviews)
          setUserReviews(data.userReviews)
          
@@ -76,15 +75,25 @@ export default function ReviewsGivenUserProfile(){
                                 </div>
 
                                 <hr/>
-                                    <div className="flex gap-4 items-start">
+                                    <div className="flex gap-4 items-center ">
+                                      <div className="flex gap-4">
                                       <Link to={`/equipment/${r.rental?.equipment?.equipment_id}`}>
                                         <img src={r.rental?.equipment?.photo} alt={r.rental?.equipment?.title} className="w-16 h-16 object-cover rounded-lg shrink-0"/>
                                       </Link>
-                                      <div className="flex-1">
+                                      <div className="flex-col ">
                                         <h3 className="text-gray-900 font-medium">{r.rental?.equipment?.title}</h3>
                                         <p className="text-gray-500 text-sm">Du {FormatDate(r.rental?.start_date)}</p>
                                         <p className="text-gray-500 text-sm">Au {FormatDate(r.rental?.end_date)}</p>
                                       </div>
+                                      </div>
+                                      <div className="flex justify-center w-2/3">
+                                   {equipmentReviews.filter((er) =>  er.rental_id === r.rental_id)
+                                   .map((er)=>(
+                                   <div className="bg-gray-100 rounded-lg p-4 border-l-4 border-accent text-center md:w-2/3">
+                                 <p className="text-gray-900 italic text-lg">"{er.comment}"</p>
+                                </div>
+                                   ))}
+                                   </div>
                                       <div className="text-right shrink-0">
                                         <p className="text-xl text-primary">{r.rental?.total_price} €</p>
                                         <p className="text-sm text-gray-500">Total</p>
