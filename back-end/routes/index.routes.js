@@ -6,6 +6,7 @@ import rentalRoutes from "./rental.routes.js";
 import authRoutes from "./auth.routes.js";
 import paiementRoutes from "./paiement.routes.js";
 import reviewRoutes from "./review.routes.js";
+import conversationRoutes from "./conversation.routes.js";
 const router = express.Router();
 
 router.use(equipmentRoutes);
@@ -15,5 +16,6 @@ router.use(rentalRoutes);
 router.use(authRoutes);
 router.use(paiementRoutes);
 router.use(reviewRoutes);
+router.use(conversationRoutes);
 
 export default router;

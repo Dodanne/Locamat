@@ -13,6 +13,7 @@ const Review_equipment = sequelize.define(
     },
     rental_id: {
       type: DataTypes.INTEGER,
+      allowNull: true,
     },
     reviewer_id: {
       type: DataTypes.INTEGER,

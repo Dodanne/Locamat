@@ -62,11 +62,11 @@ Rental.belongsTo(User, {
 
 //rental&reviews_equipment
 Rental.hasMany(Reviews_equipment, {
-  foreignKey: { name: "renter_id", allowNull: false },
+  foreignKey: { name: "rental_id", allowNull: true },
   as: "reviews_equipment",
 });
 Reviews_equipment.belongsTo(Rental, {
-  foreignKey: { name: "rental_id", allowNull: false },
+  foreignKey: { name: "rental_id", allowNull: true },
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
   as: "rental",
