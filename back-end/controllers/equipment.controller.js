@@ -60,7 +60,6 @@ export const get6FirstEquipment = async (req, res) => {
         {
           model: Category,
           as: "category",
-          attributes: ["name"],
         },
       ],
       limit: 6,

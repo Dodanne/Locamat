@@ -143,11 +143,14 @@ return (
           ) : (
                 <h3 className="text-lg text-gray-900 mb-1">{equipment.title}</h3>
           )}
-                <span className="text-sm text-black bg-primary/10 px-1 py-1 rounded-full text-center">{equipment.category?.name}</span>
+               
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center justify-between gap-2 text-sm text-gray-600">
+              <div className="flex gap-1 items-center">
                 <IoLocationSharp />
-      <span>{equipment.owner?.city}</span>  
+               <span>{equipment.owner?.city}</span>  
+             </div>
+             <span className="text-sm text-black bg-primary/10 px-1 py-2 rounded-full text-center whitespace-nowrap">{equipment.category?.icon} {equipment.category?.name}</span>
     </div>
 
         {/* Note + Prix */}
