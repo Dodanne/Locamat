@@ -41,28 +41,28 @@ const Review_user = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
       validate: {
-        notNull: { mesage: "Le commentaire est obligatoire" },
-        notEmpty: { mesage: "Le commentaire ne peut pas être vide" },
+        notNull: { message: "Le commentaire est obligatoire" },
+        notEmpty: { message: "Le commentaire ne peut pas être vide" },
         len: {
           args: [3, 1000],
-          mesage: "Le commentaire doit contenir entre 3 et 1000 caractères",
+          message: "Le commentaire doit contenir entre 3 et 1000 caractères",
         },
       },
     },
     status: {
       type: DataTypes.ENUM("renter", "owner"),
       allowNull: false,
-      indexes: [
-        {
-          unique: true,
-          fields: ["rental_id", "reviewer_id"],
-        },
-      ],
     },
   },
   {
     timestamps: true,
     freezeTableName: true,
+    indexes: [
+      {
+        unique: true,
+        fields: ["rental_id", "reviewer_id"],
+      },
+    ],
   },
 );
 
