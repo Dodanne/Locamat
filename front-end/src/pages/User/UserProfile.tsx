@@ -11,6 +11,7 @@ import getInitials from "../../components/GetInitials";
 import EquipmentUserProfile from "../../components/user/EquipmentUserProfile";
 import OwnerRentalsUserProfile from "../../components/user/RenterRentalUserProfile";
 import RenterREntalsUserProfile from "../../components/user/OwnerRentalUserProfile";
+import ReviewsReceivedUserProfile from "../../components/user/ReviewsReceivedUserProfile";
 import ReviewsUserProfile from "../../components/user/ReviewsUserProfile";
 import { useAuth } from "../../context/AuthContext";
 import { useUsers } from "../../hook/useUsers";
@@ -100,18 +101,18 @@ export default function UserProfile (){
         <div className="flex flex-col gap-2 my-6">
                 {isOwnerProfile&&(
                     <>
-            <div className="bg-gray-200 h-9 items-center justify-center rounded-xl p-[3px] grid w-full grid-cols-4">
-                <button onClick={()=>setActiveDiv("equipment")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="equipment" ? 'bg-gray-300' : ''} `}>
+            <div className="bg-gray-100 h-9 items-center justify-center rounded-xl p-[3px] grid w-full grid-cols-4">
+                <button onClick={()=>setActiveDiv("equipment")} className={`btn border-none py-1 px-2 rounded-xl h-7 ${activeDiv==="equipment" ? 'bg-gray-300' : ''} `}>
                     <BsBoxSeam /> <span className="hidden md:block">Mon matériel</span>  </button>
                 
-                <button onClick={()=>setActiveDiv("locations")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="locations" ? 'bg-gray-300' : ''} `}>
+                <button onClick={()=>setActiveDiv("locations")} className={`btn border-none py-1 px-2 rounded-xl h-7 ${activeDiv==="locations" ? 'bg-gray-300' : ''} `}>
                     <PiClockCounterClockwise /> <span className="hidden md:block"> Mes réservations</span> </button>
                     
-                <button onClick={()=>setActiveDiv("prêts")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="prêts" ? 'bg-gray-300' : ''} `}>
+                <button onClick={()=>setActiveDiv("prêts")} className={`btn border-none py-1 px-2 rounded-xl h-7 ${activeDiv==="prêts" ? 'bg-gray-300' : ''} `}>
                     <FaHandHolding className="flex items-center gap-2 relative -top-0.5"/><span className="hidden md:block"> Mes mises en location </span></button>
                     
-                 <button onClick={()=>setActiveDiv("reviews")} className={`btn py-1 px-2 rounded-xl h-7 ${activeDiv==="reviews" ? 'bg-gray-300' : ''} `}>
-                    <FaRegStar /><span className="hidden md:block"> Avis reçus </span> </button>
+                 <button onClick={()=>setActiveDiv("reviews")} className={`btn border-none py-1 px-2 rounded-xl h-7 ${activeDiv==="reviews" ? 'bg-gray-300' : ''} `}>
+                    <FaRegStar /><span className="hidden md:block"> Mes avis </span> </button>
             </div> 
                     </>
                     )}
@@ -132,7 +133,7 @@ export default function UserProfile (){
             )}
             </> 
               ):(
-                <ReviewsUserProfile />
+                <ReviewsReceivedUserProfile />
               )}
             </div>
     </div>

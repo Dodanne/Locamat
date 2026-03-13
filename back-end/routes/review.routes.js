@@ -5,6 +5,7 @@ import {
   createUserReview,
   getEquipmentIsReview,
   getEquipmentReviews,
+  getUserGivesReviews,
   getUserIsReview,
   getUserReviews,
 } from "../controllers/review.controller.js";
@@ -21,5 +22,6 @@ router.get(
 );
 router.get("/review-user/user/:user_id", getUserReviews);
 router.get("/review-equipment/equipment/:equipment_id", getEquipmentReviews);
+router.get("/reviews-given/:user_id", getUserGivesReviews);
 
 export default router;

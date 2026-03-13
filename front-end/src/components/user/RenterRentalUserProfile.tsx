@@ -66,7 +66,7 @@ export default function RenterRentalsUserProfile(){
                     </div>
                      ) :(
                         <>
-                    <div className="flex equipments-center justify-between"> 
+                    <div className="flex justify-between"> 
                        <h2 className="text-2xl text-gray-900 my-4"> Matériel que j’ai loué</h2>
                     </div>
                     <div className="space-y-4">

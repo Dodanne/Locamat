@@ -136,7 +136,6 @@ export const getEquipmentReviews = async (req, res) => {
           model: Rental,
           as: "rental",
           where: { equipment_id },
-          attributes: [],
         },
         {
           model: User,
@@ -149,6 +148,61 @@ export const getEquipmentReviews = async (req, res) => {
     res.json(data);
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+export const getUserGivesReviews = async (req, res) => {
+  try {
+    const reviewer_id = req.params.user_id;
+
+    const dataUser = await Review_user.findAll({
+      where: { reviewer_id },
+      include: [
+        {
+          model: Rental,
+          as: "rental",
+          include: [
+            {
+              model: Equipment,
+              as: "equipment",
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "reviewed",
+          attributes: ["user_id", "first_name", "last_name", "photo", "city"],
+        },
+      ],
+    });
+    const dataEquipment = await Review_equipment.findAll({
+      where: { reviewer_id },
+      include: [
+        {
+          model: Rental,
+          as: "rental",
+          include: [
+            {
+              model: Equipment,
+              as: "equipment",
+            },
+          ],
+        },
+        {
+          model: User,
+          as: "reviewed",
+          attributes: ["user_id", "first_name", "last_name", "photo", "city"],
+        },
+      ],
+    });
+
+    res.json({
+      userReviews: dataUser,
+      equipmentReviews: dataEquipment,
+    });
+  } catch (err) {
+    console.log(err);
+
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
