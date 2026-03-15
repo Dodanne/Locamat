@@ -10,15 +10,17 @@ import getInitials from "../GetInitials";
 import { IoLocationOutline } from "react-icons/io5";
 import { Link, useParams } from "react-router-dom";
 import FormatDate from "../FormatDate";
+import { ReviewEquipment } from "../../types/Review_equipment";
 
 
 export default function ReviewsReceivedUserProfile(){
     const {user_id}=useAuth()
     const {id}= useParams()
     const {getUserById}=useUsers()
-    const {getUserReviews}=useReviews()
+    const {getUserReviews, getEquipmentReviews}=useReviews()
     const [user, setUser] = useState<User|null>(null);
     const [userReviews, setUserReviews] = useState<ReviewUser[]>([])
+    const [equipmentReviews, setEquipmentReviews] = useState<ReviewEquipment[]>([])
     const [error, setError] = useState("")
 
     const idProfile= id? Number(id):Number(user_id)
@@ -41,8 +43,11 @@ export default function ReviewsReceivedUserProfile(){
        
         async function fetchUserReviews(){
     try{
-        const data= await getUserReviews(idProfile)
-         setUserReviews(data)
+        const dataUser= await getUserReviews(idProfile)
+        const dataEquipment= await getEquipmentReviews(idProfile)
+         setUserReviews(dataUser)
+         setEquipmentReviews(dataEquipment)
+         console.log(dataEquipment)
          
      }catch(err){
             console.log(err)
@@ -134,6 +139,14 @@ export default function ReviewsReceivedUserProfile(){
                                         <p className="text-gray-500 text-sm">Du {FormatDate(r.rental?.start_date)}</p>
                                         <p className="text-gray-500 text-sm">Au {FormatDate(r.rental?.end_date)}</p>
                                       </div>
+                                       <div className="flex justify-center w-2/3">
+                                         {equipmentReviews.filter((er) =>  er.rental_id === r.rental_id)
+                                                          .map((er)=>(
+                                             <div className="bg-gray-100 rounded-lg p-4 border-l-4 border-accent text-center md:w-2/3">
+                                                 <p className="text-gray-900 italic text-lg">"{er.comment}"</p>
+                                             </div>
+                                           ))}
+                                   </div>
                                       <div className="text-right shrink-0">
                                         <p className="text-xl text-primary">{r.rental?.total_price} €</p>
                                         <p className="text-sm text-gray-500">Total</p>

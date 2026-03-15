@@ -117,6 +117,8 @@ Cette application a été réalisée dans le cadre d’un projet de fin de forma
         |    │       |     ├───EquipmentUserProfile.tsx
         |    │       |     ├───OwnerRentalUserProfile.tsx
         |    │       |     ├───RenterRentalUserProfile.tsx
+        |    │       |     ├───RenterGivenUserProfile.tsx
+        |    │       |     ├───RenterReceivedUserProfile.tsx
         |    │       |     └───ReviewsUserProfile.tsx
         |    │       ├───equipment
         |    │       |     ├───ItemCard.tsx
@@ -232,6 +234,9 @@ npm run dev
 - GET '/review-equipment/:rental_id' //token
 - GET '/review-user/user/:user_id'
 - GET '/review-equipment/equipment/:equipment_id'
+- GET '/reviews-given/:user_id' //token
+- PATCH '/review-user/:reviews_user_id' //token
+- PATCH '/review-equipment/:reviews_equipment_id' //token
 
 ### User
 

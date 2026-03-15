@@ -8,6 +8,8 @@ import {
   getUserGivesReviews,
   getUserIsReview,
   getUserReviews,
+  patchEquipmentReview,
+  patchUserReview,
 } from "../controllers/review.controller.js";
 
 const router = express.Router();
@@ -22,6 +24,16 @@ router.get(
 );
 router.get("/review-user/user/:user_id", getUserReviews);
 router.get("/review-equipment/equipment/:equipment_id", getEquipmentReviews);
-router.get("/reviews-given/:user_id", getUserGivesReviews);
+router.get("/reviews-given/:user_id", authenticateToken, getUserGivesReviews);
+router.patch(
+  "/review-user/:reviews_user_id",
+  authenticateToken,
+  patchUserReview,
+);
+router.patch(
+  "/review-equipment/:reviews_equipment_id",
+  authenticateToken,
+  patchEquipmentReview,
+);
 
 export default router;

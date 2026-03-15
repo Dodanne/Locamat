@@ -263,9 +263,8 @@ export const updateEquipment = async (req, res) => {
     const id = req.params.id;
     const { title, price, description } = req.body;
     const data = await Equipment.findByPk(id);
-    if (!data) {
+    if (!data)
       return res.status(404).json({ message: "Equipement non trouvé" });
-    }
     data.title = title;
     data.price = Number(price);
     data.description = description;

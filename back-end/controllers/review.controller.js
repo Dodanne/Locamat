@@ -206,3 +206,35 @@ export const getUserGivesReviews = async (req, res) => {
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
+export const patchUserReview = async (req, res) => {
+  try {
+    const id = req.params.reviews_user_id;
+    const { comment, rating } = req.body;
+    const data = await Review_user.findByPk(id);
+    if (!data) return res.status(404).json({ message: "Avis non trouvé" });
+    data.comment = comment;
+    data.rating = Number(rating);
+    await data.save();
+    console.log(data);
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+export const patchEquipmentReview = async (req, res) => {
+  try {
+    const id = req.params.reviews_equipment_id;
+    const { comment, rating } = req.body;
+    const data = await Review_equipment.findByPk(id);
+    if (!data) return res.status(404).json({ message: "Avis non trouvé" });
+    data.comment = comment;
+    data.rating = Number(rating);
+    await data.save();
+    console.log(data);
+    res.json(data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};

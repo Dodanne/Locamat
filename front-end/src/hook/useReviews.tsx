@@ -70,7 +70,24 @@ async function getUserGivenReviews(user_id:number){
         return []
     }
 }
+async function patchUserReview(reviewed_user_id:number, data:{comment:string,rating:number}){
+    try{
+        const res= await apiAuth.patch(`/review-user/${reviewed_user_id}`, data)
+        return res.data
+    }catch (err){
+        console.log(err)
+        throw err
+    }
+}
+async function patchEquipmentReview(reviewed_equipment_id:number, data:{comment:string,rating:number}){
+    try{
+        const res= await apiAuth.patch(`/review-user/${reviewed_equipment_id}`, data)
+        return res.data
+    }catch (err){
+        console.log(err)
+        throw err
+    }
+}
 
-
-return {postUserReview, postEquipmentReviews, getEquipmentIsReview, getUserIsReview, getUserReviews, getEquipmentReviews, getUserGivenReviews}
+return {postUserReview, postEquipmentReviews, getEquipmentIsReview, getUserIsReview, getUserReviews, getEquipmentReviews, getUserGivenReviews, patchUserReview, patchEquipmentReview}
 }
