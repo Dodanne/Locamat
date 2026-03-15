@@ -22,6 +22,7 @@ export default function ReviewsGivenUserProfile(){
      const [rating,setRating]=useState(5)
      const [comment,setComment]=useState("")
      const [updateUserReview,setUpdateUserReview ] = useState <number | null>(null)
+     const [updateEquipmentReview,setUpdateEquipmentReview ] = useState <number | null>(null)
 
 
  useEffect(() => {
@@ -48,6 +49,16 @@ export default function ReviewsGivenUserProfile(){
         console.log(err)
       }
     }
+        async function handleEquipmentReviewUpdate(reviewed_equipment_id:number, comment:string, rating:number){
+      try {
+          await patchEquipmentReview(reviewed_equipment_id,{comment,rating})
+          
+          setEquipmentReviews(prev=>prev.map(r=> r.reviews_equipment_id === reviewed_equipment_id? {...r,comment,rating} : r))
+          setUpdateEquipmentReview(null)
+      } catch (err){
+        console.log(err)
+      }
+    }
     
     if(!user_id) return <Loader/> 
 
@@ -59,8 +70,8 @@ export default function ReviewsGivenUserProfile(){
                          <div className="flex flex-col gap-4 ">
                            {userReviews.map((r) => (
                             <div key={r.reviews_user_id} className="bg-white rounded-xl border p-4 space-y-4">
-                                <div className="flex items-start justify-between gap-4">
-                                  <div className="flex items-center gap-3">
+                                <div className="flex  flex-col md:flex-row justify-between gap-4">
+                                  <div className="flex flex-col md:flex-row items-center gap-3">
                                     {r.reviewedUser?.photo && r.reviewedUser?.photo !== "NULL" ? (
                                       <img src={r.reviewedUser?.photo} className="w-10 h-10 object-cover rounded-full shrink-0"/>
                                     ) : (
@@ -68,19 +79,60 @@ export default function ReviewsGivenUserProfile(){
                                         {getInitials(r.reviewedUser)}
                                       </span>
                                     )}
-                                    <div>
-                                      <p className="font-semibold text-gray-900">
+                                    <div >
+                                      
+                                      <p className="font-semibold text-gray-900 whitespace-nowrap">
                                         {r.reviewedUser ? `${r.reviewedUser.first_name} ${r.reviewedUser.last_name}` : "Utilisateur supprimé"}
                                       </p>
+                                      
                                       <p className="text-gray-500 text-sm">{FormatDate(r.createdAt)}</p>
                                       <div className="flex items-center text-gray-500 text-sm">
                                         <IoLocationOutline/><span>{r.reviewedUser?.city}</span>
                                       </div>
                                     </div>
                                   </div>
-                                  <div className="flex items-center gap-1 shrink-0">
+                                  <div className="flex justify-center w-full">
+                                   <div className="bg-gray-100 rounded-lg p-4 pb-12 relative border-l-4 border-accent text-center w-full md:w-2/3 ">
+                                {updateUserReview === r.reviews_user_id? (
+                                  < textarea className="w-full p-2 rounded border" rows={3} value={comment} onChange={(e)=>setComment(e.target.value)}/>
+                                ):(
+                                 <p className="text-gray-900 italic text-lg">"{r.comment}"</p>
+                                 )}
+                                 {!updateUserReview &&(
+                                 <span className="text-sm text-gray-500 mt-2 block">
+                                   {r.status === "renter" ? "En tant que locataire" : "En tant que propriétaire"}
+                                 </span>
+                                 )}
+                                <div className="absolute right-1 bottom-1 ">
+                                  {updateUserReview === r.reviews_user_id ? (
+                                    <>
+                                      <button className="btn bg-white p-2 border-gray-400"
+                                       onClick={()=>handleUserReviewUpdate(r.reviews_user_id, comment, rating)} >
+                                      <FiSave />
+                                      <span className="hidden md:block">Sauvegarder</span>
+                                      </button>
+                                      <button
+                                        onClick={() => setUpdateUserReview(null)} className="btn bg-white p-2 border-gray-400" >
+                                      <MdCancel />
+                                      <span className="hidden md:block">Annuler</span>
+                                      </button>
+                                    </>
+                                      ) : (
+                                        <button className="btn bg-white p-2 border-gray-400"
+                                        onClick={()=>{
+                                          setUpdateUserReview(r.reviews_user_id)
+                                          setComment(r.comment) 
+                                          setRating(r.rating)}}>
+                                    <FaEdit />
+                                    <span className="hidden md:block">Modifier </span>
+                                    </button>
+                                   )}
+                                   </div>
+                                </div>
+                                </div>
+                                  <div className="flex items-center justify-center gap-1 shrink-0">
                                     {updateUserReview === r.reviews_user_id? (
-                                   <div className="flex gap-2 text-2xl cursor-pointer">
+                                   <div className="flex  gap-2 text-2xl cursor-pointer">
                                              {[1, 2, 3, 4, 5].map((starUser) => (
                                                <label className="cursor-pointer">
                                                <input type="radio" name="ratingUser" value={starUser} className="hidden" onChange={()=>setRating(starUser)}/>
@@ -92,51 +144,16 @@ export default function ReviewsGivenUserProfile(){
                                  <StarRating rating={r.rating}/>
                                  )}
                                     
-                                    <span className="text-sm text-gray-600">({r.rating}/5)</span>
+                                    <span className="text-sm text-gray-600">({rating}/5)</span>
                                   </div>
                                 </div>
 
-                                   <div className="flex justify-center">
-                                   <div className="bg-gray-100 rounded-lg p-4 relative border-l-4 border-accent text-center md:w-2/3">
-                                {updateUserReview === r.reviews_user_id? (
-                                  < textarea className="w-full p-2 rounded border" rows={3} value={comment} onChange={(e)=>setComment(e.target.value)}/>
-                                ):(
-                                 <p className="text-gray-900 italic text-lg">"{r.comment}"</p>
-                                 )}
-                                 <span className="text-sm text-gray-500 mt-2 block">
-                                   {r.status === "renter" ? "En tant que locataire" : "En tant que propriétaire"}
-                                 </span>
-                                <div className="absolute right-1 bottom-1">
-                                  {updateUserReview === r.reviews_user_id ? (
-                                    <>
-                                      <button className="btn bg-white p-2 border-gray-400"
-                                       onClick={()=>handleUserReviewUpdate(r.reviews_user_id, comment, rating)} >
-                                      <FiSave />
-                                      Sauvegarder
-                                      </button>
-                                      <button
-                                        onClick={() => setUpdateUserReview(null)} className="btn bg-white p-2 border-gray-400" >
-                                      <MdCancel />
-                                      Annuler
-                                      </button>
-                                    </>
-                                      ) : (
-                                        <button className="btn bg-white p-2 border-gray-400"
-                                        onClick={()=>{
-                                          setUpdateUserReview(r.reviews_user_id)
-                                          setComment(r.comment) 
-                                          setRating(r.rating)}}>
-                                    <FaEdit />
-                                    Modifier 
-                                    </button>
-                                   )}
-                                   </div>
-                                </div>
-                                </div>
+                                   
 
                                 <hr/>
-                                    <div className="flex gap-4 items-center ">
-                                      <div className="flex gap-4">
+                                    <div className="flex  flex-col md:flex-row gap-4 items-center ">
+                                        
+                                      <div className="flex  flex-col md:flex-row gap-4">
                                       <Link to={`/equipment/${r.rental?.equipment?.equipment_id}`}>
                                         <img src={r.rental?.equipment?.photo} alt={r.rental?.equipment?.title} className="w-16 h-16 object-cover rounded-lg shrink-0"/>
                                       </Link>
@@ -146,19 +163,67 @@ export default function ReviewsGivenUserProfile(){
                                         <p className="text-gray-500 text-sm">Au {FormatDate(r.rental?.end_date)}</p>
                                       </div>
                                       </div>
-                                      <div className="flex justify-center w-2/3">
+                                      <div className="flex justify-center w-full items-center md:flex-row flex-col ">
                                    {equipmentReviews.filter((er) =>  er.rental_id === r.rental_id)
                                    .map((er)=>(
-                                   <div className="bg-gray-100 rounded-lg p-4 border-l-4 border-accent text-center md:w-2/3">
-                                 <p className="text-gray-900 italic text-lg">"{er.comment}"</p>
-                                </div>
-                                   ))}
+                                    <>
+                                    <div className="flex gap-3 w-full md:flex-row justify-center flex-col ">
+                                   <div className="bg-gray-100 rounded-lg p-4 relative pb-12 border-l-4 border-accent text-center  w-full md:w-2/3 ">
+                                       {updateEquipmentReview === er.reviews_equipment_id? (
+                                         < textarea className="w-full p-2 rounded border" rows={3} value={comment} onChange={(e)=>setComment(e.target.value)}/>
+                                            ):(
+                                         <p className="text-gray-900 italic text-lg">"{er.comment}"</p>
+                                            )}
+                                        <div className=" absolute right-1 bottom-1">
+                                     {updateEquipmentReview === er.reviews_equipment_id ? (
+                                       <>
+                                             <button className="btn bg-white p-2 border-gray-400"
+                                              onClick={()=>handleEquipmentReviewUpdate(er.reviews_equipment_id, comment, rating)} >
+                                              <FiSave />
+                                              <span className="hidden md:block">Sauvegarder</span>
+                                              </button>
+                                             <button
+                                             onClick={() => setUpdateEquipmentReview(null)} className="btn bg-white p-2 border-gray-400" >
+                                            <MdCancel />
+                                             <span className="hidden md:block">Annuler</span>
+                                             </button>
+                                           </>
+                                      ) : (
+                                        <button className="btn bg-white p-2 border-gray-400"
+                                        onClick={()=>{
+                                          setUpdateEquipmentReview(er.reviews_equipment_id)
+                                          setComment(er.comment) 
+                                          setRating(er.rating)}}>
+                                        <FaEdit />
+                                        <span className="hidden md:block">Modifier</span>
+                                       </button>
+                                   )}
                                    </div>
-                                      <div className="text-right shrink-0">
-                                        <p className="text-xl text-primary">{r.rental?.total_price} €</p>
-                                        <p className="text-sm text-gray-500">Total</p>
-                                      </div>
-                                    </div>
+                                   
+                                   </div>
+                                    
+                                  </div>
+                                  <div className="flex  items-center  gap-1 ">
+                                    {updateEquipmentReview === er.reviews_equipment_id? (
+                                   <div className="flex gap-2 text-2xl cursor-pointer">
+                                             {[1, 2, 3, 4, 5].map((starEquipment) => (
+                                               <label className="cursor-pointer">
+                                               <input type="radio" name="ratingUser" value={starEquipment} className="hidden" onChange={()=>setRating(starEquipment)}/>
+                                                  <FaStar className={starEquipment<=rating ? "text-yellow-400":"text-gray-300"}/>
+                                               </label>
+                                             ))}
+                                           </div>        
+                                ):(
+                                 <StarRating rating={er.rating}/>
+                                 )}
+                                    
+                                    <span className="text-sm text-gray-600">({rating}/5)</span>
+                                  </div>
+                                  </>
+                                    ))}
+                                   </div>
+                                     
+                                </div>
 
                                 </div>
                                 ))}

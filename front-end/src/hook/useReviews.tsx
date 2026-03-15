@@ -81,7 +81,7 @@ async function patchUserReview(reviewed_user_id:number, data:{comment:string,rat
 }
 async function patchEquipmentReview(reviewed_equipment_id:number, data:{comment:string,rating:number}){
     try{
-        const res= await apiAuth.patch(`/review-user/${reviewed_equipment_id}`, data)
+        const res= await apiAuth.patch(`/review-equipment/${reviewed_equipment_id}`, data)
         return res.data
     }catch (err){
         console.log(err)
