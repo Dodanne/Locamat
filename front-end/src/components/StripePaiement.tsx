@@ -1,31 +1,31 @@
-
-import { useState } from "react";
-import {usePaiement} from "./../hook/usePaiement"
+import { useState } from 'react';
+import { PaiementApi } from '../services/PaiementApi';
 
 type StripePaiementProps = {
   rental_id: number;
 };
 
-export default function StripePaiement({rental_id}: StripePaiementProps){
-    const {postSession}=usePaiement()
-    const [error, setError] = useState("")
+export default function StripePaiement({ rental_id }: StripePaiementProps) {
+  const { postSession } = PaiementApi();
+  const [error, setError] = useState('');
 
-    const handleClick=async()=>{
-            try{
-                const data = await postSession(rental_id)
-                    window.location.href = data.url;    
-            } catch (err){
-                console.log (err)
-                setError ("Une erreur est survenue, veuillez réessayer ultérieurement")
-            }
-
+  const handleClick = async () => {
+    try {
+      const data = await postSession(rental_id);
+      window.location.href = data.url;
+    } catch (err) {
+      console.log(err);
+      setError('Une erreur est survenue, veuillez réessayer ultérieurement');
     }
-    return (
-        <>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        <div className="flex justify-center">
-        <button onClick={handleClick} className="btn bg-accent w-2/4 text-white">Payer</button>
-        </div>
-        </>
-    )
+  };
+  return (
+    <>
+      {error && <p className="text-red-500 text-sm">{error}</p>}
+      <div className="flex justify-center">
+        <button onClick={handleClick} className="btn bg-accent w-2/4 text-white">
+          Payer
+        </button>
+      </div>
+    </>
+  );
 }

@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import { useAuth } from "../context/AuthContext";
-import Connexion from "../pages/User/Connexion";
+import { ReactNode } from 'react';
+import { useAuth } from '../context/AuthContext';
+import Connexion from '../pages/User/Connexion';
 
 type PropsNode = { children: ReactNode };
 

@@ -1,28 +1,55 @@
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer components {
-  .container { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
-  .footer-link { @apply text-gray-600 hover:text-accent transition-colors; }
-  .footer-title { @apply text-primary mb-4; }
-  .processSteps-icon { @apply w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4; }
-  .img-cover { @apply w-full h-full object-cover; }
-  .loop-div { @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6; }
-  .btn-primary { @apply inline-flex items-center justify-center gap-2 h-9 py-2 px-8 rounded-md text-sm font-medium bg-primary text-white hover:bg-[#0A2D4D]; }
-  .icon-btn { @apply relative p-2 hover:bg-background rounded-full transition-colors; }
-  .icon-primary { @apply text-primary text-2xl; }
-  .section-white { @apply py-16 bg-white; }
-  .section-title { @apply text-3xl text-center mb-12 text-blackText; }
-  .icon-white { @apply text-white text-2xl; }
-  .btn {@apply inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium border p-1}
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  .footer-link {
+    @apply text-gray-600 hover:text-accent transition-colors;
+  }
+  .footer-title {
+    @apply text-primary mb-4;
+  }
+  .processSteps-icon {
+    @apply w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4;
+  }
+  .img-cover {
+    @apply w-full h-full object-cover;
+  }
+  .loop-div {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 h-9 py-2 px-8 rounded-md text-sm font-medium bg-primary text-white hover:bg-[#0A2D4D];
+  }
+  .icon-btn {
+    @apply relative p-2 hover:bg-background rounded-full transition-colors;
+  }
+  .icon-primary {
+    @apply text-primary text-2xl;
+  }
+  .section-white {
+    @apply py-16 bg-white;
+  }
+  .section-title {
+    @apply text-3xl text-center mb-12 text-blackText;
+  }
+  .icon-white {
+    @apply text-white text-2xl;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium border p-1;
+  }
   /* Form */
-  .form-div {@apply flex flex-col gap-2}
-  .form-label{@apply flex items-center text-sm leading-none font-medium}
-  .form-input{@apply flex h-9 w-full min-w-0 rounded-md px-3 py-1 text-base bg-gray-100 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.5)] transition-shadow outline-none}
-
+  .form-div {
+    @apply flex flex-col gap-2;
+  }
+  .form-label {
+    @apply flex items-center text-sm leading-none font-medium;
+  }
+  .form-input {
+    @apply flex h-9 w-full min-w-0 rounded-md px-3 py-1 text-base bg-gray-100 focus:shadow-[0_0_0_2px_rgba(59,130,246,0.5)] transition-shadow outline-none;
+  }
 }
-
-

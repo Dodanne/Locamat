@@ -1,3 +1,1 @@
-export default function Statistiques(){
-    
-}
+export default function Statistiques() {}

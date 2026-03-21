@@ -1,9 +1,6 @@
-import { Link } from "react-router-dom";
-
+import { Link } from 'react-router-dom';
 
 export default function EquipmentSuccess() {
-  
-
   return (
     <>
       <div className="py-20 bg-gradient-to-r from-accent to-primary text-white">
@@ -14,9 +11,7 @@ export default function EquipmentSuccess() {
             </div>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-semibold mb-4">
-            Matériel ajouté avec succès
-          </h1>
+          <h1 className="text-3xl sm:text-4xl font-semibold mb-4">Matériel ajouté avec succès</h1>
 
           <p className="text-lg sm:text-xl text-blue-100 mb-10">
             Il est maintenant en ligne et prêt à être loué sur LocaMat.
@@ -43,30 +38,22 @@ export default function EquipmentSuccess() {
       <div className="py-16 bg-gray-50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-8 sm:grid-cols-3 text-center">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Visible immédiatement
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Visible immédiatement</h3>
             <p className="text-gray-600">
               Le matériel apparaît dès maintenant dans les recherches.
             </p>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Gestion simple
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Gestion simple</h3>
             <p className="text-gray-600">
               Modification tes tarifs et disponibilités à tout moment.
             </p>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Revenus sécurisés
-            </h3>
-            <p className="text-gray-600">
-              Louez en toute confiance grâce au cadre LocaMat.
-            </p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Revenus sécurisés</h3>
+            <p className="text-gray-600">Louez en toute confiance grâce au cadre LocaMat.</p>
           </div>
         </div>
       </div>

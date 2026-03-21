@@ -1,3 +1,1 @@
-export default function Params(){
-    
-}
+export default function Params() {}

@@ -1,6 +1,6 @@
-import { Equipment, User, Category } from "../models/index.js";
-import { Op } from "sequelize";
-import deletePhoto from "../services/cloudinary.service.js";
+import { Equipment, User, Category } from '../models/index.js';
+import { literal, Op } from 'sequelize';
+import deletePhoto from '../services/cloudinary.service.js';
 
 export const getAllEquipments = async (req, res) => {
   try {
@@ -9,26 +9,26 @@ export const getAllEquipments = async (req, res) => {
     const data = await Equipment.findAll({
       limit,
       offset,
-      order: [["createdAt", "DESC"]],
+      order: [['createdAt', 'DESC']],
       include: [
         {
           model: User,
-          as: "owner",
+          as: 'owner',
           attributes: [
-            "user_id",
-            "first_name",
-            "last_name",
-            "photo",
-            "city",
-            "rating_avg",
-            "rating_count",
-            "user_type",
+            'user_id',
+            'first_name',
+            'last_name',
+            'photo',
+            'city',
+            'rating_avg',
+            'rating_count',
+            'user_type',
           ],
         },
         {
           model: Category,
-          as: "category",
-          attributes: ["name"],
+          as: 'category',
+          attributes: ['name'],
         },
       ],
     });
@@ -36,7 +36,7 @@ export const getAllEquipments = async (req, res) => {
     res.json(data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 export const get6FirstEquipment = async (req, res) => {
@@ -45,31 +45,31 @@ export const get6FirstEquipment = async (req, res) => {
       include: [
         {
           model: User,
-          as: "owner",
+          as: 'owner',
           attributes: [
-            "user_id",
-            "first_name",
-            "last_name",
-            "photo",
-            "city",
-            "rating_avg",
-            "rating_count",
-            "user_type",
+            'user_id',
+            'first_name',
+            'last_name',
+            'photo',
+            'city',
+            'rating_avg',
+            'rating_count',
+            'user_type',
           ],
         },
         {
           model: Category,
-          as: "category",
+          as: 'category',
         },
       ],
       limit: 6,
-      order: [["createdAt", "DESC"]],
+      order: [['createdAt', 'DESC']],
     });
 
     res.json(data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 
@@ -81,31 +81,31 @@ export const getEquipmentById = async (req, res) => {
       include: [
         {
           model: User,
-          as: "owner",
+          as: 'owner',
           attributes: [
-            "user_id",
-            "first_name",
-            "last_name",
-            "photo",
-            "city",
-            "rating_avg",
-            "rating_count",
-            "user_type",
+            'user_id',
+            'first_name',
+            'last_name',
+            'photo',
+            'city',
+            'rating_avg',
+            'rating_count',
+            'user_type',
           ],
         },
         {
           model: Category,
-          as: "category",
+          as: 'category',
         },
       ],
     });
     if (!data) {
-      return res.status(404).json({ message: "Matériel non trouvé" });
+      return res.status(404).json({ message: 'Matériel non trouvé' });
     }
     res.json(data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 
@@ -121,22 +121,22 @@ export const getEquipmentByUser = async (req, res) => {
       include: [
         {
           model: User,
-          as: "owner",
+          as: 'owner',
           attributes: [
-            "user_id",
-            "first_name",
-            "last_name",
-            "photo",
-            "city",
-            "rating_avg",
-            "rating_count",
-            "user_type",
+            'user_id',
+            'first_name',
+            'last_name',
+            'photo',
+            'city',
+            'rating_avg',
+            'rating_count',
+            'user_type',
           ],
         },
         {
           model: Category,
-          as: "category",
-          attributes: ["name"],
+          as: 'category',
+          attributes: ['name'],
         },
       ],
     });
@@ -144,7 +144,7 @@ export const getEquipmentByUser = async (req, res) => {
     res.json(data);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 
@@ -153,7 +153,7 @@ export const createEquipment = async (req, res) => {
     const { title, description, category_id, price, caution } = req.body;
     const photo = req.file
       ? req.file.path
-      : "https://res.cloudinary.com/dxqyqpshr/image/upload/v1772622339/default_ivnc80.png";
+      : 'https://res.cloudinary.com/dxqyqpshr/image/upload/v1772622339/default_ivnc80.png';
     const owner_id = req.user.id;
     const data = await Equipment.create({
       title,
@@ -166,12 +166,12 @@ export const createEquipment = async (req, res) => {
     });
     res.json(data);
   } catch (err) {
-    if (err.name === "SequelizeValidationError") {
+    if (err.name === 'SequelizeValidationError') {
       const messages = err.errors.map((e) => e.message);
       return res.status(400).json({ errors: messages });
     }
     console.log(err);
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 
@@ -195,7 +195,7 @@ export const getSearchEquipments = async (req, res) => {
     if (categories) {
       const categoryArray = Array.isArray(categories)
         ? categories.map(Number)
-        : categories.split(",").map(Number);
+        : categories.split(',').map(Number);
 
       where.category_id = { [Op.in]: categoryArray };
     }
@@ -203,43 +203,50 @@ export const getSearchEquipments = async (req, res) => {
     if (maxPrice) {
       where.price = { [Op.lte]: Number(maxPrice) };
     }
-
-    const data = await Equipment.findAll({
-      limit,
-      offset,
-      where,
-      include: [
-        { model: Category, as: "category" },
-        {
-          model: User,
-          as: "owner",
-          attributes: [
-            "user_id",
-            "city",
-            "rating_avg",
-            "rating_count",
-            "user_type",
-          ],
-          // formule Haversine pour calculer la distance entre deux points gps
-          ...(latitude && longitude
-            ? {
-                where: literal(`(
+    // formule Haversine pour calculer la distance entre deux points gps
+    const distanceCalculation =
+      latitude && longitude
+        ? literal(`(
               6371 * acos(
               cos(radians(${latitude})) * cos(radians(\`owner\`.\`latitude\`)) *
               cos(radians(\`owner\`.\`longitude\`) - radians(${longitude})) +
               sin(radians(${latitude})) * sin(radians(\`owner\`.\`latitude\`))
                )
-               ) <= ${distance}`),
-              }
-            : {}),
+               )`)
+        : null;
+    const data = await Equipment.findAll({
+      attributes: {
+        include: distanceCalculation ? [[distanceCalculation, 'distance']] : [],
+      },
+      limit,
+      offset,
+      where,
+      include: [
+        { model: Category, as: 'category' },
+        {
+          model: User,
+          as: 'owner',
+          attributes: [
+            'user_id',
+            'city',
+            'rating_avg',
+            'rating_count',
+            'user_type',
+          ],
         },
       ],
-      order: [["createdAt", "DESC"]],
+      order: distanceCalculation
+        ? [[literal('distance'), 'ASC']]
+        : [['createdAt', 'DESC']],
     });
-    res.json(data);
+    let filteredData = data;
+    if (distanceCalculation && distance) {
+      filteredData = data.filter((e) => e.get('distance') <= Number(distance));
+    }
+    res.json(filteredData);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 
@@ -248,14 +255,14 @@ export const deleteEquipment = async (req, res) => {
     const { id } = req.params;
     const data = await Equipment.findByPk(id);
     if (!data) {
-      return res.status(404).json({ message: "Equipement non trouvé" });
+      return res.status(404).json({ message: 'Equipement non trouvé' });
     }
     await deletePhoto(data.photo);
     await data.destroy();
-    return res.json({ message: "Équipement supprimé avec succès" });
+    return res.json({ message: 'Équipement supprimé avec succès' });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ message: "Erreur serveur" });
+    return res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 export const updateEquipment = async (req, res) => {
@@ -264,7 +271,7 @@ export const updateEquipment = async (req, res) => {
     const { title, price, description } = req.body;
     const data = await Equipment.findByPk(id);
     if (!data)
-      return res.status(404).json({ message: "Equipement non trouvé" });
+      return res.status(404).json({ message: 'Equipement non trouvé' });
     data.title = title;
     data.price = Number(price);
     data.description = description;
@@ -277,11 +284,11 @@ export const updateEquipment = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    if (err.name === "SequelizeValidationError") {
+    if (err.name === 'SequelizeValidationError') {
       const messages = err.errors.map((e) => e.message);
       return res.status(400).json({ errors: messages });
     }
     console.log(err);
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: 'Erreur serveur' });
   }
 };

@@ -1,61 +1,91 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Connexion() {
- 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const {postLogin, error, setError }=useAuth()
-  const handleSubmit =  (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setError(null)
-    postLogin(email, password)
-  }
-    return (
-       
-        <div className=" grid min-h-screen grid-cols-1 lg:grid-cols-[1fr_420px_1fr] gap-6 rounded-xl border bg-accent/25">
-        <div className="hidden md:flex flex-col mt-6 p-4 text-center justify-center ">
-            <h3 className="text-primary font-semibold text-2xl mt-7 ">Vous avez du matériel inutilisé chez vous ?</h3>
-            <hr className=" border-primary border-1 mx-8 my-3"/>
-          <h3 className="text-primary font-semibold text-xl">Partagez votre matériel en un clic </h3>
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { postLogin, error, setError } = useAuth();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+    postLogin(email, password);
+  };
+  return (
+    <div className=" grid min-h-screen grid-cols-1 lg:grid-cols-[1fr_420px_1fr] gap-6 rounded-xl border bg-accent/25">
+      <div className="hidden md:flex flex-col mt-6 p-4 text-center justify-center ">
+        <h3 className="text-primary font-semibold text-2xl mt-7 ">
+          Vous avez du matériel inutilisé chez vous ?
+        </h3>
+        <hr className=" border-primary border-1 mx-8 my-3" />
+        <h3 className="text-primary font-semibold text-xl">Partagez votre matériel en un clic </h3>
+      </div>
+      <div className="flex flex-col justify-center items-center p-4 my-10">
+        <div className="p-8 bg-white/70 rounded-2xl shadow-xl">
+          <h1 className="text-2xl font-semibold text-gray-900 text-center">
+            Connectez-vous avec votre compte LocaMat
+          </h1>
+          <div className="py-16">
+            <form className="space-y-6  " onSubmit={handleSubmit}>
+              <div className="form-div">
+                <label htmlFor="email" className="form-label">
+                  Adresse e-mail
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="form-input bg-gray-200"
+                  placeholder=""
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="form-div">
+                <label htmlFor="password" className="form-label">
+                  Mot de passe
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  className="form-input bg-gray-200"
+                  placeholder=""
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              {error && (
+                <div className="text-red-600 text-sm text-center mt-2 bg-red-50 p-2 rounded">
+                  {' '}
+                  {error}
+                </div>
+              )}
+              <button
+                type="submit"
+                className="w-full items-center h-10 rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer"
+              >
+                Continuer
+              </button>
+              <div className="text-center italic underline text-sm">
+                {' '}
+                <Link to="/user-form" state={{ mode: 'create' }}>
+                  {' '}
+                  Pas encore de compte LocaMat ? Inscrivez-vous ici{' '}
+                </Link>
+              </div>
+            </form>
+          </div>
         </div>
-        <div className="flex flex-col justify-center items-center p-4 my-10">
-            <div className="p-8 bg-white/70 rounded-2xl shadow-xl">
-                <h1 className="text-2xl font-semibold text-gray-900 text-center">Connectez-vous avec votre compte LocaMat</h1>
-            <div className="py-16">
-                <form className="space-y-6  " onSubmit={handleSubmit}>
-                    <div className="form-div">
-                        <label htmlFor="email" className="form-label">Adresse e-mail</label>
-                        <input type="email" id="email" className="form-input bg-gray-200" placeholder="" 
-                        value={email} 
-                        onChange={(e) => setEmail(e.target.value)}/>
-                    </div>
-                    <div className="form-div"> 
-                        <label htmlFor="password" className="form-label">Mot de passe</label>
-                        <input type="password" id="password" className="form-input bg-gray-200" placeholder=""
-                        value={password} 
-                        onChange={(e) => setPassword(e.target.value)}/>
-                    </div>
-                    {error && (
-                        <div className="text-red-600 text-sm text-center mt-2 bg-red-50 p-2 rounded"> {error}
-                        </div>
-                      )}
-                    <button type="submit" className="w-full items-center h-10 rounded-md bg-accent text-white text-sm font-medium hover:bg-[#0087BB] transition cursor-pointer">Continuer</button>
-                    <div className="text-center italic underline text-sm"> <Link to="/user-form" state={{mode: "create"}}> Pas encore de compte LocaMat ? Inscrivez-vous ici </Link></div>
-                </form>
-            </div>
-            </div>
-        </div>
-        <div className="hidden md:flex flex-col mt-6 p-4 text-center justify-center ">
-            <h3 className="text-primary font-semibold text-2xl mt-7">Besoin d'un matériel momentanément ?</h3>
-                <hr className=" border-primary border-1 mx-8 my-3"/>
-            <h3 className="text-primary font-semibold text-xl ">Louez du matériel facilement près de chez vous </h3>
-        </div>
-        <div>
-        </div>
-        </div>
-        
-    )
-}   
+      </div>
+      <div className="hidden md:flex flex-col mt-6 p-4 text-center justify-center ">
+        <h3 className="text-primary font-semibold text-2xl mt-7">
+          Besoin d'un matériel momentanément ?
+        </h3>
+        <hr className=" border-primary border-1 mx-8 my-3" />
+        <h3 className="text-primary font-semibold text-xl ">
+          Louez du matériel facilement près de chez vous{' '}
+        </h3>
+      </div>
+      <div></div>
+    </div>
+  );
+}
