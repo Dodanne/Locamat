@@ -7,7 +7,8 @@ type SliderProps = {
   onChange: (value: number) => void;
 };
 
-export default function Slider({ min = 0, max, step = 5, unit, value, onChange }: SliderProps) {
+export default function Slider({ min = 5, max, step = 5, unit, value, onChange }: SliderProps) {
+  1;
   return (
     <div className="w-full">
       <label className="text-sm font-medium mb-1 block"></label>
@@ -24,7 +25,7 @@ export default function Slider({ min = 0, max, step = 5, unit, value, onChange }
         <div className="mt-1 text-xs text-gray-600 text-center">
           {!unit
             ? value === max
-              ? `${value}€ et plus`
+              ? ` ${value}€ et plus`
               : `${value}€`
             : `Dans un rayon de ${value} ${unit}`}
         </div>

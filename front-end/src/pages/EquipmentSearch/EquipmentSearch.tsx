@@ -17,6 +17,7 @@ export default function EquipmentSearch() {
   const { getSearchEquipment } = EquipmentApi();
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get('q') ?? '');
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [hasSearched, setHasSearched] = useState(false);
   const navigate = useNavigate();
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
@@ -26,18 +27,18 @@ export default function EquipmentSearch() {
   const [distance, setDistance] = useState<number>(30);
   const [debouncedDistance, setDebouncedDistance] = useState<number>(30);
   const [results, setResults] = useState<Equipment[]>([]);
-  const [cityResults, setCityResults] = useState<
-    {
-      properties: { city: string; postcode: string };
-      geometry: { coordinates: [number, number] };
-    }[]
-  >([]);
+  const [cityResults, setCityResults] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(
     null,
   );
   const [locationError, setLocationError] = useState('');
+  const [selectedCity, setSelectedCity] = useState<{
+    name: string;
+    latitude: number;
+    longitude: number;
+  } | null>(null);
   const limit = 9;
 
   useEffect(() => {
@@ -63,59 +64,79 @@ export default function EquipmentSearch() {
     }
   }, [searchParams]);
 
-  useEffect(() => {
-    const q = searchParams.get('q') ?? '';
-    const fetchResults = async () => {
-      try {
-        const params: any = { page, limit };
-        if (q) params.q = q;
-        if (selectedCategories.length) params.categories = selectedCategories;
-        if (userLocation) {
-          params.latitude = userLocation.latitude;
-          params.longitude = userLocation.longitude;
-          if (debouncedDistance) params.distance = debouncedDistance;
-        }
-        if (debouncedPrice) params.maxPrice = debouncedPrice;
-        setLoading(true);
-        const data = await getSearchEquipment(params);
-        setResults(Array.isArray(data) ? data : []);
-        setLoading(false);
-        setHasSearched(true);
-      } catch (err) {
-        console.log(err);
-        setResults([]);
-        setLoading(false);
+  const fetchResults = async () => {
+    setLoading(true);
+    try {
+      const params: any = { page, limit };
+      if (debouncedSearch) params.q = debouncedSearch;
+      if (selectedCategories.length) params.categories = selectedCategories;
+      const activeLocation = userLocation
+        ? { latitude: userLocation.latitude, longitude: userLocation.longitude }
+        : selectedCity
+          ? { latitude: selectedCity.latitude, longitude: selectedCity.longitude }
+          : null;
+      if (activeLocation && debouncedDistance > 0) {
+        params.latitude = activeLocation.latitude;
+        params.longitude = activeLocation.longitude;
+        params.distance = debouncedDistance;
       }
-    };
-
+      if (debouncedPrice) params.maxPrice = debouncedPrice;
+      console.log(params);
+      const data = await getSearchEquipment(params);
+      setResults(Array.isArray(data) ? data : []);
+      setLoading(false);
+      setHasSearched(true);
+    } catch (err) {
+      console.log(err);
+      setResults([]);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchResults();
-  }, [searchParams, selectedCategories, debouncedPrice, page, userLocation, debouncedDistance]);
+  }, [
+    debouncedSearch,
+    selectedCategories,
+    debouncedPrice,
+    debouncedDistance,
+    userLocation,
+    selectedCity,
+    page,
+  ]);
 
-  const resetFilters = () => {
-    setSelectedCategories([]);
-    setUserLocation(null);
-    setPrice(300);
-    setDistance(30);
-  };
-
-  const handleChangeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const category_id = Number(e.target.value);
-
-    setSelectedCategories((prev) =>
-      prev.includes(category_id) ? prev.filter((id) => id !== category_id) : [...prev, category_id],
-    );
-  };
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedPrice(price);
       setDebouncedDistance(distance);
+      setDebouncedSearch(search);
     }, 500);
     return () => clearTimeout(timer);
-  }, [price, distance, cityResults]);
+  }, [price, distance, search]);
+
+  useEffect(() => {
+    if (debouncedSearch.trim() !== '') {
+      navigate(`/rechercher?q=${encodeURIComponent(debouncedSearch)}`);
+    }
+  }, [debouncedSearch, navigate]);
 
   useEffect(() => {
     setPage(1);
-  }, [selectedCategories, debouncedPrice, userLocation, debouncedDistance]);
+  }, [search, selectedCategories, debouncedPrice, userLocation, debouncedDistance]);
+
+  function handleChangeCategory(category_id: number) {
+    setSelectedCategories((prev) =>
+      prev.includes(category_id) ? prev.filter((id) => id !== category_id) : [...prev, category_id],
+    );
+  }
+  function handleSelectCity(city: any) {
+    setSelectedCity({
+      name: `${city.properties.city} (${city.properties.postcode})`,
+      latitude: city.geometry.coordinates[1],
+      longitude: city.geometry.coordinates[0],
+    });
+    setCityResults([]);
+    setUserLocation(null);
+  }
 
   function handleLocation() {
     if (!navigator.geolocation) {
@@ -125,22 +146,38 @@ export default function EquipmentSearch() {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setUserLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
+        setSelectedCity(null);
         setLocationError('');
       },
       () => setLocationError('Impossible de récupérer votre position'),
     );
   }
+  function handleResetLocation() {
+    setUserLocation(null);
+    setSelectedCity(null);
+  }
+
   async function fetchCityCoordinates(e: React.ChangeEvent<HTMLInputElement>) {
     const query = e.target.value;
     try {
       const results = await CoordinatesApi(query, 3, true);
       setCityResults(results);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
-  function handleResetLocation() {
+  function resetFilters() {
+    setSelectedCategories([]);
+    setPrice(300);
+    setDistance(30);
+    setSelectedCity(null);
     setUserLocation(null);
+    setSearch('');
+    setPage(1);
+  }
+  function resetCity() {
+    setSelectedCity(null);
+    handleResetLocation();
   }
 
   if (loading) return <Loader />;
@@ -161,11 +198,6 @@ export default function EquipmentSearch() {
             onSubmit={() => navigate(`/rechercher?q=${encodeURIComponent(search)}`)}
           />
         </div>
-        {hasSearched && results.length === 0 && (
-          <div className="text-center p-2 text-gray-500">
-            Aucun matériel ne correspond à votre recherche
-          </div>
-        )}
 
         <div className="text-gray-600 text-sm">
           {results.length}
@@ -179,25 +211,31 @@ export default function EquipmentSearch() {
             <SidebarFilter
               categories={categories}
               selectedCategories={selectedCategories}
-              onChangeCategories={handleChangeCategory}
+              onChangeCategories={(category_id) => handleChangeCategory(category_id)}
               price={price}
               setPrice={setPrice}
               distance={distance}
               setDistance={setDistance}
-              userLocation={userLocation}
-              setUserLocation={setUserLocation}
               fetchCityCoordinates={fetchCityCoordinates}
               handleLocation={handleLocation}
               handleResetLocation={handleResetLocation}
               locationError={locationError}
               resetFilters={resetFilters}
+              handleSelectCity={handleSelectCity}
               cityResults={cityResults}
-              setCityResults={setCityResults}
+              selectedCityName={selectedCity?.name || null}
+              userLocation={userLocation}
+              resetCity={resetCity}
             />
           </div>
         </aside>
 
         <div className="flex-1">
+          {hasSearched && results.length === 0 && (
+            <div className="text-center p-2 text-gray-500 ">
+              Aucun matériel ne correspond à votre recherche
+            </div>
+          )}
           <div className="loop-div">
             {results.map((equipment) => (
               <Link key={equipment.equipment_id} to={`/equipment/${equipment.equipment_id}`}>

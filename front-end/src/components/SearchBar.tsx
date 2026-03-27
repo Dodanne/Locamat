@@ -9,7 +9,7 @@ type SearchBarProps = {
 
 export default function SearchBar({ value, onChange, onSubmit, onKeyDown }: SearchBarProps) {
   return (
-    <div className="bg-white rounded-lg shadow-lg p-2 flex flex-1 gap-2">
+    <div className="bg-white rounded-lg border p-2 flex flex-1 gap-2">
       <div className="flex-1 flex items-center gap-2 px-3">
         <FaSearch className=" left-3  text-gray-400" />
         <label htmlFor="search"></label>
@@ -25,6 +25,6 @@ export default function SearchBar({ value, onChange, onSubmit, onKeyDown }: Sear
       <button className="btn-primary" onClick={onSubmit}>
         Rechercher
       </button>
-    </div>
+   </div>
   );
 }

@@ -32,12 +32,14 @@ export default function Banner() {
           <p className="text-xl mb-8 text-white drop-shadow-md">
             Entre particuliers et professionnels, trouvez tout ce qu'il vous faut près de chez vous
           </p>
+          <div className="bg-white rounded-lg shadow-lg p-2 flex flex-1 gap-2">
           <SearchBar
             value={search}
             onChange={handleChange}
             onSubmit={handleSubmit}
             onKeyDown={handleKeyDown}
           />
+           </div>
         </div>
       </div>
     </div>
