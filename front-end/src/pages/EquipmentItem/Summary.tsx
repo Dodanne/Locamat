@@ -1,7 +1,32 @@
 import { useNavigate } from 'react-router-dom';
+import ContactButton from '../../components/contact-button';
+import { useParams } from 'react-router-dom';
+import { EquipmentApi } from '../../services/EquipmentsApi';
+import { useEffect, useState } from 'react';
+import { Equipment } from '../../types/Equipment';
+import Loader from '../../components/Loader';
 
 export default function Summary() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const { getEquipmentById } = EquipmentApi();
+  const [equipment, setEquipment] = useState<Equipment | null>(null);
+  const equipment_id = id ? Number(id) : null;
+
+  useEffect(() => {
+    if (!equipment_id) return;
+    async function fetchEquipment() {
+      try {
+        const equipment = await getEquipmentById(Number(equipment_id));
+        setEquipment(equipment);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchEquipment();
+  }, [equipment_id]);
+
+  if (!equipment) return <Loader />;
 
   return (
     <div className="flex justify-center items-center min-h-screen px-4">
@@ -25,6 +50,11 @@ export default function Summary() {
         >
           Voir mes réservations
         </button>
+        <h2 className="text-xl text-primary">
+          {' '}
+          Vous pouvez aussi contacter le propriétaire de l'équipement :{' '}
+        </h2>
+        <ContactButton equipment={equipment} />
       </div>
     </div>
   );

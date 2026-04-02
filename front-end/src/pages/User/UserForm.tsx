@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { UsersApi } from '../../services/UsersApi';
 import { IoEyeOutline } from 'react-icons/io5';
 import { IoEyeOffOutline } from 'react-icons/io5';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import CoordinatesApi from '../../services/CoordinatesApi';
 
 export default function UserForm() {

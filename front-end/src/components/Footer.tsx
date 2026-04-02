@@ -2,7 +2,7 @@ import { FiFacebook } from 'react-icons/fi';
 import { FaInstagram } from 'react-icons/fa';
 import { FiLinkedin } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Footer() {
   const { isLogged } = useAuth();

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import Connexion from '../pages/User/Connexion';
 
 type PropsNode = { children: ReactNode };

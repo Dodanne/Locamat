@@ -1,7 +1,7 @@
 import AddEquipmentBtn from '../AddEquipmentBtn';
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { useStatus } from '../../context/StatusContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { useStatus } from '../../contexts/StatusContext';
 import { Link } from 'react-router-dom';
 import { RentalsApi } from '../../services/RentalsApi';
 import Loader from '../Loader';

@@ -1,6 +1,6 @@
 import { FaUsers, FaTools, FaChartLine, FaCogs, FaSignOutAlt } from 'react-icons/fa';
 import { RiAdminFill } from 'react-icons/ri';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ListeUtilisateurs from '../../components/admin/ListeUtilisateurs';

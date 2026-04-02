@@ -1,6 +1,6 @@
 import StarRating from '../StarRating';
 import { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { UsersApi } from '../../services/UsersApi';
 import Loader from '../Loader';
 import { User } from '../../types/User';

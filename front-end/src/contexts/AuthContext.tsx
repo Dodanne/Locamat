@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import type { User } from './../types/User';
+import type { User } from '../types/User';
 import apiAuth from '../api/axiosAuth';
 import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';

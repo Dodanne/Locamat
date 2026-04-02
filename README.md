@@ -20,47 +20,19 @@ Cette application a été réalisée dans le cadre d’un projet de fin de forma
 <pre>
 ├───back-end
 │ ├───db
-│ |   ├─init.js
-│ |   └─sequelize.js
+│ |   
 │ ├───routes
-│ |     ├─auth.routes.js
-│ |     ├─category.routes.js
-│ |     ├─equipment.routes.js
-│ |     ├─index.routes.js
-│ |     ├─paiement.routes.js
-│ |     ├─rental.routes.js
-│ |     ├─review.routes.js
-│ |     └─user.routes.js
+│ |   
 │ ├───controllers
-│ |     ├─auth.controller.js
-│ |     ├─category.controller.js
-│ |     ├─equipment.controller.js
-│ |     ├─index.controller.js
-│ |     ├─paiement.controller.js
-│ |     ├─rental.controller.js
-│ |     ├─review.controller.js
-│ |     └─user.controller.js
+│ |     
 │ ├───config
-│ |     ├─cloudinary.config.js
-│ |     ├─env.js
-│ |     └─jwt.config.js
+│ |    
 │ ├───middleware
-│ |     ├─authentificateToken.js
-│ |     ├─isAdmin.js
-│ |     ├─isSuperAdmin.js
-│ |     └─upload.middleware.js
+│ |   
 │ ├───services
-│ |     ├─email.service.js
-│ |     ├─emailToken.service.js
-│ |     └─stripe.service.js
+│ |     
 │ ├───models
-│ |     ├─Category.js
-│ |     ├─Equipment.js
-│ |     ├─index.js
-│ |     ├─Rental.js
-│ |     ├─Review_equipment.js
-│ |     ├─Review_user.js
-│ |     └─User.js
+│ |   
 │ ├─ .env
 │ ├─ app.js
 │ ├─ server.js
@@ -70,103 +42,47 @@ Cette application a été réalisée dans le cadre d’un projet de fin de forma
         ├───src
         |    ├───pages
         |    │      ├───Home
-        |    │      |    ├───ActionSection.tsx
-        |    │      |    ├───Banner.tsx
-        |    │      |    ├───CategoriesItems.tsx
-        |    │      |    ├───Home.tsx
-        |    │      |    ├───PopularItems.tsx
-        |    │      |    └───ProcessSteps.tsx
+        |    │      |   
         |    │      ├───User
-        |    │      |    ├───Connexion.tsx
-        |    │      |    ├───Deconnexion.tsx
-        |    │      |    ├───EmailChecked.tsx
-        |    │      |    ├───Succes.tsx
-        |    │      |    ├───UserForm.tsx
-        |    │      |    └───UserProfile.tsx
+        |    │      |   
         |    │      ├───EquipmentItem
-        |    │      |    ├───EquipmentItem.tsx
-        |    │      |    └───Summary.tsx
+        |    │      |   
         |    │      ├───EquipmentSearch
-        |    │      |    └───EquipmentSearch.tsx
+        |    │      |  
         |    │      ├───Admin
-        |    │      |    └───Dashboard.tsx
+        |    │      |   
         |    │      ├───AddEquipment
-        |    │      |    ├───AddEquipmpent.tsx
-        |    │      |    └───Succes.tsx
+        |    │      |    
         |    │      ├───Chat
-        |    │      |    └───ChatPage.tsx
+        |    │      |   
         |    │      ├───Errors
-        |    │      |    └───404.tsx
+        |    │      |    
         |    │      ├───Legal
-        |    │      |    ├───MentionsLegales.tsx
-        |    │      |    ├───Confidentialite.tsx
-        |    │      |    ├───CGU.tsx
-        |    │      |    ├───Cookies.tsx
-        |    │      |    └───RGPD.tsx
+        |    │      |   
         |    │      └───Reservation
-        |    │           ├───FailPaiement.tsx
-        |    │           └───SuccesPaiement.tsx
+        |    │         
         |    ├───components
         |    │       ├───admin
-        |    │       |     ├───ListeAdministrateurs.tsx
-        |    │       |     ├───ListeEquipments.tsx
-        |    │       |     ├───ListeUtilisateurs.tsx
-        |    │       |     ├───Params.tsx
-        |    │       |     └───Statistiques.tsx
+        |    │       |    
         |    │       ├───user
-        |    │       |     ├───EquipmentUserProfile.tsx
-        |    │       |     ├───OwnerRentalUserProfile.tsx
-        |    │       |     ├───RenterRentalUserProfile.tsx
-        |    │       |     ├───RenterGivenUserProfile.tsx
-        |    │       |     ├───RenterReceivedUserProfile.tsx
-        |    │       |     └───ReviewsUserProfile.tsx
+        |    │       |   
         |    │       ├───equipment
-        |    │       |     ├───ItemCard.tsx
-        |    │       |     └───Reservation.tsx
-        |    │       ├───reviews
-        |    │       |     └───Reviews.tsx
-        |    │       ├───AddEquipmentBtn.tsx
-        |    │       ├───Footer.tsx
-        |    │       ├───FormatDate.tsx
-        |    │       ├───GetInitials.tsx
-        |    │       ├───Header.tsx
-        |    │       ├───Loader.tsx
-        |    │       ├───ProtectedRoute.tsx
-        |    │       ├───ScrollToTop.tsx
-        |    │       ├───Slider.tsx
-        |    │       ├───StarRating.tsx
-        |    │       └──StripePaiement.tsx
+        |    │       |     
+        |    │       └────reviews
+        |    │      
         |    ├───types
-        |    │     ├──Category.ts
-        |    │     ├──Equipement.ts
-        |    │     ├──Owner.ts
-        |    │     ├──Rental.ts
-        |    │     ├──Review_equipment.ts
-        |    │     ├──Review_user.ts
-        |    │     └──User.ts
+        |    │   
         |    ├───context
-        |    │    ├───AuthContext.tsx 
-        |    │    ├───EquipmentContext.tsx 
-        |    │    └───StatusContext.tsx 
+        |    │    
         |    ├───api 
-        |    │    ├───axios.ts 
-        |    │    └───axiosAuth.ts
-        |    ├───hook 
-        |    |     ├───useAdmin.tsx 
-        |    |     ├───useCategories.tsx 
-        |    |     ├───useEquipments.tsx 
-        |    |     ├───usepaiements.tsx 
-        |    |     ├───useRentals.tsx 
-        |    |     ├───useReviews.tsx 
-        |    |     └───useUsers.tsx 
+        |    │    
+        |    ├───services 
+        |    |     
         |    ├───App.tsx
         |    ├───index.css
         |    └───main.tsx 
         ├─.env
         ├─index.html
-        ├─tailwind.config.js
-        ├─tsconfig.js
-        ├─vite.config.js
         └─package.json
         
 </pre>
@@ -250,6 +166,15 @@ npm run dev
 - POST '/new-user'
 - PATCH '/edit-profile/:id' //token
 
+### Conversation
+
+- GET '/conversations' //token
+- POST '/conversations' //token
+- GET '/conversations/:id' //token
+- GET '/conversations/:conversation_id/messages' //token;
+- POST '/messages'//token
+- POST '/messages/read' //token
+
 ## Librairies & Dépendances
 
 ### Dépendances back-end
@@ -260,6 +185,7 @@ npm run dev
 - JsonWebToken
 - Stripe
 - Multer-storage-coudinary
+- Socket.io
 
 ### Dépendances front-end
 
@@ -270,3 +196,4 @@ npm run dev
 - ReactDayPicker
 - ReactLoaderSpinner
 - Stripe
+- Socket.io-client

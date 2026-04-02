@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { MdDelete } from 'react-icons/md';
-import { EquipmentApiContext } from '../../context/EquipmentContext';
+import { EquipmentApiContext } from '../../contexts/EquipmentContext';
 import FormatDate from '../FormatDate';
 
 export default function ListeEquipments() {

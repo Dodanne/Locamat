@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Equipment } from '../types/Equipment';
-import api from './../api/axios';
-import apiAth from './../api/axiosAuth';
-import apiAuth from './../api/axiosAuth';
+import api from '../api/axios';
+import apiAth from '../api/axiosAuth';
+import apiAuth from '../api/axiosAuth';
 
 type EquipmentContextType = {
   equipments: Equipment[];

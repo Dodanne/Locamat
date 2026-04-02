@@ -10,7 +10,7 @@ export type SearchParams = {
 };
 
 export function EquipmentApi() {
-  async function getEquipmentById(id: string | undefined) {
+  async function getEquipmentById(id: number) {
     try {
       const res = await api.get(`/equipment/${id}`);
       return res.data;

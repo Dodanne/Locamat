@@ -9,11 +9,11 @@ const Conversation = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    user1_id: {
+    owner_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    user2_id: {
+    renter_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

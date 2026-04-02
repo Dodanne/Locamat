@@ -1,8 +1,8 @@
 import ItemCard from '../equipment/ItemCard';
 import { useEffect } from 'react';
 import AddEquipmentBtn from '../AddEquipmentBtn';
-import { useAuth } from '../../context/AuthContext';
-import { EquipmentApiContext } from '../../context/EquipmentContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { EquipmentApiContext } from '../../contexts/EquipmentContext';
 
 export default function EquipmentUserProfile() {
   const { getUserEquipments, deleteEquipment, userEquipments, patchEquipment } =

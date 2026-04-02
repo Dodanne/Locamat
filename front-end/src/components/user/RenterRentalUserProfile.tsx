@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { IoLocationOutline } from 'react-icons/io5';
 import getInitials from '../GetInitials';
-import { useStatus } from '../../context/StatusContext';
+import { useStatus } from '../../contexts/StatusContext';
 import Loader from '../Loader';
 import { RentalsApi } from '../../services/RentalsApi';
 import { Rental } from '../../types/Rental';

@@ -2,7 +2,7 @@ import { FaEuroSign } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Category } from '../../types/Category';
-import { EquipmentApiContext } from '../../context/EquipmentContext';
+import { EquipmentApiContext } from '../../contexts/EquipmentContext';
 import { CategoriesApi } from '../../services/CategoriesApi';
 
 export default function AddEquipment() {

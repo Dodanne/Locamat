@@ -4,7 +4,7 @@ import { NavLink, Link } from 'react-router-dom';
 import AddEquipmentBtn from './AddEquipmentBtn';
 import { useState } from 'react';
 import { IoMdMenu, IoMdClose } from 'react-icons/io';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import { IoLogOutSharp } from 'react-icons/io5';
 import getInitials from './GetInitials';
 

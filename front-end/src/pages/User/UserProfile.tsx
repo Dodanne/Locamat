@@ -13,7 +13,7 @@ import OwnerRentalsUserProfile from '../../components/user/RenterRentalUserProfi
 import RenterREntalsUserProfile from '../../components/user/OwnerRentalUserProfile';
 import ReviewsReceivedUserProfile from '../../components/user/ReviewsReceivedUserProfile';
 import ReviewsUserProfile from '../../components/user/ReviewsUserProfile';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { UsersApi } from '../../services/UsersApi';
 import { User } from '../../types/User';
 import Loader from '../../components/Loader';

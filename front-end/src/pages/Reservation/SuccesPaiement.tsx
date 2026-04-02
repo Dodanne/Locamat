@@ -1,6 +1,30 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import ContactButton from '../../components/contact-button';
+import { EquipmentApi } from '../../services/EquipmentsApi';
+import { useEffect, useState } from 'react';
+import { Equipment } from '../../types/Equipment';
+import Loader from '../../components/Loader';
 
 export default function PaiementSuccess() {
+  const { id } = useParams();
+  const { getEquipmentById } = EquipmentApi();
+  const [equipment, setEquipment] = useState<Equipment | null>(null);
+  const equipment_id = id ? Number(id) : null;
+
+  useEffect(() => {
+    if (!equipment_id) return;
+    async function fetchEquipment() {
+      try {
+        const equipment = await getEquipmentById(Number(equipment_id));
+        setEquipment(equipment);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchEquipment();
+  }, [equipment_id]);
+
+  if (!equipment) return <Loader />;
   return (
     <div className="py-20 bg-gradient-to-r from-accent to-primary text-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -22,17 +46,12 @@ export default function PaiementSuccess() {
         <div className="flex justify-center gap-4 flex-wrap">
           <Link
             to="/user-profile"
-            className="inline-flex items-center justify-center h-11 px-8 rounded-md bg-white text-primary text-sm font-medium hover:bg-gray-100 transition"
+            className="inline-flex items-center justify-center h-11 px-8 rounded-md bg-white text-gray-900 text-sm font-medium hover:bg-gray-100 transition"
           >
             Voir mon profil
           </Link>
 
-          <Link
-            to="/chat"
-            className="inline-flex items-center justify-center h-11 px-8 rounded-md border border-white text-white text-sm font-medium hover:bg-white hover:text-primary transition"
-          >
-            Accéder à la messagerie
-          </Link>
+          <ContactButton equipment={equipment} />
         </div>
       </div>
     </div>

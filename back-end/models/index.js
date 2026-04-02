@@ -172,28 +172,28 @@ Message.belongsTo(User, {
   as: "sender",
 });
 
-// conversation&user1
+// conversation&owner
 User.hasMany(Conversation, {
-  foreignKey: { name: "user1_id", allowNull: false },
+  foreignKey: { name: "owner_id", allowNull: false },
   as: "conversationsAsUser1",
 });
 Conversation.belongsTo(User, {
-  foreignKey: { name: "user1_id", allowNull: false },
+  foreignKey: { name: "owner_id", allowNull: false },
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
-  as: "user1",
+  as: "owner",
 });
 
-// conversation&user2
+// conversation&renter
 User.hasMany(Conversation, {
-  foreignKey: { name: "user2_id", allowNull: false },
+  foreignKey: { name: "renter_id", allowNull: false },
   as: "conversationsAsUser2",
 });
 Conversation.belongsTo(User, {
-  foreignKey: { name: "user2_id", allowNull: false },
+  foreignKey: { name: "renter_id", allowNull: false },
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
-  as: "user2",
+  as: "renter",
 });
 
 //equipment&Conversation

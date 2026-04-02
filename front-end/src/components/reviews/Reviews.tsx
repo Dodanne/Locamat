@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { ReviewsApi } from '../../services/ReviewsApi';
 import { Rental } from '../../types/Rental';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 type ReviewProps = {
   rental: Rental;

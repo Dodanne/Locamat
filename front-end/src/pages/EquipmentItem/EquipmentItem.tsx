@@ -1,8 +1,7 @@
 import { IoLocationSharp, IoArrowBack } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
-import { CiChat1 } from 'react-icons/ci';
 import { EquipmentApi } from '../../services/EquipmentsApi';
 import Loader from '../../components/Loader';
 import 'react-day-picker/dist/style.css';
@@ -16,8 +15,10 @@ import StarRating from '../../components/StarRating';
 import { CgProfile } from 'react-icons/cg';
 import FormatDate from '../../components/FormatDate';
 
+import ContactButton from '../../components/contact-button';
+
 export default function EquipmentItem() {
-  const [equipment, setEquipmentById] = useState<Equipment | null>(null);
+  const [equipment, setEquipmentById] = useState<Equipment>({} as Equipment);
   const [equipmentReview, setEquipmentReview] = useState<ReviewEquipment[]>([]);
   const { id } = useParams();
   const { getEquipmentById } = EquipmentApi();
@@ -138,11 +139,7 @@ export default function EquipmentItem() {
                     <span className="hidden md:block">Voir profil</span>{' '}
                   </button>
                 </Link>
-                <button className="btn p-3 bg-gray-100 hover:bg-gray-200 ">
-                  {' '}
-                  <CiChat1 className="text-xl " strokeWidth={1} />{' '}
-                  <span className="hidden md:block"> Contacter </span>
-                </button>
+                <ContactButton equipment={equipment} />
               </div>
             </div>
           </div>

@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Loader from '../../components/Loader';
 import { Equipment } from '../../types/Equipment';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import { RentalsApi } from '../../services/RentalsApi';
 import { Rental } from '../../types/Rental';
 
@@ -50,7 +50,7 @@ export default function Reservations({ equipment }: ReservationsProps) {
         equipment_id: equipment.equipment_id,
       };
       await postRental(form);
-      navigate(`/summary-rental`);
+      navigate(`/summary-rental/${equipment.equipment_id}`);
     } catch (err) {
       console.log(err);
       setError('Impossible créer la réservation');

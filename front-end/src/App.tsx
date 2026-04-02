@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { EquipmentProvider } from './context/EquipmentContext';
+import { AuthProvider } from './contexts/AuthContext';
+import { EquipmentProvider } from './contexts/EquipmentContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
@@ -19,7 +19,7 @@ import ChatPage from './pages/Chat/ChatPage';
 import Dashboard from './pages/Admin/Dashboard';
 import EmailChecked from './pages/User/EmailChecked';
 import Summary from './pages/EquipmentItem/Summary';
-import StatusProvider from './context/StatusContext';
+import StatusProvider from './contexts/StatusContext';
 import PaiementSuccess from './pages/Reservation/SuccesPaiement';
 import PaiementFail from './pages/Reservation/FailPaiement';
 import NotFound from './pages/Errors/404';
@@ -89,7 +89,7 @@ function App() {
                 <Route path="/succesUser" element={<UserSuccess />} />
                 <Route path="/verify-email" element={<EmailChecked />} />
                 <Route
-                  path="/summary-rental"
+                  path="/summary-rental/:id"
                   element={
                     <ProtectedRoute>
                       <Summary />
@@ -97,7 +97,7 @@ function App() {
                   }
                 />
                 <Route
-                  path="/paiement-success"
+                  path="/paiement-success/:id"
                   element={
                     <ProtectedRoute>
                       <PaiementSuccess />
