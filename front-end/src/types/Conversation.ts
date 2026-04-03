@@ -12,5 +12,5 @@ export type Conversation = {
   owner: User;
   renter: User;
   equipment: Equipment;
-  message: Message;
+  messages: Message[];
 };

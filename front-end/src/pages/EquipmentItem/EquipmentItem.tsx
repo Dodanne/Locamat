@@ -29,7 +29,7 @@ export default function EquipmentItem() {
     if (!id) return;
     async function fetchEquipmentById() {
       try {
-        const data = await getEquipmentById(id);
+        const data = await getEquipmentById(Number(id));
         setEquipmentById(data);
       } catch (err) {
         console.log(err);

@@ -20,6 +20,11 @@ export default function ConversationsList({
       {conversations.map((conversation) => {
         const otherUser =
           conversation.owner_id === user_id ? conversation.renter : conversation.owner;
+        const lastMessage =
+          conversation.messages && conversation.messages.length > 0
+            ? conversation.messages[conversation.messages.length - 1]
+            : null;
+
         return (
           <div
             className={`p-2 border-b cursor-pointer border-gray-200 hover:bg-gray-200 ${activeId === conversation.conversation_id ? 'bg-blue-100' : ''}`}
@@ -36,7 +41,7 @@ export default function ConversationsList({
               <div>
                 <p className="text-sm font-medium text-gray-900">{conversation.equipment.title}</p>
                 <p className="text-sm  italic text-primary line-clamp-1">
-                  {conversation.message?.content || 'Pas de message'}
+                  {lastMessage ? lastMessage.content : 'Pas de message'}
                 </p>
                 <p className="text-xs text-gray-500 flex ">
                   {otherUser.first_name} {otherUser.last_name} -{' '}

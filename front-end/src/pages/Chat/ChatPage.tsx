@@ -8,6 +8,7 @@ import { Conversation } from '../../types/Conversation';
 import { Message } from '../../types/Message';
 import { useLocation } from 'react-router-dom';
 import { IoIosArrowBack } from 'react-icons/io';
+import Loader from '../../components/Loader';
 
 export default function ChatPage() {
   const location = useLocation();
@@ -15,6 +16,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [showMessages, setShowMessages] = useState(false);
   const [activeConversation, setActiveConversation] = useState<Conversation | null>(null);
+  const [loading, setLoading] = useState(true);
   const { getConversations, getMessages } = ConversationsApi();
 
   useEffect(() => {
@@ -29,14 +31,16 @@ export default function ChatPage() {
       try {
         const data = await getConversations();
         setConversations(data);
-
-        if (data.length === 0) return;
-
+        if (data.length === 0) {
+          setLoading(false);
+          return;
+        }
         const stateId = location.state?.conversationId;
         const active = stateId
           ? data.find((conv: Conversation) => conv.conversation_id === stateId)
           : data[0];
         setActiveConversation(active ?? data[0]);
+        setLoading(false);
       } catch (err) {
         console.log(err);
       }
@@ -128,19 +132,16 @@ export default function ChatPage() {
       setShowMessages(true);
     }
   }
-  if (conversations.length === 0) {
-    return (
-      <div className={`container ${showMessages ? '' : 'py-8'}`}>
-        <h1 className="text-3xl text-gray-900 mb-6">Messages</h1>
-        <div className="flex flex-col gap-6 rounded-xl bg-white p-4">
-          <p className="text-gray-500">Vous n'avez aucune conversation pour le moment.</p>
-        </div>
+  if (loading) return <Loader />;
+  return conversations.length === 0 ? (
+    <div className={`container ${showMessages ? '' : 'py-8'}`}>
+      <h1 className="text-3xl text-gray-900 mb-6">Messages</h1>
+      <div className="flex flex-col gap-6 rounded-xl bg-white p-4">
+        <p className="text-gray-500">Vous n'avez aucune conversation pour le moment.</p>
       </div>
-    );
-  }
-
-  return (
-    <div className="container py-8">
+    </div>
+  ) : (
+    <div className="container pb-0 pt-8">
       <h1 className={`text-3xl text-gray-900 mb-6 ${showMessages ? 'hidden lg:block' : ''}`}>
         Messages
       </h1>

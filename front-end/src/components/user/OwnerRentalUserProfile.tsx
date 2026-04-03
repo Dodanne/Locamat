@@ -11,11 +11,13 @@ import { IoLocationOutline } from 'react-icons/io5';
 import Reviews from '../reviews/Reviews';
 import { ReviewsApi } from '../../services/ReviewsApi';
 import FormatDate from '../FormatDate';
+import ContactButton from '../contact-button';
+import Modal from '../Modals';
 
 export default function OwnerRentalsUserProfile() {
   const { status } = useStatus();
   const { getOwnerRentals, patchStatusRental } = RentalsApi();
-  const [showReview, setShowReview] = useState<{ [rental_id: number]: boolean }>({});
+  const [showReview, setShowReview] = useState<number | null>(null);
   const [hasReview, setHasReview] = useState<{ [rental_id: number]: boolean }>({});
   const [ownerRentals, setOwnerRentals] = useState<Rental[]>([]);
   const { getUserIsReview } = ReviewsApi();
@@ -90,10 +92,18 @@ export default function OwnerRentalsUserProfile() {
                         className="w-20 h-20 object-cover rounded-lg shrink-0"
                       />
                     </Link>
-                    <div className="flex flex-col gap-1">
-                      <h3 className="text-lg font-semibold text-gray-900">{e.equipment?.title}</h3>
+                    <div className="flex gap-2 w-full items-start">
+                      <div className="flex flex-col">
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {e.equipment?.title}
+                        </h3>
+                        <div className="text-gray-600 text-sm">
+                          <p>Du {FormatDate(e.start_date)}</p>
+                          <p>Au {FormatDate(e.end_date)}</p>
+                        </div>
+                      </div>
                       <span
-                        className={`inline-flex items-center justify-center rounded-md border px-2 py-1 text-sm font-medium w-fit ${status[e.status].className}`}
+                        className={`ml-auto inline-flex items-center justify-center rounded-md border px-2 py-1 text-sm font-medium ${status[e.status].className}`}
                       >
                         {status[e.status].label}
                       </span>
@@ -101,33 +111,49 @@ export default function OwnerRentalsUserProfile() {
                   </div>
 
                   <hr />
-                  <div className="text-gray-600 text-sm">
-                    <p>Du {FormatDate(e.start_date)}</p>
-                    <p>Au {FormatDate(e.end_date)}</p>
-                  </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      {e.renter?.photo && e.renter?.photo !== 'NULL' ? (
-                        <img
-                          src={e.renter?.photo}
-                          className="w-10 h-10 object-cover rounded-full"
-                        />
-                      ) : (
-                        <span className="flex items-center justify-center w-10 h-10 text-lg font-bold text-white bg-accent rounded-full">
-                          {getInitials(e.renter)}
-                        </span>
-                      )}
-                      <div>
-                        <p className="text-gray-700 text-sm">
-                          {e.renter?.first_name} {e.renter?.last_name}
-                        </p>
-                        <div className="flex items-center text-gray-500 text-sm">
-                          <IoLocationOutline />
-                          <span>{e.renter?.city}</span>
+                    <Link to={`/user-profile/${e.renter?.user_id}`}>
+                      <div className="flex items-center gap-3">
+                        {e.renter?.photo && e.renter?.photo !== 'NULL' ? (
+                          <img
+                            src={e.renter?.photo}
+                            className="w-10 h-10 object-cover rounded-full"
+                          />
+                        ) : (
+                          <span className="flex items-center justify-center w-10 h-10 text-lg font-bold text-white bg-accent rounded-full">
+                            {getInitials(e.renter)}
+                          </span>
+                        )}
+                        <div>
+                          <p className="text-gray-900 text-sm">
+                            {e.renter?.first_name} {e.renter?.last_name}
+                          </p>
+                          <div className="flex items-center text-gray-500 text-sm">
+                            <IoLocationOutline />
+                            <span>{e.renter?.city}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
+                    {e.equipment && <ContactButton equipment={e.equipment} />}
+                    {e.status === 'completed' && (
+                      <>
+                        {showReview !== e.rental_id &&
+                          (hasReview[e.rental_id] ? (
+                            <p className="text-gray-500 text-sm">Vous avez déjà laissé un avis.</p>
+                          ) : (
+                            <div className="flex justify-center">
+                              <button
+                                onClick={() => setShowReview(e.rental_id)}
+                                className="btn p-3 bg-gray-100 hover:bg-gray-200  text-gray-900"
+                              >
+                                Laisser un avis
+                              </button>
+                            </div>
+                          ))}
+                      </>
+                    )}
                     <div className="text-right">
                       <p className="text-2xl text-primary">{e.total_price} €</p>
                       <p className="text-sm text-gray-500">Total</p>
@@ -166,38 +192,27 @@ export default function OwnerRentalsUserProfile() {
                       </button>
                     </div>
                   )}
-
-                  {e.status === 'completed' && (
-                    <>
-                      {!showReview[e.rental_id] ? (
-                        hasReview[e.rental_id] ? (
-                          <p className="text-gray-500 text-sm">Vous avez déjà laissé un avis.</p>
-                        ) : (
-                          <button
-                            onClick={() =>
-                              setShowReview((prev) => ({ ...prev, [e.rental_id]: true }))
-                            }
-                            className="btn hover:bg-gray-300 w-full"
-                          >
-                            Laisser un avis
-                          </button>
-                        )
-                      ) : (
-                        <Reviews
-                          rental={e}
-                          reviewSubmitted={() => {
-                            setShowReview((prev) => ({ ...prev, [e.rental_id]: false }));
-                            setHasReview((prev) => ({ ...prev, [e.rental_id]: true }));
-                          }}
-                        />
-                      )}
-                    </>
-                  )}
                 </div>
               ))}
           </div>
         </>
       )}
+      <Modal isOpen={showReview !== null} onClose={() => setShowReview(null)}>
+        {showReview !== null && (
+          <Reviews
+            rental={ownerRentals.find((r) => r.rental_id === showReview)!}
+            reviewSubmitted={() => {
+              if (showReview !== null) {
+                setHasReview((prev) => ({
+                  ...prev,
+                  [showReview]: true,
+                }));
+              }
+              setShowReview(null);
+            }}
+          />
+        )}
+      </Modal>
     </>
   );
 }

@@ -22,12 +22,28 @@ export const getConversations = async (req, res) => {
         {
           model: User,
           as: "owner",
-          attributes: ["user_id", "first_name", "last_name", "photo", "city"],
+          attributes: [
+            "user_id",
+            "first_name",
+            "last_name",
+            "photo",
+            "city",
+            "rating_avg",
+            "rating_count",
+          ],
         },
         {
           model: User,
           as: "renter",
-          attributes: ["user_id", "first_name", "last_name", "photo", "city"],
+          attributes: [
+            "user_id",
+            "first_name",
+            "last_name",
+            "photo",
+            "city",
+            "rating_avg",
+            "rating_count",
+          ],
         },
         {
           model: Equipment,

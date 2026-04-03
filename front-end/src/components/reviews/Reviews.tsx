@@ -46,70 +46,30 @@ export default function Reviews({ rental, reviewSubmitted }: ReviewProps) {
   return (
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-white py-8 w-3/4 mx-auto">
-        <div className="grid grid-cols-2  mb-4">
-          {rental.renter?.user_id === user_id && (
-            <div className="w-full ">
-              <h2 className="text-[1.1rem] font-semibold text-center py-4">
-                {' '}
-                Laisser un avis sur le materiel
-              </h2>
-
-              <div className="flex gap-6 py-4">
-                <label className="font-medium"> Notez le materiel </label>
-
-                <div className="flex gap-2 text-2xl cursor-pointer">
-                  {[1, 2, 3, 4, 5].map((starEquipment) => (
-                    <label className="cursor-pointer">
-                      <input
-                        type="radio"
-                        name="ratingEquipment"
-                        value={starEquipment}
-                        className="hidden"
-                        onChange={() => setRatingEquipment(starEquipment)}
-                      />
-                      <FaStar
-                        className={
-                          starEquipment <= ratingEquipment ? 'text-yellow-400' : 'text-gray-300'
-                        }
-                      />
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="font-medium">Votre commentaire </label>
-                <textarea
-                  value={commentEquipment}
-                  onChange={(e) => setCommentEquipment(e.target.value)}
-                  className="border rounded p-2 resize-none mr-4"
-                  placeholder="Partagez votre expérience avec le matériel ..."
-                  required
-                />
-              </div>
-            </div>
-          )}
-          <div className=" w-full ">
+        {rental.renter?.user_id === user_id && (
+          <div className="w-full ">
             <h2 className="text-[1.1rem] font-semibold text-center py-4">
               {' '}
-              Partagez votre expérience avec cette personne{' '}
+              Laisser un avis sur le materiel
             </h2>
 
             <div className="flex gap-6 py-4">
-              <label className="font-medium"> Notez l'utilisateur </label>
+              <label className="font-medium"> Notez le materiel </label>
 
               <div className="flex gap-2 text-2xl cursor-pointer">
-                {[1, 2, 3, 4, 5].map((starUser) => (
+                {[1, 2, 3, 4, 5].map((starEquipment) => (
                   <label className="cursor-pointer">
                     <input
                       type="radio"
-                      name="ratingUser"
-                      value={starUser}
+                      name="ratingEquipment"
+                      value={starEquipment}
                       className="hidden"
-                      onChange={() => setRatingUser(starUser)}
+                      onChange={() => setRatingEquipment(starEquipment)}
                     />
                     <FaStar
-                      className={starUser <= ratingUser ? 'text-yellow-400' : 'text-gray-300'}
+                      className={
+                        starEquipment <= ratingEquipment ? 'text-yellow-400' : 'text-gray-300'
+                      }
                     />
                   </label>
                 ))}
@@ -117,15 +77,53 @@ export default function Reviews({ rental, reviewSubmitted }: ReviewProps) {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="font-medium"> Votre commentaire</label>
+              <label className="font-medium">Votre commentaire </label>
               <textarea
-                value={commentUser}
-                onChange={(e) => setCommentUser(e.target.value)}
+                value={commentEquipment}
+                onChange={(e) => setCommentEquipment(e.target.value)}
                 className="border rounded p-2 resize-none mr-4"
-                placeholder="Partagez votre expérience sur la personne..."
+                placeholder="Partagez votre expérience avec le matériel ..."
                 required
               />
             </div>
+          </div>
+        )}
+        <div className=" w-full ">
+          <h2 className="text-[1.1rem] font-semibold text-center py-4">
+            {' '}
+            Partagez votre expérience avec cette personne{' '}
+          </h2>
+
+          <div className="flex gap-6 py-4">
+            <label className="font-medium"> Notez l'utilisateur </label>
+
+            <div className="flex gap-2 text-2xl cursor-pointer">
+              {[1, 2, 3, 4, 5].map((starUser) => (
+                <label className="cursor-pointer">
+                  <input
+                    type="radio"
+                    name="ratingUser"
+                    value={starUser}
+                    className="hidden"
+                    onChange={() => setRatingUser(starUser)}
+                  />
+                  <FaStar
+                    className={starUser <= ratingUser ? 'text-yellow-400' : 'text-gray-300'}
+                  />
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="font-medium"> Votre commentaire</label>
+            <textarea
+              value={commentUser}
+              onChange={(e) => setCommentUser(e.target.value)}
+              className="border rounded p-2 resize-none mr-4"
+              placeholder="Partagez votre expérience sur la personne..."
+              required
+            />
           </div>
         </div>
         {error && <p className="text-red-500 text-sm">{error}</p>}
