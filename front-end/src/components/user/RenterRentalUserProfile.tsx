@@ -101,7 +101,7 @@ export default function RenterRentalsUserProfile() {
                 <option value="asc">Plus ancien</option>
               </select>
               <label className="flex items-center gap-2 text-sm text-primary">
-                <FaFilter /> Filtrer par status :
+                Filtrer par status :
               </label>
               <select
                 value={filterByStatus}
