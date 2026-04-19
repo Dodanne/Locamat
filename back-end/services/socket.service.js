@@ -8,7 +8,7 @@ import {
 export function initializeSocket(httpServer) {
   const io = new Server(httpServer, {
     cors: {
-      origin: process.env.FRONT_URL,
+      origin: process.env.CLIENT_URL,
       methods: ["GET", "POST"],
       credentials: true,
     },

@@ -13,6 +13,7 @@ import { ReviewsApi } from '../../services/ReviewsApi';
 import FormatDate from '../FormatDate';
 import ContactButton from '../contact-button';
 import Modal from '../Modals';
+import { FaFilter } from 'react-icons/fa';
 
 export default function OwnerRentalsUserProfile() {
   const { status } = useStatus();
@@ -21,6 +22,9 @@ export default function OwnerRentalsUserProfile() {
   const [hasReview, setHasReview] = useState<{ [rental_id: number]: boolean }>({});
   const [ownerRentals, setOwnerRentals] = useState<Rental[]>([]);
   const { getUserIsReview } = ReviewsApi();
+  const [filterByStatus, setFilterByStatus] = useState('all');
+  const [filterByDate, setFilterByDate] = useState<'asc' | 'desc'>('desc');
+
   const { user_id } = useAuth();
 
   useEffect(() => {
@@ -64,6 +68,14 @@ export default function OwnerRentalsUserProfile() {
   const handleClick = () => {
     confirm('Êtes-vous sûr de vouloir annuler cette location ?');
   };
+  const filtredRentals = (
+    filterByStatus === 'all'
+      ? ownerRentals
+      : ownerRentals.filter((r) => r.status === filterByStatus)
+  ).sort((a, b) => {
+    const diff = new Date(b.start_date).getTime() - new Date(a.start_date).getTime();
+    return filterByDate === 'desc' ? diff : -diff;
+  });
   if (!ownerRentals) return <Loader />;
   return (
     <>
@@ -77,12 +89,40 @@ export default function OwnerRentalsUserProfile() {
         </>
       ) : (
         <>
-          <div className="flex equipments-center justify-between">
+          <div className="flex items-center justify-between">
             <h2 className="text-2xl text-gray-900 my-4"> Matériel que j’ai prêté</h2>
+            <div className="flex items-center  gap-4">
+              <label className="flex items-center gap-2 text-sm text-primary">
+                <FaFilter /> Filtrer par date :
+              </label>
+              <select
+                value={filterByDate}
+                onChange={(e) => setFilterByDate(e.target.value as 'desc' | 'asc')}
+                className=" border rounded-lg px-3 py-1 text-sm text-gray-700"
+              >
+                <option value="desc">Plus recent</option>
+                <option value="asc">Plus ancien</option>
+              </select>
+              <label className="flex items-center gap-2 text-sm text-primary">
+                <FaFilter /> Filtrer par status :
+              </label>
+              <select
+                value={filterByStatus}
+                onChange={(e) => setFilterByStatus(e.target.value)}
+                className=" border rounded-lg px-3 py-1 text-sm text-gray-700"
+              >
+                <option value="all">Tous</option>
+                <option value="pending">En attente</option>
+                <option value="accepted">Accepté</option>
+                <option value="confirmed">Confirmé</option>
+                <option value="completed">Terminé</option>
+                <option value="refused">Refusé</option>
+              </select>
+            </div>
           </div>
           <div className="space-y-4">
-            {ownerRentals &&
-              ownerRentals.map((e) => (
+            {filtredRentals &&
+              filtredRentals.map((e) => (
                 <div key={e.rental_id} className="bg-white rounded-xl border p-4 space-y-4">
                   <div className="flex gap-4 items-start">
                     <Link to={`/equipment/${e.equipment?.equipment_id}`}>
