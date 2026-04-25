@@ -7,12 +7,15 @@ import { IoMdMenu, IoMdClose } from 'react-icons/io';
 import { useAuth } from '../contexts/AuthContext';
 import { IoLogOutSharp } from 'react-icons/io5';
 import getInitials from './GetInitials';
+import { useNotification } from '../contexts/NotificationContext';
+import { Nav } from 'react-day-picker';
 
 export default function Header() {
   const { isLogged, user } = useAuth();
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     ` transition-colors ${isActive ? 'text-primary' : 'text-secondary'}`;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { NumberOfNotification } = useNotification();
 
   return (
     <header className="bg-white text-primary border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -50,11 +53,19 @@ export default function Header() {
                     <span>Messagerie</span>
                   </button>
                 </NavLink>
-
-                <button className="flex flex-col items-center text-sm  icon-btn">
-                  <FaBell className="icon-primary m-2" />
-                  <span>Notifications</span>
-                </button>
+                <NavLink to="/notifications">
+                  <button className="flex flex-col items-center text-sm  icon-btn">
+                    <span className="relative">
+                      <FaBell className="icon-primary m-2" />
+                      {NumberOfNotification > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
+                          {NumberOfNotification > 9 ? '9+' : NumberOfNotification}
+                        </span>
+                      )}
+                    </span>
+                    <span>Notifications</span>
+                  </button>
+                </NavLink>
 
                 {user && (
                   <NavLink to={`/user-profile`}>

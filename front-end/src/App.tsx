@@ -28,101 +28,104 @@ import Confidentialite from './pages/Legal/Confidentialite';
 import RGPD from './pages/Legal/RGPD';
 import CGU from './pages/Legal/CGU';
 import Cookies from './pages/Legal/Cookies';
+import { NotificationProvider } from './contexts/NotificationContext';
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <EquipmentProvider>
-          <StatusProvider>
-            <Header />
-            <ScrollToTop />
-            <div className="min-h-screen bg-gray-50">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/rechercher" element={<EquipmentSearch />} />
-                <Route
-                  path="/new-equipment"
-                  element={
-                    <ProtectedRoute>
-                      <AddEquipment />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/chat"
-                  element={
-                    <ProtectedRoute>
-                      <ChatPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/connexion" element={<Connexion />} />
-                <Route path="/equipment/:id" element={<EquipmentItem />} />
-                <Route
-                  path="/user-profile"
-                  element={
-                    <ProtectedRoute>
-                      <UserProfile />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/user-profile/:id" element={<UserProfile />} />
-                <Route path="/user-form" element={<UserForm />} />
-                <Route
-                  path="/admin-dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/logout" element={<Deconnexion />} />
-                <Route
-                  path="/succes"
-                  element={
-                    <ProtectedRoute>
-                      <EquipmentSuccess />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/succesUser" element={<UserSuccess />} />
-                <Route path="/verify-email" element={<EmailChecked />} />
-                <Route
-                  path="/summary-rental/:id"
-                  element={
-                    <ProtectedRoute>
-                      <Summary />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/paiement-success/:id"
-                  element={
-                    <ProtectedRoute>
-                      <PaiementSuccess />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/paiement-cancel"
-                  element={
-                    <ProtectedRoute>
-                      <PaiementFail />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/mentions-legales" element={<MentionsLegales />} />
-                <Route path="/confidentialite" element={<Confidentialite />} />
-                <Route path="/RGPD" element={<RGPD />} />
-                <Route path="/CGU" element={<CGU />} />
-                <Route path="/cookies" element={<Cookies />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </div>
-            <Footer />
-          </StatusProvider>
-        </EquipmentProvider>
+        <NotificationProvider>
+          <EquipmentProvider>
+            <StatusProvider>
+              <Header />
+              <ScrollToTop />
+              <div className="min-h-screen bg-gray-50">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/rechercher" element={<EquipmentSearch />} />
+                  <Route
+                    path="/new-equipment"
+                    element={
+                      <ProtectedRoute>
+                        <AddEquipment />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/chat"
+                    element={
+                      <ProtectedRoute>
+                        <ChatPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/connexion" element={<Connexion />} />
+                  <Route path="/equipment/:id" element={<EquipmentItem />} />
+                  <Route
+                    path="/user-profile"
+                    element={
+                      <ProtectedRoute>
+                        <UserProfile />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/user-profile/:id" element={<UserProfile />} />
+                  <Route path="/user-form" element={<UserForm />} />
+                  <Route
+                    path="/admin-dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/logout" element={<Deconnexion />} />
+                  <Route
+                    path="/succes"
+                    element={
+                      <ProtectedRoute>
+                        <EquipmentSuccess />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/succesUser" element={<UserSuccess />} />
+                  <Route path="/verify-email" element={<EmailChecked />} />
+                  <Route
+                    path="/summary-rental/:id"
+                    element={
+                      <ProtectedRoute>
+                        <Summary />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/paiement-success/:id"
+                    element={
+                      <ProtectedRoute>
+                        <PaiementSuccess />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/paiement-cancel"
+                    element={
+                      <ProtectedRoute>
+                        <PaiementFail />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/mentions-legales" element={<MentionsLegales />} />
+                  <Route path="/confidentialite" element={<Confidentialite />} />
+                  <Route path="/RGPD" element={<RGPD />} />
+                  <Route path="/CGU" element={<CGU />} />
+                  <Route path="/cookies" element={<Cookies />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
+              <Footer />
+            </StatusProvider>
+          </EquipmentProvider>
+        </NotificationProvider>
       </AuthProvider>
     </BrowserRouter>
   );

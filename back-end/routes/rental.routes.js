@@ -14,6 +14,10 @@ router.get("/rental/:id", getRentalByEquipmentId);
 router.get("/rental/renter/:id", getRentalsByRenter);
 router.get("/rental/owner/:id", getRentalsByOwner);
 router.post("/rental/new-rental", authenticateToken, createRental);
-router.patch("/rental/status/:id", authenticateToken, patchRentalStatus);
+router.patch(
+  "/rental/status/:id",
+  // authenticateToken,
+  patchRentalStatus,
+);
 
 export default router;

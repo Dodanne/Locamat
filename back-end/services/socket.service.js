@@ -5,10 +5,20 @@ import {
   markMessagesAsReadService,
 } from "./conversation.service.js";
 
+export function sendNotification(io, user_id, { type, message, data }) {
+  io.to(`user_${user_id}`).emit("notification", {
+    id: Date.now(),
+    type,
+    message,
+    data,
+    read: false,
+    created_at: new Date().toISOString(),
+  });
+}
 export function initializeSocket(httpServer) {
   const io = new Server(httpServer, {
     cors: {
-      origin: process.env.CLIENT_URL,
+      origin: ["http://localhost:5173", "https://locamat-kappa.vercel.app"],
       methods: ["GET", "POST"],
       credentials: true,
     },
@@ -18,6 +28,7 @@ export function initializeSocket(httpServer) {
 
   io.on("connection", (socket) => {
     socket.join(`user_${socket.user_id}`);
+    //conversation
     socket.on("join_conversation", (conversation_id) => {
       socket.join(`conversation_${conversation_id}`);
     });
@@ -27,11 +38,6 @@ export function initializeSocket(httpServer) {
     });
 
     socket.on("send_message", async ({ conversation_id, content }) => {
-      console.log("SEND MESSAGE", {
-        conversation_id,
-        content,
-        user: socket.user_id,
-      });
       try {
         const { message, receiver_id } = await createMessageService({
           conversation_id,
@@ -39,11 +45,12 @@ export function initializeSocket(httpServer) {
           content,
         });
         const data = message.dataValues;
-        console.log(data);
+        //notification
         io.to(`conversation_${conversation_id}`).emit("new_message", data);
-        io.to(`user_${receiver_id}`).emit("new_message_notification", {
-          conversation_id,
-          message: data,
+        sendNotification(io, receiver_id, {
+          type: "new_message",
+          message: "vous avez un nouveau message",
+          data: { conversation_id },
         });
       } catch (err) {
         console.log(err);

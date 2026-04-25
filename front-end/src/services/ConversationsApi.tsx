@@ -21,19 +21,19 @@ export function ConversationsApi() {
     }
   }
 
-  async function postMessage(conversation_id: number, content: string, sender_id: number) {
-    try {
-      const res = await apiAuth.post(`/messages`, {
-        content,
-        sender_id,
-        conversation_id,
-      });
-      return res.data;
-    } catch (err) {
-      console.log(err);
-      return [];
-    }
-  }
+  // async function postMessage(conversation_id: number, content: string, sender_id: number) {
+  //   try {
+  //     const res = await apiAuth.post(`/messages`, {
+  //       content,
+  //       sender_id,
+  //       conversation_id,
+  //     });
+  //     return res.data;
+  //   } catch (err) {
+  //     console.log(err);
+  //     return [];
+  //   }
+  // }
   async function createConversation({
     owner_id,
     renter_id,
@@ -56,5 +56,10 @@ export function ConversationsApi() {
     }
   }
 
-  return { getConversations, getMessages, postMessage, createConversation };
+  return {
+    getConversations,
+    getMessages,
+    // postMessage,
+    createConversation,
+  };
 }

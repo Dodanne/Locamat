@@ -2,7 +2,7 @@ import express from "express";
 import { authenticateToken } from "../middleware/authentificateToken.js";
 import {
   createConversation,
-  createMessage,
+  // createMessage,
   getMessages,
   getConversations,
 } from "../controllers/conversation.controller.js";
@@ -16,6 +16,6 @@ router.get(
   authenticateToken,
   getMessages,
 );
-router.post("/messages", authenticateToken, createMessage);
+// router.post("/messages", authenticateToken, createMessage);
 
 export default router;

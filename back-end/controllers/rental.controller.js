@@ -1,6 +1,8 @@
 import { Op } from "sequelize";
 import { Rental, User, Equipment } from "../models/index.js";
 import sendEmail from "../services/email.service.js";
+import { sendNotification } from "../services/socket.service.js";
+import { getIo } from "../config/io.js";
 
 export const getRentalsByRenter = async (req, res) => {
   try {
@@ -142,7 +144,11 @@ export const createRental = async (req, res) => {
     //   <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
     // `,
     // );
-
+    sendNotification(getIo(), equipment.owner_id, {
+      type: "nouvelle_demande",
+      message: `Vous avez reçu une nouvelle demande de location pour le materiel suivant : ${equipment.title}`,
+      data: { rental_id: data.rental_id, equipment_id },
+    });
     res.json(data);
   } catch (err) {
     console.log(err);
@@ -157,7 +163,7 @@ export const patchRentalStatus = async (req, res) => {
       include: [
         {
           model: User,
-          as: "renter",
+          as: "owner",
           attributes: ["email", "first_name"],
         },
       ],
@@ -194,6 +200,65 @@ export const patchRentalStatus = async (req, res) => {
     //     `,
     //       );
     //     }
+    let notificationForRenter;
+    let notificationForOwner;
+    switch (data.status) {
+      case "accepted":
+        notificationForRenter = {
+          type: "demande_acceptee",
+          message: `Votre demande de location pour "${equipment.title}" a ete acceptee par le proprietaire, passez au paiement de la reservation dès maintenant!`,
+          data: { rental_id: id, equipment_id },
+        };
+        break;
+      case "refused":
+        notificationForRenter = {
+          type: "demande_refusee",
+          message: `Votre demande de location pour "${equipment.title}" a ete refusee par le proprietaire`,
+          data: { rental_id: id, equipment_id },
+        };
+        break;
+      case "confirmed":
+        notificationForOwner = {
+          type: "location_payee_par_locataire",
+          message: `La location pour "${equipment.title}" a été payee par le locataire. La location est maintenant confirmee, n'oubliez pas de vous donner un point de rendez-vous!`,
+          data: { rental_id: id, equipment_id },
+        };
+        break;
+      case "cancelled_by_owner":
+        notificationForRenter = {
+          type: "demande_annulee_par_proprietaire",
+          message: `Votre demande de location pour "${equipment.title}" a ete annulee par le proprietaire`,
+          data: { rental_id: id, equipment_id },
+        };
+        break;
+      case "cancelled_by_renter":
+        notificationForOwner = {
+          type: "demande_annulee_par_locataire",
+          message: `La demande de location pour "${equipment.title}" a ete annulee par le locataire`,
+          data: { rental_id: id, equipment_id },
+        };
+        break;
+      case "completed":
+        notificationForRenter = {
+          type: "demande_confirmee_par_proprietaire",
+          message: `Votre demande de location pour "${equipment.title}" est maintenant terminee. Laissez un avis sur votre loueur!`,
+          data: { rental_id: id, equipment_id },
+        };
+        notificationForOwner = {
+          type: "demande_confirmee_par_locataire",
+          message: `Votre demande de location pour "${equipment.title}" est maintenant terminee. Laissez un avis sur votre locataire!`,
+          data: { rental_id: id, equipment_id },
+        };
+        break;
+      default:
+        notificationForRenter = null;
+    }
+    if (notificationForOwner) {
+      sendNotification(getIo(), equipment.owner_id, notificationForOwner);
+    }
+    if (notificationForRenter) {
+      sendNotification(getIo(), data.renter_id, notificationForRenter);
+    }
     res.json(data);
   } catch (err) {
     console.log(err);

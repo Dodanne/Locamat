@@ -93,22 +93,22 @@ export const createConversation = async (req, res) => {
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
-export const createMessage = async (req, res) => {
-  try {
-    const { conversation_id, content } = req.body;
-    const sender_id = req.user.user_id;
+// export const createMessage = async (req, res) => {
+//   try {
+//     const { conversation_id, content } = req.body;
+//     const sender_id = req.user.user_id;
 
-    const { message } = await createMessageService({
-      conversation_id,
-      sender_id,
-      content,
-    });
-    res.json(message);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Erreur lors de la creation du message" });
-  }
-};
+//     const { message } = await createMessageService({
+//       conversation_id,
+//       sender_id,
+//       content,
+//     });
+//     res.json(message);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ error: "Erreur lors de la creation du message" });
+//   }
+// };
 export const getMessages = async (req, res) => {
   try {
     const user_id = req.user.id;
@@ -142,6 +142,6 @@ export default {
   getConversations,
   createConversation,
   getMessages,
-  createMessage,
+  // createMessage,
   findConversation,
 };
