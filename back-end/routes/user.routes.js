@@ -9,6 +9,7 @@ import {
   patchIsAdmin,
   verifyEmail,
   patchUser,
+  deleteUser,
 } from "../controllers/user.controller.js";
 import { authenticateToken } from "../middleware/authentificateToken.js";
 import { isSuperAdmin } from "./../middleware/isSuperAdmin.js";
@@ -30,5 +31,5 @@ router.patch(
   uploadUser.single("photo"),
   patchUser,
 );
-
+router.delete("/delete-user/:id", authenticateToken, deleteUser);
 export default router;

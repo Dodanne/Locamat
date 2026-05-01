@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
 import { findConversation } from "../controllers/conversation.controller.js";
 import Message from "../models/Message.js";
+import User from "../models/User.js";
 
 export const createMessageService = async ({
   conversation_id,
@@ -15,12 +16,14 @@ export const createMessageService = async ({
     }
     const data = await Message.create({ conversation_id, sender_id, content });
     await conversation.update({ updatedAt: new Date() });
-
+    const sender = await User.findByPk(sender_id, {
+      attributes: ["first_name", "last_name"],
+    });
     const receiver_id =
       conversation.owner_id === sender_id
         ? conversation.renter_id
         : conversation.owner_id;
-    return { message: data, receiver_id };
+    return { message: data, receiver_id, sender };
   } catch (err) {
     console.log(err);
     throw new Error("Erreur lors de la creation du message");

@@ -1,9 +1,12 @@
 import { stripe } from "../services/stripe.service.js";
 import Rental from "../models/Rental.js";
+import Equipment from "../models/Equipment.js";
+import { sendNotification } from "../services/socket.service.js";
+import { getIo } from "../config/io.js";
 
 export const postPaiementSession = async (req, res) => {
   try {
-    const { rental_id } = req.body;
+    const { rental_id, equipment_id } = req.body;
     const data = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -19,8 +22,8 @@ export const postPaiementSession = async (req, res) => {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.FRONT_URL}/paiement-success`,
-      cancel_url: `${process.env.FRONT_URL}/paiement-cancel`,
+      success_url: `${process.env.CLIENT_URL}/paiement-success/${equipment_id}/${rental_id}`,
+      cancel_url: `${process.env.CLIENT_URL}/paiement-cancel/${equipment_id}/${rental_id}`,
       metadata: { rental_id: rental_id.toString() },
     });
     res.json({ url: data.url });
@@ -54,6 +57,33 @@ export const postWebHook = async (req, res) => {
       }
     }
     res.json({ received: true });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+export const notificationPaiement = async (req, res) => {
+  try {
+    const { rental_id } = req.body;
+    const rental = await Rental.findByPk(rental_id, {
+      include: [
+        {
+          model: Equipment,
+          as: "equipment",
+          attributes: ["title", "owner_id", "equipment_id"],
+        },
+      ],
+    });
+    if (!rental) {
+      return res.status(404).json({ message: "Location non trouvee" });
+    }
+    sendNotification(getIo(), rental.equipment.owner_id, {
+      type: "location_payee_par_locataire",
+      message: `La location pour "${rental.equipment.title}" a été payee par le locataire. La location est maintenant confirmee, n'oubliez pas de vous donner un point de rendez-vous!`,
+      data: { rental_id, equipment_id: rental.equipment.equipment_id },
+    });
+    res.json({ message: "Notification envoyee" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Erreur serveur" });

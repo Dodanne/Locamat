@@ -29,6 +29,7 @@ import RGPD from './pages/Legal/RGPD';
 import CGU from './pages/Legal/CGU';
 import Cookies from './pages/Legal/Cookies';
 import { NotificationProvider } from './contexts/NotificationContext';
+import NotificationPage from './pages/Notification/NotificationPage';
 
 function App() {
   return (
@@ -56,6 +57,14 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <ChatPage />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/notifications"
+                    element={
+                      <ProtectedRoute>
+                        <NotificationPage />
                       </ProtectedRoute>
                     }
                   />
@@ -99,7 +108,7 @@ function App() {
                     }
                   />
                   <Route
-                    path="/paiement-success/:id"
+                    path="/paiement-success/:id/:rental_id"
                     element={
                       <ProtectedRoute>
                         <PaiementSuccess />
@@ -107,7 +116,7 @@ function App() {
                     }
                   />
                   <Route
-                    path="/paiement-cancel"
+                    path="/paiement-cancel/:id/:rental_id"
                     element={
                       <ProtectedRoute>
                         <PaiementFail />

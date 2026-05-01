@@ -4,6 +4,7 @@ import {
   createMessageService,
   markMessagesAsReadService,
 } from "./conversation.service.js";
+import Equipment from "../models/Equipment.js";
 
 export function sendNotification(io, user_id, { type, message, data }) {
   io.to(`user_${user_id}`).emit("notification", {
@@ -18,7 +19,7 @@ export function sendNotification(io, user_id, { type, message, data }) {
 export function initializeSocket(httpServer) {
   const io = new Server(httpServer, {
     cors: {
-      origin: ["http://localhost:5173", "https://locamat-kappa.vercel.app"],
+      origin: [process.env.CLIENT_URL, process.env.FRONT_URL],
       methods: ["GET", "POST"],
       credentials: true,
     },
@@ -39,7 +40,7 @@ export function initializeSocket(httpServer) {
 
     socket.on("send_message", async ({ conversation_id, content }) => {
       try {
-        const { message, receiver_id } = await createMessageService({
+        const { message, receiver_id, sender } = await createMessageService({
           conversation_id,
           sender_id: socket.user_id,
           content,
@@ -48,8 +49,8 @@ export function initializeSocket(httpServer) {
         //notification
         io.to(`conversation_${conversation_id}`).emit("new_message", data);
         sendNotification(io, receiver_id, {
-          type: "new_message",
-          message: "vous avez un nouveau message",
+          type: "nouveau_message",
+          message: `Vous avez un nouveau message de ${sender.first_name} ${sender.last_name}`,
           data: { conversation_id },
         });
       } catch (err) {
@@ -73,6 +74,21 @@ export function initializeSocket(httpServer) {
         socket.emit("error", {
           error: "Erreur lors de la mise à jour des messages",
         });
+      }
+    });
+    socket.on("payment_success", async ({ equipment_id }) => {
+      try {
+        const equipment = await Equipment.findByPk(equipment_id, {
+          attributes: ["equipment_id", "owner_id", "title"],
+        });
+        if (!equipment) return;
+        sendNotification(io, equipment.owner_id, {
+          type: "location_payee_par_locataire",
+          message: `La location pour "${equipment.title}" a été payee par le locataire. La location est maintenant confirmee, n'oubliez pas de vous donner un point de rendez-vous!`,
+          data: { equipment_id },
+        });
+      } catch (err) {
+        console.log(err);
       }
     });
     socket.on("disconnect", () => {

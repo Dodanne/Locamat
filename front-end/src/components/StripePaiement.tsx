@@ -3,15 +3,16 @@ import { PaiementApi } from '../services/PaiementApi';
 
 type StripePaiementProps = {
   rental_id: number;
+  equipment_id: number;
 };
 
-export default function StripePaiement({ rental_id }: StripePaiementProps) {
+export default function StripePaiement({ rental_id, equipment_id }: StripePaiementProps) {
   const { postSession } = PaiementApi();
   const [error, setError] = useState('');
 
   const handleClick = async () => {
     try {
-      const data = await postSession(rental_id);
+      const data = await postSession(rental_id, equipment_id);
       window.location.href = data.url;
     } catch (err) {
       console.log(err);

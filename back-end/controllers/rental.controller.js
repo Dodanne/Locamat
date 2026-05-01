@@ -158,20 +158,24 @@ export const createRental = async (req, res) => {
 export const patchRentalStatus = async (req, res) => {
   try {
     const id = req.params.id;
-    const { status, equipment_id } = req.body;
-    const equipment = await Equipment.findByPk(equipment_id, {
+    const { status } = req.body;
+    const data = await Rental.findByPk(id, {
       include: [
         {
-          model: User,
-          as: "owner",
-          attributes: ["email", "first_name"],
+          model: Equipment,
+          as: "equipment",
+          attributes: ["equipment_id", "title", "owner_id"],
         },
       ],
     });
-    const data = await Rental.findByPk(id);
     if (!data) {
       return res.status(404).json({ message: "Location non trouvée" });
     }
+    if (!data.equipment) {
+      return res.status(404).json({ message: "Equipement non trouvé" });
+    }
+    const equipment = data.equipment;
+    const equipment_id = equipment.equipment_id;
     data.status = status;
     await data.save();
 
@@ -214,13 +218,6 @@ export const patchRentalStatus = async (req, res) => {
         notificationForRenter = {
           type: "demande_refusee",
           message: `Votre demande de location pour "${equipment.title}" a ete refusee par le proprietaire`,
-          data: { rental_id: id, equipment_id },
-        };
-        break;
-      case "confirmed":
-        notificationForOwner = {
-          type: "location_payee_par_locataire",
-          message: `La location pour "${equipment.title}" a été payee par le locataire. La location est maintenant confirmee, n'oubliez pas de vous donner un point de rendez-vous!`,
           data: { rental_id: id, equipment_id },
         };
         break;

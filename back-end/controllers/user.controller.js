@@ -234,3 +234,18 @@ export const patchUser = async (req, res) => {
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
+export const deleteUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await User.findByPk(id);
+    if (!data) {
+      return res.status(404).json({ message: "Utilisateur introuvable" });
+    }
+    await deletePhoto(data.photo);
+    await data.destroy();
+    res.json({ message: "Utilisateur supprimé avec succès" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};

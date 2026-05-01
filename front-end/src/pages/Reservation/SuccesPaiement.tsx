@@ -4,13 +4,13 @@ import { EquipmentApi } from '../../services/EquipmentsApi';
 import { useEffect, useState } from 'react';
 import { Equipment } from '../../types/Equipment';
 import Loader from '../../components/Loader';
+import apiAuth from '../../api/axiosAuth';
 
 export default function PaiementSuccess() {
-  const { id } = useParams();
+  const { id, rental_id } = useParams();
   const { getEquipmentById } = EquipmentApi();
   const [equipment, setEquipment] = useState<Equipment | null>(null);
   const equipment_id = id ? Number(id) : null;
-
   useEffect(() => {
     if (!equipment_id) return;
     async function fetchEquipment() {
@@ -23,6 +23,11 @@ export default function PaiementSuccess() {
     }
     fetchEquipment();
   }, [equipment_id]);
+
+  useEffect(() => {
+    if (!rental_id) return;
+    apiAuth.post('/notification-paiement', { rental_id: Number(rental_id) });
+  }, [rental_id]);
 
   if (!equipment) return <Loader />;
   return (
@@ -40,7 +45,7 @@ export default function PaiementSuccess() {
 
         <p className="text-lg sm:text-xl text-blue-100 mb-10">
           Vous pouvez dès à présent communiquer avec votre loueur. Celui-ci vous communiquera
-          l'adresse de retrait ansi que l'heure du rendez-vous.
+          l'adresse de retrait ainsi que l'heure du rendez-vous.
         </p>
 
         <div className="flex justify-center gap-4 flex-wrap">

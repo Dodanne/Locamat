@@ -15,7 +15,7 @@ export default function Header() {
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     ` transition-colors ${isActive ? 'text-primary' : 'text-secondary'}`;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { NumberOfNotification } = useNotification();
+  const { numberOfNotification } = useNotification();
 
   return (
     <header className="bg-white text-primary border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -57,9 +57,9 @@ export default function Header() {
                   <button className="flex flex-col items-center text-sm  icon-btn">
                     <span className="relative">
                       <FaBell className="icon-primary m-2" />
-                      {NumberOfNotification > 0 && (
+                      {numberOfNotification > 0 && (
                         <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
-                          {NumberOfNotification > 9 ? '9+' : NumberOfNotification}
+                          {numberOfNotification > 9 ? '9+' : numberOfNotification}
                         </span>
                       )}
                     </span>

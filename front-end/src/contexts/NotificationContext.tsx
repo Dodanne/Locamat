@@ -5,7 +5,7 @@ import socket from '../config/socket';
 
 type NotificationsContextType = {
   notifications: Notification[];
-  NumberOfNotification: number;
+  numberOfNotification: number;
   markAsRead: (id: number) => void;
   markAllAsRead: () => void;
   handleClick: (notif: Notification) => void;
@@ -14,9 +14,16 @@ type NotificationsContextType = {
 const NotificationContext = createContext<NotificationsContextType | undefined>(undefined);
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>(() => {
+    const keepNotifications = localStorage.getItem('notifications');
+    return keepNotifications ? JSON.parse(keepNotifications) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('notifications', JSON.stringify(notifications));
+  }, [notifications]);
   const navigate = useNavigate();
-  const NumberOfNotification = notifications.filter((notif) => !notif.read).length;
+  const numberOfNotification = notifications.filter((notif) => !notif.read).length;
   const markAsRead = (id: number) => {
     setNotifications((prev) =>
       prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif)),
@@ -40,7 +47,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       //locataire
       case 'demande_acceptee':
       case 'demande_refusee':
-      case 'deamnde_annulee_par_proprietaire':
+      case 'demande_annulee_par_proprietaire':
       case 'demande_confirmee_par_proprietaire':
         navigate('/user-profile', { state: { activeDiv: 'locations' } });
         break;
@@ -62,7 +69,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 
   return (
     <NotificationContext.Provider
-      value={{ notifications, NumberOfNotification, markAsRead, markAllAsRead, handleClick }}
+      value={{ notifications, numberOfNotification, markAsRead, markAllAsRead, handleClick }}
     >
       {children}
     </NotificationContext.Provider>

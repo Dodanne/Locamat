@@ -197,13 +197,16 @@ export default function RenterRentalsUserProfile() {
                     </div>
                   </div>
 
-                  {r.status === 'accepted' && (
+                  {r.status === 'accepted' && r.equipment && (
                     <div className="flex flex-col gap-2 p-3 bg-gray-50 rounded-lg">
                       <p className="text-sm text-gray-700 text-center">
                         {r.equipment?.owner?.last_name} a accepté votre demande. Pour confirmer,
                         payez dès maintenant :
                       </p>
-                      <StripePaiement rental_id={Number(r.rental_id)} />
+                      <StripePaiement
+                        rental_id={Number(r.rental_id)}
+                        equipment_id={Number(r.equipment.equipment_id)}
+                      />
                     </div>
                   )}
 
