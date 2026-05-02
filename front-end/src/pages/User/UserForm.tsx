@@ -8,6 +8,8 @@ import CoordinatesApi from '../../services/CoordinatesApi';
 
 export default function UserForm() {
   const navigate = useNavigate();
+  const { deleteUserById } = UsersApi();
+  const { logout } = useAuth();
   const location = useLocation();
   const mode = location.state?.mode ?? 'create';
   const { user_id, setUser } = useAuth();
@@ -182,20 +184,46 @@ export default function UserForm() {
     setSuggestions([]);
     setAddress(feature.properties.label);
   }
+  async function handleClickDelete() {
+    if (
+      window.confirm(
+        'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
+      )
+    ) {
+      try {
+        await deleteUserById(Number(user_id));
+        logout();
+        navigate('/');
+      } catch (err) {
+        console.log(err);
+        setError('Impossible de supprimer le compte');
+      }
+    }
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl text-gray-900 mb-2">
-          {mode === 'edit' ? 'Modifier le profil' : 'Inscrivez-vous'}
-        </h1>
+        <div className="flex justify-between">
+          <p className="text-3xl text-gray-900 mb-2">
+            {mode === 'edit' ? 'Modifier le profil' : 'Inscrivez-vous'}
+          </p>
+          {mode === 'edit' && (
+            <button
+              onClick={() => handleClickDelete()}
+              className="btn bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition"
+            >
+              Supprimer le compte
+            </button>
+          )}
+        </div>
         <p className="text-gray-600">
           {' '}
           {mode === 'edit' ? '' : 'Mettez en location votre matériel ou louez du matériel'}
         </p>
+        <span className="text-red-500 text-sm">* Champs obligatoires</span>
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <p className="text-sm text-gray-700">Les * sont des champs obligatoires</p>
         <div className="flex flex-col gap-6 rounded-xl border bg-white p-6">
           <div className="form-div">
             <label className="form-label" htmlFor="name">

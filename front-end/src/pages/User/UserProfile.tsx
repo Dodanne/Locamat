@@ -17,6 +17,9 @@ import { useAuth } from '../../contexts/AuthContext';
 import { UsersApi } from '../../services/UsersApi';
 import { User } from '../../types/User';
 import Loader from '../../components/Loader';
+import ItemCard from '../../components/equipment/ItemCard';
+import { EquipmentApiContext } from '../../contexts/EquipmentContext';
+import { Equipment } from '../../types/Equipment';
 
 export default function UserProfile() {
   const location = useLocation();
@@ -27,7 +30,6 @@ export default function UserProfile() {
   const { user_id, isLogged } = useAuth();
   const { getUserById } = UsersApi();
   const [user, setUser] = useState<User | null>(null);
-
   const idProfile = id ? Number(id) : Number(user_id);
   const isOwnerProfile = isLogged && idProfile === user_id;
 
@@ -109,7 +111,7 @@ export default function UserProfile() {
         )}
       </div>
       <div className="flex flex-col gap-2 my-6">
-        {isOwnerProfile && (
+        {isOwnerProfile ? (
           <>
             <div className="bg-gray-100 h-9 items-center justify-center rounded-xl p-[3px] grid w-full grid-cols-4">
               <button
@@ -144,17 +146,37 @@ export default function UserProfile() {
               </button>
             </div>
           </>
+        ) : (
+          <div className="bg-gray-100 h-9 items-center justify-center rounded-xl p-[3px] grid w-full grid-cols-2">
+            <button
+              onClick={() => setActiveDiv('equipment')}
+              className={`btn border-none py-1 px-2 rounded-xl h-7 ${activeDiv === 'equipment' ? 'bg-gray-300' : ''} `}
+            >
+              <BsBoxSeam /> <span className="hidden md:block">Matériel</span>{' '}
+            </button>
+
+            <button
+              onClick={() => setActiveDiv('reviews')}
+              className={`btn border-none py-1 px-2 rounded-xl h-7 ${activeDiv === 'reviews' ? 'bg-gray-300' : ''} `}
+            >
+              <PiClockCounterClockwise /> <span className="hidden md:block"> Avis </span>{' '}
+            </button>
+          </div>
         )}
         {isOwnerProfile ? (
           <>
-            {activeDiv === 'equipment' && <EquipmentUserProfile />}
+            {activeDiv === 'equipment' && (
+              <EquipmentUserProfile isOwnerProfile={true} idProfile={idProfile} />
+            )}
             {activeDiv === 'locations' && <OwnerRentalsUserProfile />}
             {activeDiv === 'prêts' && <RenterREntalsUserProfile />}
-
             {activeDiv === 'reviews' && <ReviewsUserProfile />}
           </>
         ) : (
-          <ReviewsReceivedUserProfile />
+          <>
+            {activeDiv === 'equipment' && <EquipmentUserProfile idProfile={idProfile} />}
+            {activeDiv === 'reviews' && <ReviewsReceivedUserProfile />}
+          </>
         )}
       </div>
     </div>

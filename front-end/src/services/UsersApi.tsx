@@ -1,5 +1,6 @@
 import apiAuth from '../api/axiosAuth';
 import api from '../api/axios';
+import { de } from 'react-day-picker/locale';
 
 export function UsersApi() {
   async function getUsers() {
@@ -46,5 +47,13 @@ export function UsersApi() {
       throw err;
     }
   }
-  return { getUsers, deleteUser, getUserById, postUser, patchUser };
+  async function deleteUserById(user_id: number) {
+    try {
+      await apiAuth.delete(`/delete-user/${user_id}`);
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+  return { getUsers, deleteUser, getUserById, postUser, patchUser, deleteUserById };
 }

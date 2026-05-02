@@ -8,7 +8,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { IoLogOutSharp } from 'react-icons/io5';
 import getInitials from './GetInitials';
 import { useNotification } from '../contexts/NotificationContext';
-import { Nav } from 'react-day-picker';
 
 export default function Header() {
   const { isLogged, user } = useAuth();
@@ -24,7 +23,7 @@ export default function Header() {
           <div className="flex items-center gap-3 cursor-pointer group">
             <div className="relative flex-shrink-0">
               <Link to="/">
-                <img src="logo.png" alt="LocaMat" className="h-16 w-16" />
+                <img src="/logo.png" alt="LocaMat" className="h-16 w-16" />
               </Link>
             </div>
             <Link to="/">

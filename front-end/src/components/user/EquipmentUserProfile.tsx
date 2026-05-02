@@ -3,15 +3,21 @@ import { useEffect } from 'react';
 import AddEquipmentBtn from '../AddEquipmentBtn';
 import { useAuth } from '../../contexts/AuthContext';
 import { EquipmentApiContext } from '../../contexts/EquipmentContext';
-
-export default function EquipmentUserProfile() {
+type EquipmentUserProfileProps = {
+  isOwnerProfile?: boolean;
+  idProfile?: number;
+};
+export default function EquipmentUserProfile({
+  isOwnerProfile = false,
+  idProfile,
+}: EquipmentUserProfileProps) {
   const { getUserEquipments, deleteEquipment, userEquipments, patchEquipment } =
     EquipmentApiContext();
   const { user_id } = useAuth();
 
   useEffect(() => {
-    if (!user_id) return;
-    getUserEquipments(user_id);
+    if (!idProfile) return;
+    getUserEquipments(idProfile);
   }, [user_id]);
 
   const handleDeleteEquipment = async (id: number) => {
@@ -32,18 +38,22 @@ export default function EquipmentUserProfile() {
         </div>
       ) : (
         <>
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl text-gray-900 my-4">Mon matériel</h2>
-            <AddEquipmentBtn />
-          </div>
+          {isOwnerProfile && (
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl text-gray-900 my-4">Mon matériel</h2>
+              <AddEquipmentBtn />
+            </div>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
             {userEquipments.map((e) => (
               <ItemCard
                 key={e.equipment_id}
                 equipment={e}
-                editable
-                onUpdate={handleUpdateEquipment}
-                onDelete={handleDeleteEquipment}
+                {...(isOwnerProfile && {
+                  editable: true,
+                  onUpdate: handleUpdateEquipment,
+                  onDelete: handleDeleteEquipment,
+                })}
               />
             ))}
           </div>
