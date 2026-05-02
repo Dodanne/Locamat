@@ -12,4 +12,16 @@ apiAuth.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   }
   return config;
 });
+
+apiAuth.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      localStorage.removeItem('token');
+      window.location.href = '/connexion';
+    }
+    return Promise.reject(error);
+  },
+);
+
 export default apiAuth;

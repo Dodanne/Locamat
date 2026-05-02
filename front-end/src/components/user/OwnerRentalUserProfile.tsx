@@ -42,6 +42,8 @@ export default function OwnerRentalsUserProfile() {
   }, [user_id]);
 
   function handleChangeStatus(id: number, newStatus: RentalStatus) {
+    if (newStatus === 'cancelled_by_owner')
+      confirm('Êtes-vous sûr de vouloir annuler cette location ?');
     patchStatusRental(id, newStatus);
     setOwnerRentals((prev) =>
       prev.map((r) => (r.rental_id === id ? { ...r, status: newStatus } : r)),
@@ -65,9 +67,6 @@ export default function OwnerRentalsUserProfile() {
     isReview();
   }, [ownerRentals]);
 
-  const handleClick = () => {
-    confirm('Êtes-vous sûr de vouloir annuler cette location ?');
-  };
   const filtredRentals = (
     filterByStatus === 'all'
       ? ownerRentals
@@ -222,10 +221,10 @@ export default function OwnerRentalsUserProfile() {
                     </div>
                   )}
 
-                  {e.status === 'confirmed' && (
+                  {(e.status === 'confirmed' || e.status === 'accepted') && (
                     <div className="flex justify-end">
                       <button
-                        onClick={handleClick}
+                        onClick={() => handleChangeStatus(e.rental_id, 'cancelled_by_owner')}
                         className="btn font-normal border-red-400 bg-red-200"
                       >
                         Annuler la location

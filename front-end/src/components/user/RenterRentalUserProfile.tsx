@@ -25,6 +25,7 @@ export default function RenterRentalsUserProfile() {
   const [filterByDate, setFilterByDate] = useState<'asc' | 'desc'>('desc');
   const { user_id } = useAuth();
   const { status } = useStatus();
+  const { patchStatusRental } = RentalsApi();
 
   useEffect(() => {
     if (!user_id) return;
@@ -57,9 +58,6 @@ export default function RenterRentalsUserProfile() {
     isReview();
   }, [renterRentals]);
 
-  const handleClick = () => {
-    confirm('Êtes-vous sûr de vouloir annuler cette location ?');
-  };
   const filtredRentals = (
     filterByStatus === 'all'
       ? renterRentals
@@ -69,6 +67,13 @@ export default function RenterRentalsUserProfile() {
     return filterByDate === 'desc' ? diff : -diff;
   });
 
+  function handleChangeStatus(id: number) {
+    confirm('Êtes-vous sûr de vouloir annuler cette location ?');
+    patchStatusRental(id, 'cancelled_by_renter');
+    setRenterRentals((prev) =>
+      prev.map((r) => (r.rental_id === id ? { ...r, status: 'cancelled_by_renter' } : r)),
+    );
+  }
   if (!renterRentals) return <Loader />;
   return (
     <>
@@ -210,9 +215,12 @@ export default function RenterRentalsUserProfile() {
                     </div>
                   )}
 
-                  {r.status === 'confirmed' && (
+                  {(r.status === 'confirmed' || r.status === 'accepted') && (
                     <div className="flex justify-end">
-                      <button onClick={handleClick} className="btn border-red-400 bg-red-200">
+                      <button
+                        onClick={() => handleChangeStatus(r.rental_id)}
+                        className="btn border-red-400 bg-red-200"
+                      >
                         Annuler la location
                       </button>
                     </div>
