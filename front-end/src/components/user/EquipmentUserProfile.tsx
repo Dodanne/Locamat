@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import AddEquipmentBtn from '../AddEquipmentBtn';
 import { useAuth } from '../../contexts/AuthContext';
 import { EquipmentApiContext } from '../../contexts/EquipmentContext';
+import { Link } from 'react-router-dom';
 type EquipmentUserProfileProps = {
   isOwnerProfile?: boolean;
   idProfile?: number;
@@ -46,15 +47,17 @@ export default function EquipmentUserProfile({
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
             {userEquipments.map((e) => (
-              <ItemCard
-                key={e.equipment_id}
-                equipment={e}
-                {...(isOwnerProfile && {
-                  editable: true,
-                  onUpdate: handleUpdateEquipment,
-                  onDelete: handleDeleteEquipment,
-                })}
-              />
+              <Link key={e.equipment_id} to={`/equipment/${e.equipment_id}`}>
+                <ItemCard
+                  key={e.equipment_id}
+                  equipment={e}
+                  {...(isOwnerProfile && {
+                    editable: true,
+                    onUpdate: handleUpdateEquipment,
+                    onDelete: handleDeleteEquipment,
+                  })}
+                />
+              </Link>
             ))}
           </div>
         </>

@@ -132,6 +132,14 @@ export default function ChatPage() {
       setShowMessages(true);
     }
   }
+  function onDeleteConversation(id: number) {
+    setConversations((prev) => prev.filter((c) => c.conversation_id !== id));
+    if (activeConversation?.conversation_id === id) {
+      setActiveConversation(null);
+      setMessages([]);
+      setShowMessages(false);
+    }
+  }
   if (loading) return <Loader />;
   return conversations.length === 0 ? (
     <div className={`container ${showMessages ? '' : 'py-8'}`}>
@@ -152,7 +160,7 @@ export default function ChatPage() {
           >
             <div className="p-4 border-b border-gray-200">
               <div className="relative">
-                <FaSearch className="absolute left-3 mt-1 top-1/2 translate-y-1/2 text-gray-400" />
+                <FaSearch className="absolute left-3 mt-1 top1/2 translate-y-1/2 text-gray-400" />
                 <input className="form-input pl-10" placeholder="Rechercher une conversation..." />
               </div>
             </div>
@@ -160,6 +168,7 @@ export default function ChatPage() {
               conversations={conversations}
               activeId={activeConversation?.conversation_id ?? null}
               onSelectConversation={onSelectConversation}
+              ondeleteConversation={onDeleteConversation}
             />
           </div>
 

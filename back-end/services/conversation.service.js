@@ -36,9 +36,7 @@ export const markMessagesAsReadService = async ({
 }) => {
   try {
     const conversation = await findConversation(conversation_id, user_id);
-    if (!conversation) {
-      throw new Error("Conversation non trouvee");
-    }
+    if (!conversation) return;
     await Message.update(
       { read: true },
       {

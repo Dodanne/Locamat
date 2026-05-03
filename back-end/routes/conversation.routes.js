@@ -5,6 +5,7 @@ import {
   // createMessage,
   getMessages,
   getConversations,
+  deleteConversation,
 } from "../controllers/conversation.controller.js";
 
 const router = express.Router();
@@ -17,5 +18,10 @@ router.get(
   getMessages,
 );
 // router.post("/messages", authenticateToken, createMessage);
+router.delete(
+  "/conversations/:conversation_id",
+  authenticateToken,
+  deleteConversation,
+);
 
 export default router;

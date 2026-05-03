@@ -55,11 +55,20 @@ export function ConversationsApi() {
       return null;
     }
   }
-
+  async function deleteConversation(conversation_id: number) {
+    try {
+      const res = await apiAuth.delete(`/conversations/${conversation_id}`);
+      return res.data;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  }
   return {
     getConversations,
     getMessages,
     // postMessage,
     createConversation,
+    deleteConversation,
   };
 }

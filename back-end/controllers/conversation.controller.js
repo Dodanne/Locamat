@@ -71,6 +71,11 @@ export const getConversations = async (req, res) => {
 export const createConversation = async (req, res) => {
   try {
     const { owner_id, renter_id, equipment_id } = req.body;
+    if (owner_id === renter_id) {
+      return res
+        .status(400)
+        .json({ error: "Impossible de se contacter soi-même" });
+    }
     const existingConversation = await Conversation.findOne({
       where: {
         [Op.or]: [
@@ -138,10 +143,28 @@ export const getMessages = async (req, res) => {
   }
 };
 
+export const deleteConversation = async (req, res) => {
+  try {
+    const user_id = req.user.id;
+    const conversation_id = req.params.conversation_id;
+    const conversation = await findConversation(conversation_id, user_id);
+    if (!conversation) {
+      return res.json({ error: "Conversation non trouvee" });
+    }
+    await Message.destroy({ where: { conversation_id } });
+    await Conversation.destroy({ where: { conversation_id } });
+    res.json({ message: "Conversation supprimee" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
 export default {
   getConversations,
   createConversation,
   getMessages,
   // createMessage,
   findConversation,
+  deleteConversation,
 };

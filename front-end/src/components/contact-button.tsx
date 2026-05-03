@@ -8,7 +8,7 @@ export default function ContactButton({ equipment }: { equipment: Equipment }) {
   const { createConversation } = ConversationsApi();
   const { user_id } = useAuth();
   const navigate = useNavigate();
-
+  const isOwner = Number(user_id) === Number(equipment.owner_id);
   async function handleClick() {
     if (!equipment) return;
     try {
@@ -23,10 +23,17 @@ export default function ContactButton({ equipment }: { equipment: Equipment }) {
     }
   }
   return (
-    <button className="btn p-3 bg-gray-100 hover:bg-gray-200  text-gray-900" onClick={handleClick}>
-      {' '}
-      <CiChat1 className="text-xl " strokeWidth={1} />{' '}
-      <span className="hidden md:block"> Contacter </span>
-    </button>
+    <>
+      {!isOwner && (
+        <button
+          className="btn p-3 bg-gray-100 hover:bg-gray-200  text-gray-900"
+          onClick={handleClick}
+        >
+          {' '}
+          <CiChat1 className="text-xl " strokeWidth={1} />{' '}
+          <span className="hidden md:block"> Contacter </span>
+        </button>
+      )}
+    </>
   );
 }
