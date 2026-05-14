@@ -262,3 +262,35 @@ export const patchRentalStatus = async (req, res) => {
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
+export const patchRentalMeetingPoint = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { address, lat, lng } = req.body;
+    if (!address || !lat || !lng) {
+      return res
+        .status(400)
+        .json({ message: "Adresse, latitude et longitude sont requis" });
+    }
+    const data = await Rental.findByPk(id);
+    if (!data) {
+      return res.status(404).json({ message: "Location non trouvée" });
+    }
+    if (data.owner_id !== req.user.user_id) {
+      return res.status(403).json({ message: "Accès refusé" });
+    }
+    if (data.status !== "accepted") {
+      return res
+        .status(400)
+        .json({
+          message:
+            "Le point de rencontre ne peut être défini que pour les réservations acceptées",
+        });
+    }
+    await data.update({ meeting_point: { address, lat, lng } });
+
+    res.json({ success: true, meeting_point: data.meeting_point });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};

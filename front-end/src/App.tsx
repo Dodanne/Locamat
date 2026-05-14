@@ -30,6 +30,7 @@ import CGU from './pages/Legal/CGU';
 import Cookies from './pages/Legal/Cookies';
 import { NotificationProvider } from './contexts/NotificationContext';
 import NotificationPage from './pages/Notification/NotificationPage';
+import 'leaflet/dist/leaflet.css';
 
 function App() {
   return (

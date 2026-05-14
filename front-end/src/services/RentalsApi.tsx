@@ -47,5 +47,21 @@ export function RentalsApi() {
       return [];
     }
   }
-  return { getRenterRentals, getOwnerRentals, patchStatusRental, postRental, getRentalbyId };
+  async function patchRentalMeetingPoint(rental_id: number, meeting_point: object) {
+    try {
+      const res = await apiAuth.patch(`${rental_id}/meeting-point`, { meeting_point });
+      return res.data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+  return {
+    getRenterRentals,
+    getOwnerRentals,
+    patchStatusRental,
+    postRental,
+    getRentalbyId,
+    patchRentalMeetingPoint,
+  };
 }

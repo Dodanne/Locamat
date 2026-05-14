@@ -19,4 +19,9 @@ export type Rental = {
   renter?: User;
   total_price: number;
   owner?: User;
+  meeting_point: {
+    address: string;
+    lat: number;
+    lng: number;
+  } | null;
 };

@@ -70,6 +70,11 @@ const Rental = sequelize.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    meeting_point: {
+      type: DataTypes.JSON,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
   {
     timestamps: true,

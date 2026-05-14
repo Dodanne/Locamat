@@ -14,6 +14,13 @@ import FormatDate from '../FormatDate';
 import ContactButton from '../contact-button';
 import Modal from '../Modals';
 import { FaFilter } from 'react-icons/fa';
+import MeetingPointModal from '../rental/MeetingPointModal';
+
+interface MeetingPoint {
+  address: string;
+  lat: number;
+  lng: number;
+}
 
 export default function OwnerRentalsUserProfile() {
   const { status } = useStatus();
@@ -24,6 +31,7 @@ export default function OwnerRentalsUserProfile() {
   const { getUserIsReview } = ReviewsApi();
   const [filterByStatus, setFilterByStatus] = useState('all');
   const [filterByDate, setFilterByDate] = useState<'asc' | 'desc'>('desc');
+  const [showMeetingModal, setShowMeetingModal] = useState<number | null>(null);
 
   const { user_id } = useAuth();
 
@@ -48,6 +56,9 @@ export default function OwnerRentalsUserProfile() {
     setOwnerRentals((prev) =>
       prev.map((r) => (r.rental_id === id ? { ...r, status: newStatus } : r)),
     );
+    if (newStatus === 'accepted') {
+      setShowMeetingModal(id);
+    }
   }
 
   useEffect(() => {
@@ -150,6 +161,15 @@ export default function OwnerRentalsUserProfile() {
                   </div>
 
                   <hr />
+                  {e.meeting_point && (
+                    <div className="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 rounded-lg px-3 py-2">
+                      <IoLocationOutline className="text-primary shrink-0" />
+                      <div>
+                        <span className="font-medium text-gray-700">Point de RDV : </span>
+                        {e.meeting_point.address}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-between">
                     <Link to={`/user-profile/${e.renter?.user_id}`}>
@@ -206,13 +226,13 @@ export default function OwnerRentalsUserProfile() {
                       </p>
                       <div className="flex gap-3">
                         <button
-                          className="flex-1 py-2 rounded-lg font-semibold bg-green-500 text-white hover:bg-green-600 transition"
+                          className="flex-1 py-2 rounded-lg font-semibold border text-green-500 border-green-500 hover:text-white hover:bg-green-600 transition"
                           onClick={() => handleChangeStatus(e.rental_id, 'accepted')}
                         >
                           ✓ Confirmer
                         </button>
                         <button
-                          className="flex-1 py-2 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700 transition"
+                          className="flex-1 py-2 rounded-lg font-semibold border text-red-600 border-red-600 hover:text-white hover:bg-red-700 transition"
                           onClick={() => handleChangeStatus(e.rental_id, 'refused')}
                         >
                           ✕ Refuser
@@ -252,6 +272,21 @@ export default function OwnerRentalsUserProfile() {
           />
         )}
       </Modal>
+      {showMeetingModal !== null && (
+        <MeetingPointModal
+          isOpen={showMeetingModal !== null}
+          rental={ownerRentals.find((r) => r.rental_id === showMeetingModal)!}
+          onSaved={(point: MeetingPoint) => {
+            setOwnerRentals((prev) =>
+              prev.map((r) =>
+                r.rental_id === showMeetingModal ? { ...r, meeting_point: point } : r,
+              ),
+            );
+            setShowMeetingModal(null);
+          }}
+          onClose={() => setShowMeetingModal(null)}
+        />
+      )}
     </>
   );
 }
