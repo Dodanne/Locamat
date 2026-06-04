@@ -26,8 +26,8 @@ export const postPaiementSession = async (req, res) => {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.CLIENT_URL}/paiement-success/${equipment_id}/${rental_id}`,
-      cancel_url: `${process.env.CLIENT_URL}/paiement-cancel/${equipment_id}/${rental_id}`,
+      success_url: `${process.env.FRONT_URL}/paiement-success/${equipment_id}/${rental_id}`,
+      cancel_url: `${process.env.FRONT_URL}/paiement-cancel/${equipment_id}/${rental_id}`,
       metadata: { rental_id: rental_id.toString() },
     });
     res.json({ url: data.url });

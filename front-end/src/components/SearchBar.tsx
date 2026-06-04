@@ -25,6 +25,6 @@ export default function SearchBar({ value, onChange, onSubmit, onKeyDown }: Sear
       <button className="btn-primary" onClick={onSubmit}>
         Rechercher
       </button>
-   </div>
+    </div>
   );
 }
