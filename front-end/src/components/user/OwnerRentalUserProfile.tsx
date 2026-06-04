@@ -221,7 +221,7 @@ export default function OwnerRentalsUserProfile() {
                     </div>
                   )}
 
-                  {(e.status === 'confirmed' || e.status === 'accepted') && (
+                  {e.status === 'accepted' && (
                     <div className="flex justify-end">
                       <button
                         onClick={() => handleChangeStatus(e.rental_id, 'cancelled_by_owner')}

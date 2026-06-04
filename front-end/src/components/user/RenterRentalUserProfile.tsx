@@ -215,7 +215,7 @@ export default function RenterRentalsUserProfile() {
                     </div>
                   )}
 
-                  {(r.status === 'confirmed' || r.status === 'accepted') && (
+                  {r.status === 'accepted' && (
                     <div className="flex justify-end">
                       <button
                         onClick={() => handleChangeStatus(r.rental_id)}
