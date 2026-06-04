@@ -47,7 +47,7 @@ export default function EquipmentUserProfile({
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
             {userEquipments.map((e) => (
-              <Link key={e.equipment_id} to={`/equipment/${e.equipment_id}`}>
+              <div key={e.equipment_id}>
                 <ItemCard
                   key={e.equipment_id}
                   equipment={e}
@@ -57,7 +57,7 @@ export default function EquipmentUserProfile({
                     onDelete: handleDeleteEquipment,
                   })}
                 />
-              </Link>
+              </div>
             ))}
           </div>
         </>
