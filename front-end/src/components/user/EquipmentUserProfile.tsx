@@ -24,9 +24,11 @@ export default function EquipmentUserProfile({
   const handleDeleteEquipment = async (id: number) => {
     if (!confirm('Supprimer cet équipement ?')) return;
     await deleteEquipment(id);
+    await getUserEquipments(idProfile!);
   };
   const handleUpdateEquipment = async (id: number, formData: FormData) => {
     await patchEquipment(id, formData);
+    await getUserEquipments(idProfile!);
   };
   if (!userEquipments) return null;
   return (

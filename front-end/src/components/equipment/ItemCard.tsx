@@ -65,7 +65,7 @@ export default function ItemCard({
     setIsEditing(false);
   }
 
-  async function handleSave() {
+  function handleSave() {
     const formData = new FormData();
     formData.append('title', form.title);
     formData.append('price', form.price.toString());
