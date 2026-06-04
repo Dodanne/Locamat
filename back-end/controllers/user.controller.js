@@ -241,7 +241,13 @@ export const patchUser = async (req, res) => {
 };
 export const deleteUser = async (req, res) => {
   try {
-    if (req.user.id !== req.params.id) {
+    console.log(
+      "Delete user request for user ID:",
+      req.params.id,
+      "by user ID:",
+      req.user.id,
+    );
+    if (req.user.id !== parseInt(req.params.id)) {
       return res.status(403).json({
         message: "Vous n'avez pas la permission de supprimer ce profil",
       });
