@@ -7,6 +7,10 @@ import { getIo } from "../config/io.js";
 export const postPaiementSession = async (req, res) => {
   try {
     const { rental_id, equipment_id } = req.body;
+    const rental = await Rental.findByPk(rental_id);
+    if (!rental) {
+      return res.status(404).json({ message: "Location non trouvee" });
+    }
     const data = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -17,7 +21,7 @@ export const postPaiementSession = async (req, res) => {
             product_data: {
               name: "Location test",
             },
-            unit_amount: 2000, // 20 €
+            unit_amount: rental.total_price * 100, //mettre en centimes
           },
           quantity: 1,
         },

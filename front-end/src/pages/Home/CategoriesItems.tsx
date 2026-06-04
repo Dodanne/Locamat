@@ -25,10 +25,10 @@ export default function CategoriesItems() {
         <h2 className="section-title">Parcourir par catégorie</h2>
         <div
           className="mx-auto px-4 grid grid-cols-2 
-        sm:grid-cols-3 
-        md:grid-cols-4 
-        lg:grid-cols-8 
-        gap-6 justify-items-center max-w-full"
+                    sm:grid-cols-3 
+                    md:grid-cols-4 
+                    lg:grid-cols-8 
+                    gap-6 justify-items-center max-w-full"
         >
           {categories.map((category) => (
             <Link

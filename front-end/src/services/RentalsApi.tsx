@@ -2,6 +2,14 @@ import api from '../api/axios';
 import apiAuth from '../api/axiosAuth';
 import { RentalStatus } from '../types/Rental';
 
+type RentalForm = {
+  start_date: string;
+  end_date: string;
+  total_price: number;
+  status: string;
+  equipment_id: number;
+};
+
 export function RentalsApi() {
   async function getRenterRentals(user_id: number) {
     try {
@@ -29,7 +37,7 @@ export function RentalsApi() {
       throw err;
     }
   }
-  async function postRental(form: any) {
+  async function postRental(form: RentalForm) {
     try {
       await apiAuth.post('/rental/new-rental', form);
     } catch (err) {

@@ -134,16 +134,6 @@ export const createRental = async (req, res) => {
       equipment_id,
       renter_id: renter_id,
     });
-    // const ownerEmail = equipment.owner.email;
-    // await sendEmail(
-    //   ownerEmail,
-    //   "Vous avez une nouvelle demande de réservation",
-    //   `<h1> Félicitations </h1>
-    //      <p>Vous avez une nouvelle demande de réservation sur le site LocaMat. Répondez rapidement pour ne pas rater la location!</p>
-    //   <a href="${process.env.FRONT_URL}/connexion"> Connectez-vous ici.</a>
-    //   <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message.</p>
-    // `,
-    // );
     sendNotification(getIo(), equipment.owner_id, {
       type: "nouvelle_demande",
       message: `Vous avez reçu une nouvelle demande de location pour le materiel suivant : ${equipment.title}`,
