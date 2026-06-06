@@ -9,11 +9,13 @@ type NotificationsContextType = {
   markAsRead: (id: number) => void;
   markAllAsRead: () => void;
   handleClick: (notif: Notification) => void;
+  lastRentalEvent: { type: string; at: number } | null;
 };
 
 const NotificationContext = createContext<NotificationsContextType | undefined>(undefined);
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
+  const [lastRentalEvent, setLastRentalEvent] = useState<{ type: string; at: number } | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>(() => {
     const keepNotifications = localStorage.getItem('notifications');
     return keepNotifications ? JSON.parse(keepNotifications) : [];
@@ -29,12 +31,15 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       prev.map((notif) => (notif.id === id ? { ...notif, read: true } : notif)),
     );
   };
+
   useEffect(() => {
-    socket.on('notification', (data: Notification) => {
+    const handleNotif = (data: Notification) => {
       setNotifications((prev) => [data, ...prev]);
-    });
+      setLastRentalEvent({ type: data.type, at: Date.now() }); // 👈
+    };
+    socket.on('notification', handleNotif);
     return () => {
-      socket.off('notification');
+      socket.off('notification', handleNotif);
     };
   }, []);
 
@@ -69,7 +74,14 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 
   return (
     <NotificationContext.Provider
-      value={{ notifications, numberOfNotification, markAsRead, markAllAsRead, handleClick }}
+      value={{
+        notifications,
+        numberOfNotification,
+        markAsRead,
+        markAllAsRead,
+        handleClick,
+        lastRentalEvent,
+      }}
     >
       {children}
     </NotificationContext.Provider>

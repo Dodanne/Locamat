@@ -14,6 +14,7 @@ import FormatDate from '../FormatDate';
 import ContactButton from '../contact-button';
 import Modal from '../Modals';
 import { FaFilter } from 'react-icons/fa';
+import { useNotification } from '../../contexts/NotificationContext';
 
 export default function OwnerRentalsUserProfile() {
   const { status } = useStatus();
@@ -24,22 +25,35 @@ export default function OwnerRentalsUserProfile() {
   const { getUserIsReview } = ReviewsApi();
   const [filterByStatus, setFilterByStatus] = useState('all');
   const [filterByDate, setFilterByDate] = useState<'asc' | 'desc'>('desc');
-
+  const { lastRentalEvent } = useNotification();
   const { user_id } = useAuth();
 
-  useEffect(() => {
+  const ownerEvents = [
+    'nouvelle_demande',
+    'demande_annulee_par_locataire',
+    'demande_confirmee_par_locataire',
+    'location_payee_par_locataire',
+  ];
+
+  const fetchOwnerRentals = async () => {
     if (!user_id) return;
-    const id = user_id;
-    async function fetchRenterRental() {
-      try {
-        const data = await getOwnerRentals(id);
-        setOwnerRentals(data || []);
-      } catch (err) {
-        console.log(err);
-      }
+    try {
+      const data = await getOwnerRentals(user_id);
+      setOwnerRentals(data || []);
+    } catch (err) {
+      console.log(err);
     }
-    fetchRenterRental();
+  };
+
+  useEffect(() => {
+    fetchOwnerRentals();
   }, [user_id]);
+
+  useEffect(() => {
+    if (lastRentalEvent && ownerEvents.includes(lastRentalEvent.type)) {
+      fetchOwnerRentals();
+    }
+  }, [lastRentalEvent]);
 
   function handleChangeStatus(id: number, newStatus: RentalStatus) {
     if (newStatus === 'cancelled_by_owner')

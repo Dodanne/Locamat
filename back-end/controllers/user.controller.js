@@ -181,9 +181,9 @@ export const verifyEmail = async (req, res) => {
 };
 export const patchUser = async (req, res) => {
   try {
-    if (req.user.id !== req.params.id) {
+    if (req.user.id !== parseInt(req.params.id)) {
       return res.status(403).json({
-        message: "Vous n'avez pas la permission de modifier ce profil",
+        message: "Vous n'avez pas la permission de supprimer ce profil",
       });
     }
     const id = req.params.id;
@@ -241,12 +241,6 @@ export const patchUser = async (req, res) => {
 };
 export const deleteUser = async (req, res) => {
   try {
-    console.log(
-      "Delete user request for user ID:",
-      req.params.id,
-      "by user ID:",
-      req.user.id,
-    );
     if (req.user.id !== parseInt(req.params.id)) {
       return res.status(403).json({
         message: "Vous n'avez pas la permission de supprimer ce profil",

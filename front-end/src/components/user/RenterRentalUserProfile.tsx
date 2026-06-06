@@ -14,6 +14,8 @@ import FormatDate from '../FormatDate';
 import Modal from '../Modals';
 import { FaFilter } from 'react-icons/fa';
 import ContactButton from '../contact-button';
+import socket from '../../config/socket';
+import { useNotification } from '../../contexts/NotificationContext';
 
 export default function RenterRentalsUserProfile() {
   const [renterRentals, setRenterRentals] = useState<Rental[]>([]);
@@ -26,20 +28,34 @@ export default function RenterRentalsUserProfile() {
   const { user_id } = useAuth();
   const { status } = useStatus();
   const { patchStatusRental } = RentalsApi();
+  const { lastRentalEvent } = useNotification();
+
+  const renterEvents = [
+    'nouvelle_demande',
+    'demande_annulee_par_locataire',
+    'demande_confirmee_par_locataire',
+    'location_payee_par_locataire',
+  ];
+
+  const fetchRenterRentals = async () => {
+    if (!user_id) return;
+    try {
+      const data = await getRenterRentals(user_id);
+      setRenterRentals(data || []);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    if (!user_id) return;
-    const id = user_id;
-    async function fetchRenterRental() {
-      try {
-        const data = await getRenterRentals(id);
-        setRenterRentals(data || []);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchRenterRental();
+    fetchRenterRentals();
   }, [user_id]);
+
+  useEffect(() => {
+    if (lastRentalEvent && renterEvents.includes(lastRentalEvent.type)) {
+      fetchRenterRentals();
+    }
+  }, [lastRentalEvent]);
 
   useEffect(() => {
     async function isReview() {
@@ -74,6 +90,7 @@ export default function RenterRentalsUserProfile() {
       prev.map((r) => (r.rental_id === id ? { ...r, status: 'cancelled_by_renter' } : r)),
     );
   }
+
   if (!renterRentals) return <Loader />;
   return (
     <>
