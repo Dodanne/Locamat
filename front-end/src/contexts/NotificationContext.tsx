@@ -60,7 +60,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       case 'nouvelle_demande':
       case 'demande_annulee_par_locataire':
       case 'demande_confirmee_par_locataire':
-      case 'demande_payee_par_locataire':
+      case 'location_payee_par_locataire':
         navigate('/user-profile', { state: { activeDiv: 'prêts' } });
         break;
       default:
