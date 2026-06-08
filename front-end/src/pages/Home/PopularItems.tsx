@@ -14,7 +14,7 @@ export default function PopularItems() {
         const data = await getEquipment6First();
         setEquipment6First(data || []);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchPopularEquipment();

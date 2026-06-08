@@ -27,7 +27,7 @@ export default function AddEquipment() {
         const data = await getCategories();
         setCategories(data || []);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchCategories();
@@ -48,7 +48,7 @@ export default function AddEquipment() {
       await postNewEquipment(form);
       navigate('/succes');
     } catch (err: any) {
-      console.log(err);
+      console.error(err);
       if (err.response?.status === 400 && err.response?.data?.errors) {
         setValidationError(err.response.data.errors);
       } else {

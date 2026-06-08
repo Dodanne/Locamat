@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const res = await apiAuth.get(`/user/${user_id}`);
         setUser(res.data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
         logout();
       }
     };
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       login(res.data.token, res.data.user.id);
       navigate(`/user-profile`);
     } catch (err: any) {
-      console.log(err);
+      console.error(err);
       setError(err.response?.data?.message);
     }
   }
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await api.get(`/verify-email?token=${token}`);
       navigate('/connexion');
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError('Lien de vérification invalide');
     }
   }

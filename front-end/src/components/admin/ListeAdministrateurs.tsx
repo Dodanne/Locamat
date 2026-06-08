@@ -16,7 +16,7 @@ export default function ListeAdministrateurs() {
         const data = await getAdmins();
         setAdmin(data || []);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchAdmins();
@@ -33,7 +33,7 @@ export default function ListeAdministrateurs() {
       await deleteAdmin(userId);
       setAdmin((prev) => prev.filter((a) => a.user_id !== userId));
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError("Impossible de supprimer l'administrateur");
     }
   };

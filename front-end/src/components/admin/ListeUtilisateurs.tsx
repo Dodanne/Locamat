@@ -20,7 +20,7 @@ export default function ListeUtilisateurs() {
         const data = await getUsers();
         setUsers(data || []);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchUsers();
@@ -37,7 +37,7 @@ export default function ListeUtilisateurs() {
         ),
       );
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError("Impossible de supprimer l'utilisateur");
     }
   };

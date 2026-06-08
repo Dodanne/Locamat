@@ -9,7 +9,7 @@ export function PaiementApi() {
       });
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }

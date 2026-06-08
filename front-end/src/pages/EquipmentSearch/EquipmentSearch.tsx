@@ -47,7 +47,7 @@ export default function EquipmentSearch() {
         const data = await getCategories();
         setCategories(data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchCategories();
@@ -81,13 +81,12 @@ export default function EquipmentSearch() {
         params.distance = debouncedDistance;
       }
       if (debouncedPrice) params.maxPrice = debouncedPrice;
-      console.log(params);
       const data = await getSearchEquipment(params);
       setResults(Array.isArray(data) ? data : []);
       setLoading(false);
       setHasSearched(true);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setResults([]);
       setLoading(false);
     }

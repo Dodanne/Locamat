@@ -6,7 +6,7 @@ export function CategoriesApi() {
       const res = await api.get(`/category`);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }

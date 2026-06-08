@@ -32,7 +32,7 @@ export default function EquipmentItem() {
         const data = await getEquipmentById(Number(id));
         setEquipmentById(data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
         setError('Equipement introuvable');
       }
     }
@@ -47,7 +47,7 @@ export default function EquipmentItem() {
         const data = await getEquipmentReviews(id);
         setEquipmentReview(data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchEquipmentReviews();
@@ -55,7 +55,6 @@ export default function EquipmentItem() {
 
   if (error) return <div className="container py-8 text-center text-red-500">{error}</div>;
   if (!equipment) return <Loader />;
-  console.log(equipment);
   return (
     <div className="container py-8">
       <Link to="/rechercher">

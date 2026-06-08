@@ -6,7 +6,7 @@ export function ReviewsApi() {
     try {
       await apiAuth.post('/review-user', form);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -15,7 +15,7 @@ export function ReviewsApi() {
     try {
       await apiAuth.post('/review-equipment', form);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -25,7 +25,7 @@ export function ReviewsApi() {
       const res = await apiAuth.get(`/review-user/${rental_id}`);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -35,7 +35,7 @@ export function ReviewsApi() {
 
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -45,7 +45,7 @@ export function ReviewsApi() {
       return res.data;
     } catch (err: any) {
       if (err.response?.status === 404) return [];
-      console.log(err);
+      console.error(err);
       return [];
     }
   }
@@ -55,7 +55,7 @@ export function ReviewsApi() {
 
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }
@@ -64,7 +64,7 @@ export function ReviewsApi() {
       const res = await apiAuth.get(`/reviews-given/${user_id}`);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }
@@ -76,7 +76,7 @@ export function ReviewsApi() {
       const res = await apiAuth.patch(`/review-user/${reviewed_user_id}`, data);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -88,7 +88,7 @@ export function ReviewsApi() {
       const res = await apiAuth.patch(`/review-equipment/${reviewed_equipment_id}`, data);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }

@@ -32,7 +32,7 @@ export default function ReviewsGivenUserProfile() {
         setEquipmentReviews(data.equipmentReviews);
         setUserReviews(data.userReviews);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchUserGivenReviews();
@@ -47,7 +47,7 @@ export default function ReviewsGivenUserProfile() {
       );
       setUpdateUserReview(null);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
   async function handleEquipmentReviewUpdate(
@@ -65,7 +65,7 @@ export default function ReviewsGivenUserProfile() {
       );
       setUpdateEquipmentReview(null);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 

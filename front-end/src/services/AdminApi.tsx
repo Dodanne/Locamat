@@ -6,7 +6,7 @@ export function AdminsApi() {
       const res = await apiAuth.get('/role/admin');
       return Array.isArray(res.data) ? res.data : [];
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }
@@ -14,7 +14,7 @@ export function AdminsApi() {
     try {
       await apiAuth.patch(`/${userId}/isAdmin`, { role: 'user' });
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }

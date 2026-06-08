@@ -6,7 +6,7 @@ export function ConversationsApi() {
       const res = await apiAuth.get(`/conversations`);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }
@@ -16,7 +16,7 @@ export function ConversationsApi() {
       const res = await apiAuth.get(`/conversations/${conversationId}/messages`);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }
@@ -30,7 +30,7 @@ export function ConversationsApi() {
   //     });
   //     return res.data;
   //   } catch (err) {
-  //     console.log(err);
+  //     console.error(err);
   //     return [];
   //   }
   // }
@@ -51,7 +51,7 @@ export function ConversationsApi() {
       });
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return null;
     }
   }
@@ -60,7 +60,7 @@ export function ConversationsApi() {
       const res = await apiAuth.delete(`/conversations/${conversation_id}`);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return null;
     }
   }

@@ -15,7 +15,7 @@ export default function StripePaiement({ rental_id, equipment_id }: StripePaieme
       const data = await postSession(rental_id, equipment_id);
       window.location.href = data.url;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError('Une erreur est survenue, veuillez réessayer ultérieurement');
     }
   };

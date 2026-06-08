@@ -38,7 +38,7 @@ export default function Reviews({ rental, reviewSubmitted }: ReviewProps) {
       await postEquipmentReviews(formEquipment);
       reviewSubmitted();
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError("Impossible d'envoyer votre avis");
     }
   }

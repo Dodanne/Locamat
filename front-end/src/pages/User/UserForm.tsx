@@ -83,7 +83,7 @@ export default function UserForm() {
         navigate(`/succesUser`);
       }
     } catch (err: any) {
-      console.log(err);
+      console.error(err);
       if (err.response?.status === 400 && err.response?.data?.errors) {
         setValidationError(err.response.data.errors);
       } else {
@@ -156,7 +156,7 @@ export default function UserForm() {
         });
         setAddress(`${data.number} ${data.street} ${data.postal_code} ${data.city}`);
       } catch (err) {
-        console.log(err);
+        console.error(err);
         setError('Impossible de charger les informations');
       }
     }
@@ -172,7 +172,7 @@ export default function UserForm() {
       const results = await CoordinatesApi(query, 5, false);
       setSuggestions(results);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
   function handleSelectAddress(feature: any) {
@@ -196,7 +196,7 @@ export default function UserForm() {
       logout();
       navigate('/');
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError('Impossible de supprimer le compte');
     }
   }

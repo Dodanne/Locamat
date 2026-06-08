@@ -8,7 +8,7 @@ export function UsersApi() {
       const res = await apiAuth.get('/role/users');
       return Array.isArray(res.data) ? res.data : [];
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }
@@ -16,7 +16,7 @@ export function UsersApi() {
     try {
       await apiAuth.patch(`/${userId}/ban`, { banned: !isBanned });
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -25,7 +25,7 @@ export function UsersApi() {
       const res = await apiAuth.get(`/user/${user_id}`);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -34,7 +34,7 @@ export function UsersApi() {
       const res = await api.post('/new-user', form);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -43,7 +43,7 @@ export function UsersApi() {
       const res = await apiAuth.patch(`/edit-profile/${user_id}`, form);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -51,7 +51,7 @@ export function UsersApi() {
     try {
       await apiAuth.delete(`/delete-user/${user_id}`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }

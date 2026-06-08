@@ -16,7 +16,7 @@ export function RentalsApi() {
       const res = await apiAuth.get(`/rental/renter/${user_id}`);
       return Array.isArray(res.data) ? res.data : []; // pour ne pas avoir null=>tableau vide
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }
@@ -25,7 +25,7 @@ export function RentalsApi() {
       const res = await apiAuth.get(`/rental/owner/${user_id}`);
       return Array.isArray(res.data) ? res.data : []; // pour ne pas avoir null=>tableau vide
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }
@@ -33,7 +33,7 @@ export function RentalsApi() {
     try {
       await apiAuth.patch(`/rental/status/${id}`, { status: newStatus });
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -41,7 +41,7 @@ export function RentalsApi() {
     try {
       await apiAuth.post('/rental/new-rental', form);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -51,7 +51,7 @@ export function RentalsApi() {
 
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }

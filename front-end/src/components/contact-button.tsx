@@ -19,7 +19,7 @@ export default function ContactButton({ equipment }: { equipment: Equipment }) {
       });
       navigate(`/chat`, { state: { conversationId: conversation.conversation_id } });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
   return (

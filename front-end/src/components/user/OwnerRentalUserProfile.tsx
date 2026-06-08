@@ -41,7 +41,7 @@ export default function OwnerRentalsUserProfile() {
       const data = await getOwnerRentals(user_id);
       setOwnerRentals(data || []);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -75,7 +75,7 @@ export default function OwnerRentalsUserProfile() {
             [rental.rental_id]: resUser.hasReview,
           }));
         } catch (err) {
-          console.log(err);
+          console.error(err);
         }
     }
     isReview();

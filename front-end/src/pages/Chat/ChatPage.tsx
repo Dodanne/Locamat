@@ -42,7 +42,7 @@ export default function ChatPage() {
         setActiveConversation(active ?? data[0]);
         setLoading(false);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchConversations();
@@ -62,7 +62,7 @@ export default function ChatPage() {
         setMessages(data);
         socket.emit('read_messages', { conversation_id: activeConversation.conversation_id });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchMessages();
@@ -122,7 +122,7 @@ export default function ChatPage() {
         content,
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
   function onSelectConversation(id: number) {

@@ -43,7 +43,7 @@ export default function RenterRentalsUserProfile() {
       const data = await getRenterRentals(user_id);
       setRenterRentals(data || []);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -68,7 +68,7 @@ export default function RenterRentalsUserProfile() {
             [rental.rental_id]: resUser.hasReview && resEquipment.hasReview,
           }));
         } catch (err) {
-          console.log(err);
+          console.error(err);
         }
     }
     isReview();

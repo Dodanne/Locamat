@@ -41,7 +41,7 @@ export default function UserProfile() {
         const data = await getUserById(idProfile);
         setUser(data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchUserById();

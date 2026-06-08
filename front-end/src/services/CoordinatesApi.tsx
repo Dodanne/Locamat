@@ -11,7 +11,7 @@ export default async function CoordinatesApi(
     const data = await res.json();
     return data.features ?? [];
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return [];
   }
 }

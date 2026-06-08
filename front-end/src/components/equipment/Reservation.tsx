@@ -52,7 +52,7 @@ export default function Reservations({ equipment }: ReservationsProps) {
       await postRental(form);
       navigate(`/summary-rental/${equipment.equipment_id}`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setError('Impossible créer la réservation');
     }
   };
@@ -87,7 +87,7 @@ export default function Reservations({ equipment }: ReservationsProps) {
 
         setRentedDates(dataRanges);
       } catch (err) {
-        console.log(err);
+        console.error(err);
         setError("Chargement des disponibilités de l'équipement impossible");
       }
     }

@@ -31,7 +31,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
       setEquipments(res.data);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }
@@ -42,7 +42,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
       setEquipments((prev) => [...prev, res.data]);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -55,7 +55,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
       setUserEquipments((prev) => prev.filter((e) => e.equipment_id !== id));
       alert('Équipement supprimé avec succès !');
     } catch (err) {
-      console.log(err);
+      console.error(err);
       alert('Erreur lors de la suppression.');
     }
   }
@@ -67,7 +67,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
       //liste userProfile
       setUserEquipments((prev) => prev.filter((e) => e.equipment_id !== id));
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -82,7 +82,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
       setUserEquipments((prev) => prev.map((e) => (e.equipment_id === id ? res.data : e)));
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
     }
   }
@@ -91,7 +91,7 @@ export const EquipmentProvider = ({ children }: { children: ReactNode }) => {
       const res = await apiAuth.get(`/user/${id}/equipment`);
       setUserEquipments(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 

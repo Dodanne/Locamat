@@ -31,7 +31,7 @@ export default function ReviewsReceivedUserProfile() {
         const data = await getUserById(idProfile);
         setUser(data);
       } catch (err) {
-        console.log(err);
+        console.error(err);
         setError('Impossible de charger le profil');
       }
     }
@@ -47,9 +47,8 @@ export default function ReviewsReceivedUserProfile() {
         const dataEquipment = await getEquipmentReviews(idProfile);
         setUserReviews(dataUser);
         setEquipmentReviews(dataEquipment);
-        console.log(dataEquipment);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchUserReviews();

@@ -18,7 +18,7 @@ export default function ListeEquipments() {
 
       alert('Équipement supprimé avec succès !');
     } catch (err) {
-      console.log(err);
+      console.error(err);
       alert('Erreur lors de la suppression.');
     }
   };

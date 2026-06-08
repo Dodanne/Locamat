@@ -15,7 +15,7 @@ export function EquipmentApi() {
       const res = await api.get(`/equipment/${id}`);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return null;
     }
   }
@@ -25,7 +25,7 @@ export function EquipmentApi() {
       const res = await api.get(`/equipment6first`);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }
@@ -47,7 +47,7 @@ export function EquipmentApi() {
 
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return [];
     }
   }

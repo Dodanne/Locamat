@@ -79,7 +79,7 @@ export default function ItemCard({
       onUpdate?.(equipment.equipment_id, formData);
       setIsEditing(false);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
   function startEditing() {

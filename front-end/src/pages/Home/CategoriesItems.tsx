@@ -13,7 +13,7 @@ export default function CategoriesItems() {
         const data = await getCategories();
         setCategories(data || []);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchCategories();

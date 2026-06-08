@@ -18,7 +18,7 @@ export default function PaiementSuccess() {
         const equipment = await getEquipmentById(Number(equipment_id));
         setEquipment(equipment);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     fetchEquipment();

@@ -27,7 +27,7 @@ export default function ConversationsList({
       await deleteConversation(conversation_id);
       ondeleteConversation(conversation_id);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
   return (
