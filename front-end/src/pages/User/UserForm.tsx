@@ -5,6 +5,7 @@ import { IoEyeOutline } from 'react-icons/io5';
 import { IoEyeOffOutline } from 'react-icons/io5';
 import { useAuth } from '../../contexts/AuthContext';
 import CoordinatesApi from '../../services/CoordinatesApi';
+import DeleteModal from '../../components/user/DeleteModal';
 
 export default function UserForm() {
   const navigate = useNavigate();
@@ -41,6 +42,11 @@ export default function UserForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [validationError, setValidationError] = useState<string[]>([]);
+  const [showModal, setShowModal] = useState(false);
+
+  function handleClickDelete() {
+    setShowModal(true);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -184,20 +190,14 @@ export default function UserForm() {
     setSuggestions([]);
     setAddress(feature.properties.label);
   }
-  async function handleClickDelete() {
-    if (
-      window.confirm(
-        'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
-      )
-    ) {
-      try {
-        await deleteUserById(Number(user_id));
-        logout();
-        navigate('/');
-      } catch (err) {
-        console.log(err);
-        setError('Impossible de supprimer le compte');
-      }
+  async function handleDeleteAccount() {
+    try {
+      await deleteUserById(Number(user_id));
+      logout();
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+      setError('Impossible de supprimer le compte');
     }
   }
 
@@ -210,11 +210,14 @@ export default function UserForm() {
           </p>
           {mode === 'edit' && (
             <button
-              onClick={() => handleClickDelete()}
+              onClick={handleClickDelete}
               className="btn bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition"
             >
               Supprimer le compte
             </button>
+          )}
+          {showModal && (
+            <DeleteModal onClose={() => setShowModal(false)} onConfirm={handleDeleteAccount} />
           )}
         </div>
         <p className="text-gray-600">

@@ -6,7 +6,13 @@ import { fileURLToPath } from "url";
 import { postWebHook } from "./controllers/paiement.controller.js";
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: [process.env.FRONT_URL, process.env.CLIENT_URL],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
 app.post("/webhook", express.raw({ type: "application/json" }), postWebHook);
 
 app.use(express.json());
