@@ -54,7 +54,7 @@ export function initializeSocket(httpServer) {
           data: { conversation_id },
         });
       } catch (err) {
-        console.log(err);
+        console.error(err);
         socket.emit("error", { error: "Erreur lors de l'envoi du message" });
       }
     });
@@ -70,7 +70,7 @@ export function initializeSocket(httpServer) {
           user_id: socket.user_id,
         });
       } catch (err) {
-        console.log(err);
+        console.error(err);
         socket.emit("error", {
           error: "Erreur lors de la mise à jour des messages",
         });
@@ -88,7 +88,7 @@ export function initializeSocket(httpServer) {
           data: { equipment_id },
         });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     });
     socket.on("disconnect", () => {

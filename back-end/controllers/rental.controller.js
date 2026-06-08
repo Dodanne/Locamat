@@ -51,7 +51,7 @@ export const getRentalsByRenter = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -68,7 +68,7 @@ export const getRentalByEquipmentId = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -104,7 +104,7 @@ export const getRentalsByOwner = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -141,7 +141,7 @@ export const createRental = async (req, res) => {
     });
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -248,7 +248,7 @@ export const patchRentalStatus = async (req, res) => {
     }
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };

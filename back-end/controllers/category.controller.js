@@ -6,7 +6,7 @@ export const getAllCategories = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -19,7 +19,7 @@ export const getCategoryById = async (req, res) => {
     }
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };

@@ -34,7 +34,7 @@ export const createUserReview = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -63,7 +63,7 @@ export const createEquipmentReview = async (req, res) => {
     });
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -77,7 +77,7 @@ export const getEquipmentIsReview = async (req, res) => {
     const hasReview = data ? true : false;
     res.json({ hasReview });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -91,7 +91,7 @@ export const getUserIsReview = async (req, res) => {
     const hasReview = data ? true : false;
     res.json({ hasReview });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -122,7 +122,7 @@ export const getUserReviews = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
 
     res.status(500).json({ error: "Erreur serveur" });
   }
@@ -147,7 +147,7 @@ export const getEquipmentReviews = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -201,7 +201,7 @@ export const getUserGivesReviews = async (req, res) => {
       equipmentReviews: dataEquipment,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
 
     res.status(500).json({ error: "Erreur serveur" });
   }
@@ -215,10 +215,9 @@ export const patchUserReview = async (req, res) => {
     data.comment = comment;
     data.rating = Number(rating);
     await data.save();
-    console.log(data);
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -231,10 +230,10 @@ export const patchEquipmentReview = async (req, res) => {
     data.comment = comment;
     data.rating = Number(rating);
     await data.save();
-    console.log(data);
+    console.error(data);
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };

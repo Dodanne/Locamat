@@ -35,7 +35,7 @@ export const getAllEquipments = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -68,7 +68,7 @@ export const get6FirstEquipment = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -104,7 +104,7 @@ export const getEquipmentById = async (req, res) => {
     }
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -143,7 +143,7 @@ export const getEquipmentByUser = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -170,7 +170,7 @@ export const createEquipment = async (req, res) => {
       const messages = err.errors.map((e) => e.message);
       return res.status(400).json({ errors: messages });
     }
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -245,7 +245,7 @@ export const getSearchEquipments = async (req, res) => {
     }
     res.json(filteredData);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -266,7 +266,7 @@ export const deleteEquipment = async (req, res) => {
     await data.destroy();
     return res.json({ message: "Équipement supprimé avec succès" });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -298,7 +298,7 @@ export const updateEquipment = async (req, res) => {
       const messages = err.errors.map((e) => e.message);
       return res.status(400).json({ errors: messages });
     }
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };

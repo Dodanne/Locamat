@@ -8,6 +8,6 @@ export default async function deletePhoto(photo) {
       .replace(/\.[^/.]+$/, "");
     await cloudinary.uploader.destroy(photoCloudinary);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 }

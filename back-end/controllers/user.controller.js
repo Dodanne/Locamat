@@ -11,7 +11,7 @@ export const getAllUsers = async (req, res) => {
     const data = await User.findAll();
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -27,7 +27,7 @@ export const getUserById = async (req, res) => {
     }
     res.json(data.toJSON());
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -85,14 +85,14 @@ export const createUser = async (req, res) => {
     // `,
     // //   );
     // } catch (emailErr) {
-    //   console.log("Erreur envoi email:", emailErr);
+    //   console.error("Erreur envoi email:", emailErr);
     // }
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
       const messages = err.errors.map((e) => e.message);
       return res.status(400).json({ errors: messages });
     }
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -102,7 +102,7 @@ export const getAllRoleUsers = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -114,7 +114,7 @@ export const getAllRoleAdmin = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ err: "Erreur serveur" });
   }
 };
@@ -134,7 +134,7 @@ export const patchBannedUser = async (req, res) => {
     await data.save();
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -146,7 +146,7 @@ export const patchIsAdmin = async (req, res) => {
     await data.save();
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -175,7 +175,7 @@ export const verifyEmail = async (req, res) => {
     res.status(400).json({
       message: "Lien invalide ou expiré",
     });
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -235,7 +235,7 @@ export const patchUser = async (req, res) => {
       const messages = err.errors.map((e) => e.messages);
       return res.status(400).json({ errors: messages });
     }
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -255,7 +255,7 @@ export const deleteUser = async (req, res) => {
     await data.destroy();
     res.json({ message: "Utilisateur supprimé avec succès" });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };

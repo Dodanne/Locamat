@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify((err) => {
   if (err) {
-    console.log(err);
+    console.error(err);
   } else {
     console.log("server connecté avec gmail");
   }

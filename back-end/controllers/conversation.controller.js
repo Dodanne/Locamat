@@ -62,7 +62,7 @@ export const getConversations = async (req, res) => {
 
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
 
     res.status(500).json({ error: "Erreur serveur" });
   }
@@ -94,7 +94,7 @@ export const createConversation = async (req, res) => {
     });
     res.json({ conversation: data, created: true });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -110,7 +110,7 @@ export const createConversation = async (req, res) => {
 //     });
 //     res.json(message);
 //   } catch (err) {
-//     console.log(err);
+//     console.error(err);
 //     res.status(500).json({ error: "Erreur lors de la creation du message" });
 //   }
 // };
@@ -138,7 +138,7 @@ export const getMessages = async (req, res) => {
     );
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -155,7 +155,7 @@ export const deleteConversation = async (req, res) => {
     await Conversation.destroy({ where: { conversation_id } });
     res.json({ message: "Conversation supprimee" });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };

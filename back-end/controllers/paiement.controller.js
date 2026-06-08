@@ -32,7 +32,7 @@ export const postPaiementSession = async (req, res) => {
     });
     res.json({ url: data.url });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -62,7 +62,7 @@ export const postWebHook = async (req, res) => {
     }
     res.json({ received: true });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };
@@ -89,7 +89,7 @@ export const notificationPaiement = async (req, res) => {
     });
     res.json({ message: "Notification envoyee" });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 };

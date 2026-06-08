@@ -25,7 +25,7 @@ export const createMessageService = async ({
         : conversation.owner_id;
     return { message: data, receiver_id, sender };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw new Error("Erreur lors de la creation du message");
   }
 };
@@ -49,7 +49,7 @@ export const markMessagesAsReadService = async ({
     );
     return true;
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw new Error("Erreur lors de la mise à jour des messages");
   }
 };
