@@ -76,10 +76,10 @@ export default function ReviewsReceivedUserProfile() {
                 <div className="text-4xl text-primary mb-2">{user.rating_count}</div>
                 <p className="text-gray-600">Avis {user.rating_count > 1 ? 'reçus' : 'reçu'}</p>
               </div>
-              <div className="text-center">
+              {/* <div className="text-center">
                 <div className="text-4xl text-primary mb-2">0 %</div>
                 <p className="text-gray-600">Taux d'annulation</p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -1,18 +1,19 @@
 export default function DeleteModal({
   onClose,
   onConfirm,
+  content,
 }: {
   onClose: () => void;
   onConfirm: () => void;
+  content?: string;
 }) {
+  const contentText =
+    content ?? 'Êtes-vous sûr de vouloir supprimer ? Cette action est irréversible.';
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg p-6 w-96 text-center ">
         <h2 className="text-xl font-semibold mb-4">Confirmer la suppression</h2>
-        <p className="mb-6">
-          Êtes-vous sûr de vouloir supprimer votre compte ? Cette action supprimera toutes vos
-          données et ne pourra pas être annulée.
-        </p>
+        <p className="mb-6">{contentText}</p>
         <div className="flex justify-center gap-4">
           <button
             onClick={onClose}

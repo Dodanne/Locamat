@@ -30,6 +30,7 @@ import CGU from './pages/Legal/CGU';
 import Cookies from './pages/Legal/Cookies';
 import { NotificationProvider } from './contexts/NotificationContext';
 import NotificationPage from './pages/Notification/NotificationPage';
+import CookieBanner from './components/cookieBanner';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <EquipmentProvider>
             <StatusProvider>
               <Header />
+              <CookieBanner />
               <ScrollToTop />
               <div className="min-h-screen bg-gray-50">
                 <Routes>

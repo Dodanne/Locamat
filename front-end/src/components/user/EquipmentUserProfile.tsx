@@ -1,9 +1,10 @@
 import ItemCard from '../equipment/ItemCard';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AddEquipmentBtn from '../AddEquipmentBtn';
 import { useAuth } from '../../contexts/AuthContext';
 import { EquipmentApiContext } from '../../contexts/EquipmentContext';
-import { Link } from 'react-router-dom';
+import DeleteModal from './DeleteModal';
+
 type EquipmentUserProfileProps = {
   isOwnerProfile?: boolean;
   idProfile?: number;
@@ -15,17 +16,22 @@ export default function EquipmentUserProfile({
   const { getUserEquipments, deleteEquipment, userEquipments, patchEquipment } =
     EquipmentApiContext();
   const { user_id } = useAuth();
+  const [equipmentToDelete, setEquipmentToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     if (!idProfile) return;
     getUserEquipments(idProfile);
   }, [user_id]);
 
-  const handleDeleteEquipment = async (id: number) => {
-    if (!confirm('Supprimer cet équipement ?')) return;
-    await deleteEquipment(id);
+  function handleClickDelete(id: number) {
+    setEquipmentToDelete(id);
+  }
+  async function handleDeleteEquipment() {
+    if (!equipmentToDelete) return;
+    await deleteEquipment(equipmentToDelete);
     await getUserEquipments(idProfile!);
-  };
+    setEquipmentToDelete(null);
+  }
   const handleUpdateEquipment = async (id: number, formData: FormData) => {
     await patchEquipment(id, formData);
     await getUserEquipments(idProfile!);
@@ -56,11 +62,18 @@ export default function EquipmentUserProfile({
                   {...(isOwnerProfile && {
                     editable: true,
                     onUpdate: handleUpdateEquipment,
-                    onDelete: handleDeleteEquipment,
+                    onDelete: handleClickDelete,
                   })}
                 />
               </div>
             ))}
+            {equipmentToDelete && (
+              <DeleteModal
+                onClose={() => setEquipmentToDelete(null)}
+                onConfirm={handleDeleteEquipment}
+                content="Êtes-vous sûr de vouloir supprimer ce matériel ? Cette action est irréversible."
+              />
+            )}
           </div>
         </>
       )}

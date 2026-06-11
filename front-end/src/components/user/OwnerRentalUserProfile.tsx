@@ -102,9 +102,9 @@ export default function OwnerRentalsUserProfile() {
         </>
       ) : (
         <>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between md:flex-row flex-col">
             <h2 className="text-2xl text-gray-900 my-4"> Matériel que j’ai prêté</h2>
-            <div className="flex items-center  gap-4">
+            <div className="flex items-center md:flex-row flex-col gap-4">
               <label className="flex items-center gap-2 text-sm text-primary">
                 <FaFilter /> Filtrer par date :
               </label>

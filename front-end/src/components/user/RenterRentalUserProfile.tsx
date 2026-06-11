@@ -108,9 +108,12 @@ export default function RenterRentalsUserProfile() {
         </div>
       ) : (
         <>
-          <div className="flex justify-between">
-            <h2 className="text-2xl text-gray-900 my-4"> Matériel que j’ai loué</h2>
-            <div className="flex items-center  gap-4">
+          <div className="flex justify-between md:flex-row flex-col">
+            <h2 className="text-2xl text-center md:text-left text-gray-900 my-4">
+              {' '}
+              Matériel que j’ai loué
+            </h2>
+            <div className="flex items-center md:flex-row flex-col gap-4">
               <label className="flex items-center gap-2 text-sm text-primary">
                 <FaFilter /> Filtrer par date :
               </label>

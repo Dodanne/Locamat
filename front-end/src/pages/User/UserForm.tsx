@@ -217,7 +217,12 @@ export default function UserForm() {
             </button>
           )}
           {showModal && (
-            <DeleteModal onClose={() => setShowModal(false)} onConfirm={handleDeleteAccount} />
+            <DeleteModal
+              onClose={() => setShowModal(false)}
+              onConfirm={handleDeleteAccount}
+              content="Êtes-vous sûr de vouloir supprimer votre compte ? Cette action supprimera toutes vos
+          données et ne pourra pas être annulée."
+            />
           )}
         </div>
         <p className="text-gray-600">
